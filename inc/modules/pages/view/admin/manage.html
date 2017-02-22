@@ -1,0 +1,53 @@
+<article class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{$lang.general.manage}</h3>
+            </div>
+            <div class="panel-body">
+        		<form name="selectLang" action="{?=url(ADMIN.'/pages/manage')?}" method="GET">
+        			<select name="lang" class="form-control" onchange="document.selectLang.submit();">
+        				{loop: $pages.langs}
+        					<option value="{$value.name}" {$value.attr}>{$value.name}</option>
+        				{/loop}
+        			</select>
+        			<input type="hidden" name="t" value="{$_SESSION['token']}">
+        		</form>
+
+        		{if: isset($pages.list)}
+					<div class="table-responsive no-margin">
+						<table class="table table-striped no-margin">
+							<thead>
+								<tr>
+									<th>{$lang.general.title}</th>
+									<th class="text-right">{$lang.general.actions}</th>
+								</tr>
+							</thead>
+							<tbody>
+								{loop: $pages.list}
+								<tr>
+									<td><a href="{$value.editURL}">{$value.title}</a></td>
+									<td class="text-right">
+										<a href="{$value.viewURL}" target="_blank" class="btn btn-primary btn-xs">
+											<i class="fa fa-search"></i> <span class="hidden-xs">{$lang.pages.view}</span>
+										</a>
+										<a href="{$value.editURL}" class="btn btn-success btn-xs">
+											<i class="fa fa-pencil"></i> <span class="hidden-xs">{$lang.general.edit}</span>
+										</a>
+										<a href="{$value.delURL}" class="btn btn-danger btn-xs" data-confirm="{$lang.pages.delete_confirm}">
+											<i class="fa fa-trash-o"></i> <span class="hidden-xs">{$lang.general.delete}</span>
+										</a>
+									</td>
+								</tr>
+								{/loop}
+							</tbody>
+						</table>
+					</div>
+					{$pages.pagination}
+        		{else}
+        			<p>{$lang.pages.no_pages}</p>
+        		{/if}
+            </div>
+        </div>
+    </div>
+</article>

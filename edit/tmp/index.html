@@ -1,0 +1,214 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Batflat - Strony</title>
+    <link href="http://localhost/inc/css/bootstrap.min.css?v=1.1.0" rel="stylesheet" />
+    <link href="http://localhost/themes/admin/css/style.css?v=1.1.0" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://use.fontawesome.com/56fa629212.js"></script>
+    <script src="http://localhost/inc/jscripts/bootstrap.min.js?v=1.1.0"></script>
+    <script src="http://localhost/inc/jscripts/bootbox.min.js?v=1.1.0"></script>
+    <script src="http://localhost/inc/jscripts/html.sortable.min.js?v=1.1.0"></script>
+    <script>
+        var batflat = {token:"f2135f346444", url:"http://localhost", admin:"edit"};
+    </script>
+    </head>
+
+<body>
+
+    <div id="wrapper">
+
+        <aside id="sidebar-wrapper">
+            <div class="sidebar-brand">
+                <!--  Icon made by Freepik from www.flaticon.com  -->
+                <img src="http://localhost/themes/admin/img/logo.png" alt="logo" />
+                <h2 class="text-warning">bat<span>flat</span></h2>
+            </div>
+            <ul class="sidebar-nav">
+                            <li class="" data-module="dashboard">
+                    <a href="http://localhost/edit/dashboard/main?t=f2135f346444"><i class="fa fa-home"></i>Ekran startowy</a>
+                                    </li>
+                            <li class="" data-module="blog">
+                    <a href="#"><i class="fa fa-pencil-square"></i>Blog</a>
+                                        <ul class="collapse">
+                                                <li class=""><a href="http://localhost/edit/blog/manage?t=f2135f346444">Zarządzanie</a></li>
+                                                <li class=""><a href="http://localhost/edit/blog/add?t=f2135f346444">Nowy wpis</a></li>
+                                                <li class=""><a href="http://localhost/edit/blog/settings?t=f2135f346444">Ustawienia</a></li>
+                                            </ul>
+                                    </li>
+                            <li class="active" data-module="pages">
+                    <a href="#"><i class="fa fa-file"></i>Strony</a>
+                                        <ul class="collapse">
+                                                <li class="active"><a href="http://localhost/edit/pages/manage?t=f2135f346444">Zarządzanie</a></li>
+                                                <li class=""><a href="http://localhost/edit/pages/add?t=f2135f346444">Dodaj nową</a></li>
+                                            </ul>
+                                    </li>
+                            <li class="" data-module="navigation">
+                    <a href="#"><i class="fa fa-list-ul"></i>Nawigacja</a>
+                                        <ul class="collapse">
+                                                <li class=""><a href="http://localhost/edit/navigation/manage?t=f2135f346444">Zarządzanie</a></li>
+                                                <li class=""><a href="http://localhost/edit/navigation/newLink?t=f2135f346444">Dodaj odnośnik</a></li>
+                                                <li class=""><a href="http://localhost/edit/navigation/newNav?t=f2135f346444">Dodaj nawigację</a></li>
+                                            </ul>
+                                    </li>
+                            <li class="" data-module="snippets">
+                    <a href="#"><i class="fa fa-puzzle-piece"></i>Skrawki</a>
+                                        <ul class="collapse">
+                                                <li class=""><a href="http://localhost/edit/snippets/manage?t=f2135f346444">Zarządzanie</a></li>
+                                                <li class=""><a href="http://localhost/edit/snippets/add?t=f2135f346444">Dodaj nowy</a></li>
+                                            </ul>
+                                    </li>
+                            <li class="" data-module="modules">
+                    <a href="#"><i class="fa fa-plug"></i>Moduły</a>
+                                        <ul class="collapse">
+                                                <li class=""><a href="http://localhost/edit/modules/active?t=f2135f346444">Aktywne</a></li>
+                                                <li class=""><a href="http://localhost/edit/modules/unactive?t=f2135f346444">Nieaktywne</a></li>
+                                                <li class=""><a href="http://localhost/edit/modules/upload?t=f2135f346444">Wgraj nowy</a></li>
+                                            </ul>
+                                    </li>
+                            <li class="" data-module="users">
+                    <a href="#"><i class="fa fa-user"></i>Użytkownicy</a>
+                                        <ul class="collapse">
+                                                <li class=""><a href="http://localhost/edit/users/manage?t=f2135f346444">Zarządzanie</a></li>
+                                                <li class=""><a href="http://localhost/edit/users/add?t=f2135f346444">Dodaj nowego</a></li>
+                                            </ul>
+                                    </li>
+                            <li class="" data-module="settings">
+                    <a href="#"><i class="fa fa-wrench"></i>Ustawienia</a>
+                                        <ul class="collapse">
+                                                <li class=""><a href="http://localhost/edit/settings/general?t=f2135f346444">Ogólne</a></li>
+                                                <li class=""><a href="http://localhost/edit/settings/theme?t=f2135f346444">Motyw</a></li>
+                                                <li class=""><a href="http://localhost/edit/settings/updates?t=f2135f346444">Aktualizacje</a></li>
+                                            </ul>
+                                    </li>
+                            <li class="" data-module="contact">
+                    <a href="http://localhost/edit/contact/settings?t=f2135f346444"><i class="fa fa-envelope"></i>Kontakt</a>
+                                    </li>
+                        </ul>
+        </aside>
+
+        <div id="navbar-wrapper">
+            <nav class="navbar navbar-inverse">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a href="#" class="navbar-brand" id="sidebar-toggle"><i class="fa fa-bars"></i></a>
+                    </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="hello hidden-sm hidden-xs"><a href="#"><i class="fa fa-fw fa-user"></i> <span>Jak leci, <strong>admin</strong>?</span></a></li>
+                        <li class="hidden-sm hidden-xs"><a href="http://localhost" target="_blank" class="fa fa-globe" data-toggle="tooltip" data-placement="bottom" title="Zobacz stronę"></a></li>
+                        <li><a href="http://localhost/edit/logout?t=f2135f346444" class="fa fa-power-off" data-toggle="tooltip" data-placement="bottom" title="Wyloguj się"></a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+		
+        <section id="content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h2 class="content-title">Strony</h2>
+                        <article class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Zarządzanie</h3>
+            </div>
+            <div class="panel-body">
+        		<form name="selectLang" action="http://localhost/edit/pages/manage?t=f2135f346444" method="GET">
+        			<select name="lang" class="form-control" onchange="document.selectLang.submit();">
+        				        					<option value="en_english" >en_english</option>
+        				        					<option value="pl_polski" selected>pl_polski</option>
+        				        			</select>
+        			<input type="hidden" name="t" value="f2135f346444">
+        		</form>
+
+        							<div class="table-responsive no-margin">
+						<table class="table table-striped no-margin">
+							<thead>
+								<tr>
+									<th>Tytuł</th>
+									<th class="text-right">Akcje</th>
+								</tr>
+							</thead>
+							<tbody>
+																<tr>
+									<td><a href="http://localhost/edit/pages/edit/2?t=f2135f346444">Home</a></td>
+									<td class="text-right">
+										<a href="http://localhost/home" target="_blank" class="btn btn-primary btn-xs">
+											<i class="fa fa-search"></i> <span class="hidden-xs">Zobacz</span>
+										</a>
+										<a href="http://localhost/edit/pages/edit/2?t=f2135f346444" class="btn btn-success btn-xs">
+											<i class="fa fa-pencil"></i> <span class="hidden-xs">Edytuj</span>
+										</a>
+										<a href="http://localhost/edit/pages/delete/2?t=f2135f346444" class="btn btn-danger btn-xs" data-confirm="Na pewno chcesz usunąć wybraną stronę?">
+											<i class="fa fa-trash-o"></i> <span class="hidden-xs">Usuń</span>
+										</a>
+									</td>
+								</tr>
+																<tr>
+									<td><a href="http://localhost/edit/pages/edit/4?t=f2135f346444">O mnie</a></td>
+									<td class="text-right">
+										<a href="http://localhost/about-me" target="_blank" class="btn btn-primary btn-xs">
+											<i class="fa fa-search"></i> <span class="hidden-xs">Zobacz</span>
+										</a>
+										<a href="http://localhost/edit/pages/edit/4?t=f2135f346444" class="btn btn-success btn-xs">
+											<i class="fa fa-pencil"></i> <span class="hidden-xs">Edytuj</span>
+										</a>
+										<a href="http://localhost/edit/pages/delete/4?t=f2135f346444" class="btn btn-danger btn-xs" data-confirm="Na pewno chcesz usunąć wybraną stronę?">
+											<i class="fa fa-trash-o"></i> <span class="hidden-xs">Usuń</span>
+										</a>
+									</td>
+								</tr>
+																<tr>
+									<td><a href="http://localhost/edit/pages/edit/6?t=f2135f346444">Kontakt</a></td>
+									<td class="text-right">
+										<a href="http://localhost/contact" target="_blank" class="btn btn-primary btn-xs">
+											<i class="fa fa-search"></i> <span class="hidden-xs">Zobacz</span>
+										</a>
+										<a href="http://localhost/edit/pages/edit/6?t=f2135f346444" class="btn btn-success btn-xs">
+											<i class="fa fa-pencil"></i> <span class="hidden-xs">Edytuj</span>
+										</a>
+										<a href="http://localhost/edit/pages/delete/6?t=f2135f346444" class="btn btn-danger btn-xs" data-confirm="Na pewno chcesz usunąć wybraną stronę?">
+											<i class="fa fa-trash-o"></i> <span class="hidden-xs">Usuń</span>
+										</a>
+									</td>
+								</tr>
+																<tr>
+									<td><a href="http://localhost/edit/pages/edit/8?t=f2135f346444">404</a></td>
+									<td class="text-right">
+										<a href="http://localhost/404" target="_blank" class="btn btn-primary btn-xs">
+											<i class="fa fa-search"></i> <span class="hidden-xs">Zobacz</span>
+										</a>
+										<a href="http://localhost/edit/pages/edit/8?t=f2135f346444" class="btn btn-success btn-xs">
+											<i class="fa fa-pencil"></i> <span class="hidden-xs">Edytuj</span>
+										</a>
+										<a href="http://localhost/edit/pages/delete/8?t=f2135f346444" class="btn btn-danger btn-xs" data-confirm="Na pewno chcesz usunąć wybraną stronę?">
+											<i class="fa fa-trash-o"></i> <span class="hidden-xs">Usuń</span>
+										</a>
+									</td>
+								</tr>
+															</tbody>
+						</table>
+					</div>
+					        		            </div>
+        </div>
+    </div>
+</article>                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="hidden-xs">
+        <a href="mailto:support@batflat.org" class="text-danger"><i class="fa fa-fw fa-bug"></i>Report a bug.</a>
+        Created by <a href="http://sruu.pl/" target="_blank">Sruu.pl</a>
+    </footer>
+    
+    <script src="http://localhost/themes/admin/js/scripts.js?v=1.1.0"></script>
+    </body>
+</html>

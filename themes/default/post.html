@@ -1,0 +1,57 @@
+    {include: themes/".$settings.theme."/inc/header.html}
+
+    <!-- Page Header -->
+    {if: $post.cover_photo}
+    <header class="intro-header" style="background-image: url('{$post.cover_url}')">
+    {else}
+    <header class="intro-header" style="background-image: url('{$bat.path}/themes/{$settings.theme}/img/sara-pattern.png')">
+    {/if}
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>{$post.title}</h1>
+                        <span class="post-meta">{?= sprintf($lang.blog.posted, $post.author.username, $post.published_at) ?}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    {$post.content}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <hr />
+                    <div id="disqus_thread"></div>
+                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+                </div>
+            </div>
+        </div>
+        {if: $post.comments == 1 && !empty($settings.blog.disqus)}
+        <script>
+        var disqus_config = function () {
+        this.page.url = "{$post.url}";
+        this.page.identifier = "{$post.id}";
+        };
+        
+        (function() {
+        var d = document, s = d.createElement('script');
+
+        s.src = '//{$settings.blog.disqus}.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+        })();
+        </script>
+        <script id="dsq-count-scr" src="//{$settings.blog.disqus}.disqus.com/count.js" async></script>
+        {/if}
+    </article>
+
+    {include: themes/".$settings.theme."/inc/footer.html}

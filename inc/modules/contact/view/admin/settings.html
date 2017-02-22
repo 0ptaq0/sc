@@ -1,0 +1,46 @@
+<article class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">{$lang.general.settings}</div>
+            <div class="panel-body">
+        		<form name="user" action="{?=url(ADMIN.'/contact/save')?}" method="POST">
+        			<div class="form-group">
+    	                <label>{$lang.users.user}</label>
+    	                <select name="user" class="form-control">
+                            <option value="0">-- Własny adres mailowy --</option>
+                            {loop: $contact.users}
+                                <option value="{$value.id}" {$value.attr}>{$value.username} - {$value.email}</option>
+                            {/loop}
+                        </select>
+        	        </div>
+    	            <div class="form-group" id="mail">
+    	                <label>{$lang.users.email}</label>
+                        <input class="form-control" type="email" name="email" value="{$contact.email}" />
+    	            </div>
+        	        <input type="submit" name="save" class="btn btn-primary" value="{$lang.general.save}" />
+                </form>
+
+
+                <div class="well well-sm clearfix" style="margin: 15px 0 0 0;">
+                    {$lang.contact.info} <strong>{noparse}{$contact.form}{/noparse}</strong>.
+                    <span class="label label-default pull-right">info</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+
+<script>
+    if($("form select[name='user']").find("option:selected").val() > 0)
+    {
+        $('form #mail').hide();
+    }
+    $("form select[name='user']").change(function()
+    {
+        var page = $(this).find("option:selected").val();
+        if(page > 0)
+            $('form #mail').slideUp();
+        else
+            $('form #mail').slideDown();
+    });
+</script>

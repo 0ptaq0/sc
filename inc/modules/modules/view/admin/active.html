@@ -1,0 +1,22 @@
+{loop: $modules}
+<article class="row">
+    {loop: $value}
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                	<a href="{$value.url}"><i class="fa fa-{$value.icon}" style="margin-right:5px;"></i> {$value.name} {$value.version}</a>
+                	<a href="{$value.uninstallUrl}" class="btn btn-warning btn-xs {if: $value.basic}disabled{/if} pull-right" style="font-size:50%" data-toggle="tooltip" data-placement="top" title="{$lang.modules.deactivate}" data-confirm="{$lang.modules.deactivate_confirm}">
+                        <i class="fa fa-minus"></i>
+                    </a>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <p>{$value.description}</p>
+                <small>{$lang.modules.author}: {$value.author}</small>
+            </div>
+        </div>
+    </div>
+    {/loop}
+</article>
+{/loop}

@@ -1,0 +1,90 @@
+<article class="row">
+    <form action="{?=url(ADMIN.'/settings/saveGeneral')?}" method="POST">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{$lang.settings.general}</h3>
+                </div>
+            	<div class="panel-body">
+                    <div class="form-group">
+                        <label>{$lang.settings.title}</label>
+                        <input type="text" name="title" class="form-control" value="{$settings.title}" required />
+                    </div>
+                    <div class="form-group">
+                        <label>{$lang.settings.description}</label>
+                        <input type="text" name="description" class="form-control" value="{$settings.description}" required />
+                    </div>
+                    <div class="form-group">
+                        <label>{$lang.settings.keywords}</label>
+                        <input type="text" name="keywords" class="form-control" value="{$settings.keywords}" required />
+                    </div>
+                    <div class="form-group">
+                        <label>{$lang.settings.homepage}</label>
+                        <select name="homepage" class="form-control">
+                            {loop: $settings.pages}
+                            <option value="{$value.slug}" {if: $settings.homepage == $value.slug}selected{/if}>{$value.title} ({$value.slug})</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{$lang.settings.system_info}</h3>
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal no-margin">
+                        <dt>{$lang.settings.version}</dt>
+                        <dd>{$settings.version} (<a href="{$updateurl}" class="small">{$lang.settings.check_updates}</a>)</dd>
+                        <dt>{$lang.settings.license}</dt>
+                        <dd>Free</dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{$lang.settings.other}</h3>
+                </div>
+                <div class="panel-body">
+                     <div class="form-group">
+                        <label>{$lang.settings.site_lang}</label>
+                        <select name="lang_site" class="form-control">
+                            {loop: $settings.langs}
+                            <option value="{$value}" {if: $settings.lang_site == $value}selected{/if}>{$value}</option>
+                            {/loop}
+                        </select>
+                     </div>
+                    <div class="form-group">
+                        <label>{$lang.settings.admin_lang}</label>
+                        <select name="lang_admin" class="form-control">
+                            {loop: $settings.langs}
+                            <option value="{$value}" {if: $settings.lang_admin == $value}selected{/if}>{$value}</option>
+                            {/loop}
+                        </select>
+                     </div>
+                    <div class="form-group">
+                         <label>{$lang.settings.footer}</label>
+                         <input type="text" name="footer" class="form-control" value="{$settings.footer}" required />
+                    </div>
+                    <div class="form-group">
+                         <label>{$lang.settings.editor}</label>
+                         <div class="radio">
+                             <label class="radio-inline">
+                                <input type="radio" name="editor" value="wysiwyg" {if: $settings.editor == 'wysiwyg'}checked{/if} /> WYSIWYG
+                             </label>
+                             <label class="radio-inline">
+                                <input type="radio" name="editor" value="html" {if: $settings.editor == 'html'}checked{/if} /> HTML
+                             </label>
+                         </div>
+                    </div>
+                    <input type="submit" name="save" class="btn btn-primary" value="{$lang.general.save}" />
+                </div>
+            </div>
+        </div>
+    </form>
+</article>

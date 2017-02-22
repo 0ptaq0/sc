@@ -1,0 +1,66 @@
+    {include: themes/".$settings.theme."/inc/header.html}
+
+    <!-- Page Header -->
+    <header class="intro-header" style="background-image: url('{$bat.path}/themes/{$settings.theme}/img/sara-pattern.png')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="site-heading">
+                        <h1>{$blog.title}</h1>
+                        <hr class="small">
+                        <span class="subheading">{$blog.desc}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            {loop: $blog.posts}
+                <div class="post-preview">
+                    <a href="{$value.url}">
+                        {if: $value.cover_photo}
+                        <img src="{$value.cover_url}" class="post-cover" />
+                        {/if}
+                        <h2 class="post-title">
+                            {$value.title}
+                        </h2>
+                    </a>
+                    <p class="post-intro">{$value.content}</p>
+                    <p class="post-meta">{?= sprintf($lang.blog.posted, $value.author.username, $value.published_at) ?} | <span class="disqus-comment-count" data-disqus-url="{$value.url}">{$lang.blog.no_comments}</span></p>
+                </div>
+                <hr>
+            {/loop}
+                <!-- Pager -->
+                <ul class="pager">
+                    {if: isset($prev)}
+                    <li class="previous">
+                        <a href="{$prev.url}">&larr; {$lang.blog.newer}</a>
+                    </li>
+                    {/if}
+                    {if: isset($next)}
+                    <li class="next">
+                        <a href="{$next.url}">{$lang.blog.older} &rarr;</a>
+                    </li>
+                    {/if}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {if: !empty($settings.blog.disqus)}
+    <script>
+        var disqus_shortname = '{$settings.blog.disqus}';
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <script id="dsq-count-scr" src="//{$settings.blog.disqus}.disqus.com/count.js" async></script>
+    {/if}
+
+    {include: themes/".$settings.theme."/inc/footer.html}
