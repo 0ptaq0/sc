@@ -3,7 +3,7 @@
 	if (!version_compare(PHP_VERSION, '5.5.0', '>=')) exit("Batflat requires at least <b>PHP 5.5</b>");
 
 	// Admin cat name
-	define('ADMIN', 'edit');
+	define('ADMIN', 'admin');
 
 	// Themes path
 	define('THEMES', BASE_DIR . '/themes');
