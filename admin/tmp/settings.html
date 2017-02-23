@@ -1,42 +1,44 @@
 <article class="row">
-    <form action="http://localhost/edit/blog/saveSettings?t=f2135f346444" method="POST">
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Ogólne</h3>
-                </div>
-            	<div class="panel-body">
-                    <div class="form-group">
-                        <label>Nazwa bloga</label>
-                        <input type="text" name="blog[title]" class="form-control" value="Blog" required />
-                    </div>
-                    <div class="form-group">
-                        <label>Krótki opis</label>
-                        <input type="text" name="blog[desc]" class="form-control" value="... Why so serious? ..." required />
-                    </div>
-                    <div class="form-group">
-                        <label>Ilośc wpisów na stronie</label>
-                        <input type="number" name="blog[perpage]" class="form-control" value="5" required />
-                    </div>
-                    <div class="form-group">
-                        <label>Disqus shortname</label>
-                        <input type="text" name="blog[disqus]" class="form-control" value="" />
-                    </div>
-                    <div class="form-group">
-                        <label>Format wyświetlanego czasu</label>
-                        <select name="blog[dateformat]" class="form-control" required>
-                                                            <option value="d-m-Y" >01-01-2017</option>
-                                                            <option value="d/m/Y" >01/01/2017</option>
-                                                            <option value="d Mx Y" >01 Stycznia 2017</option>
-                                                            <option value="M d, Y" selected>Styczeń 01, 2017</option>
-                                                            <option value="d-m-Y H:i" >01-01-2017 12:00</option>
-                                                            <option value="d/m/Y H:i" >01/01/2017 12:00</option>
-                                                            <option value="d Mx Y, H:i" >01 Stycznia 2017, 12:00</option>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">Ustawienia</div>
+            <div class="panel-body">
+        		<form name="user" action="http://localhost/admin/contact/save?t=c50678d7f020" method="POST">
+        			<div class="form-group">
+    	                <label>Użytkownik</label>
+    	                <select name="user" class="form-control">
+                            <option value="0">-- Własny adres mailowy --</option>
+                                                            <option value="1" >admin - saracosmetics.poczta@wp.pl</option>
                                                     </select>
-                    </div>
-                    <input type="submit" name="submit" class="btn btn-primary" value="Zapisz" />
+        	        </div>
+    	            <div class="form-group" id="mail">
+    	                <label>Adres e-mail</label>
+                        <input class="form-control" type="email" name="email" value="saracosmetics.poczta@wp.pl" />
+    	            </div>
+        	        <input type="submit" name="save" class="btn btn-primary" value="Zapisz" />
+                </form>
+
+
+                <div class="well well-sm clearfix" style="margin: 15px 0 0 0;">
+                    Aby wyświetlić formularz na stronie, wklej tag <strong>*bracket**dollar*contact.form*/bracket*</strong>.
+                    <span class="label label-default pull-right">info</span>
                 </div>
             </div>
         </div>
-    </form>
+    </div>
 </article>
+
+<script>
+    if($("form select[name='user']").find("option:selected").val() > 0)
+    {
+        $('form #mail').hide();
+    }
+    $("form select[name='user']").change(function()
+    {
+        var page = $(this).find("option:selected").val();
+        if(page > 0)
+            $('form #mail').slideUp();
+        else
+            $('form #mail').slideDown();
+    });
+</script>

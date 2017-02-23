@@ -72,7 +72,7 @@
 
         private function _setHeaders()
         {
-            $this->_headers  = "From: noreply@{$_SERVER['HTTP_HOST']}\n";
+            $this->_headers  = "From: saracosmetics.poczta@wp.pl\n";
             $this->_headers .= "Reply-To: {$this->_params['from']}\n";
             $this->_headers .= "MIME-Version: 1.0\n";
             $this->_headers .= "Content-type: text/html; charset=utf-8\n";

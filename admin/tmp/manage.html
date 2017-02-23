@@ -1,87 +1,25 @@
 <article class="row">
-    <div class="col-md-12">
+    <div class="col-md-8">
         <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Zarządzanie</h3>
-            </div>
+            <div class="panel-heading">Zarządzanie</div>
             <div class="panel-body">
-        		<form name="selectLang" action="http://localhost/admin/pages/manage?t=8772def47c02" method="GET">
-        			<select name="lang" class="form-control" onchange="document.selectLang.submit();">
-        				        					<option value="en_english" >en_english</option>
-        				        					<option value="pl_polski" selected>pl_polski</option>
-        				        			</select>
-        			<input type="hidden" name="t" value="8772def47c02">
-        		</form>
+                                <p>Brak obiektów do wyświetlenia.</p>
+                            </div>
+        </div>
+    </div>
 
-        							<div class="table-responsive no-margin">
-						<table class="table table-striped no-margin">
-							<thead>
-								<tr>
-									<th>Tytuł</th>
-									<th class="text-right">Akcje</th>
-								</tr>
-							</thead>
-							<tbody>
-																<tr>
-									<td><a href="http://localhost/admin/pages/edit/2?t=8772def47c02">Home</a></td>
-									<td class="text-right">
-										<a href="http://localhost/home" target="_blank" class="btn btn-primary btn-xs">
-											<i class="fa fa-search"></i> <span class="hidden-xs">Zobacz</span>
-										</a>
-										<a href="http://localhost/admin/pages/edit/2?t=8772def47c02" class="btn btn-success btn-xs">
-											<i class="fa fa-pencil"></i> <span class="hidden-xs">Edytuj</span>
-										</a>
-										<a href="http://localhost/admin/pages/delete/2?t=8772def47c02" class="btn btn-danger btn-xs" data-confirm="Na pewno chcesz usunąć wybraną stronę?">
-											<i class="fa fa-trash-o"></i> <span class="hidden-xs">Usuń</span>
-										</a>
-									</td>
-								</tr>
-																<tr>
-									<td><a href="http://localhost/admin/pages/edit/4?t=8772def47c02">O mnie</a></td>
-									<td class="text-right">
-										<a href="http://localhost/about-me" target="_blank" class="btn btn-primary btn-xs">
-											<i class="fa fa-search"></i> <span class="hidden-xs">Zobacz</span>
-										</a>
-										<a href="http://localhost/admin/pages/edit/4?t=8772def47c02" class="btn btn-success btn-xs">
-											<i class="fa fa-pencil"></i> <span class="hidden-xs">Edytuj</span>
-										</a>
-										<a href="http://localhost/admin/pages/delete/4?t=8772def47c02" class="btn btn-danger btn-xs" data-confirm="Na pewno chcesz usunąć wybraną stronę?">
-											<i class="fa fa-trash-o"></i> <span class="hidden-xs">Usuń</span>
-										</a>
-									</td>
-								</tr>
-																<tr>
-									<td><a href="http://localhost/admin/pages/edit/6?t=8772def47c02">Kontakt</a></td>
-									<td class="text-right">
-										<a href="http://localhost/contact" target="_blank" class="btn btn-primary btn-xs">
-											<i class="fa fa-search"></i> <span class="hidden-xs">Zobacz</span>
-										</a>
-										<a href="http://localhost/admin/pages/edit/6?t=8772def47c02" class="btn btn-success btn-xs">
-											<i class="fa fa-pencil"></i> <span class="hidden-xs">Edytuj</span>
-										</a>
-										<a href="http://localhost/admin/pages/delete/6?t=8772def47c02" class="btn btn-danger btn-xs" data-confirm="Na pewno chcesz usunąć wybraną stronę?">
-											<i class="fa fa-trash-o"></i> <span class="hidden-xs">Usuń</span>
-										</a>
-									</td>
-								</tr>
-																<tr>
-									<td><a href="http://localhost/admin/pages/edit/8?t=8772def47c02">404</a></td>
-									<td class="text-right">
-										<a href="http://localhost/404" target="_blank" class="btn btn-primary btn-xs">
-											<i class="fa fa-search"></i> <span class="hidden-xs">Zobacz</span>
-										</a>
-										<a href="http://localhost/admin/pages/edit/8?t=8772def47c02" class="btn btn-success btn-xs">
-											<i class="fa fa-pencil"></i> <span class="hidden-xs">Edytuj</span>
-										</a>
-										<a href="http://localhost/admin/pages/delete/8?t=8772def47c02" class="btn btn-danger btn-xs" data-confirm="Na pewno chcesz usunąć wybraną stronę?">
-											<i class="fa fa-trash-o"></i> <span class="hidden-xs">Usuń</span>
-										</a>
-									</td>
-								</tr>
-															</tbody>
-						</table>
-					</div>
-					        		            </div>
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">Dodaj galerię</div>
+            <div class="panel-body">
+        		<form action="http://localhost/admin/galleries/add?t=8772def47c02" method="POST">
+    	            <div class="form-group">
+    	                <label>Nazwa</label>
+    	                <input type="text" name="name" class="form-control" required />
+    	            </div>
+    	            <input type="submit" class="btn btn-primary" value="Zapisz" />
+                </form>
+            </div>
         </div>
     </div>
 </article>
