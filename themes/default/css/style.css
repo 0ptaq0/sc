@@ -7,7 +7,7 @@ body {
     font-family: 'Lora', 'Times New Roman', serif;
     font-size: 20px;
     color: #404040;
-    background-color: #fff;
+    background-color: #1b1b1b;
 }
 p {
     line-height: 1.5;
@@ -106,23 +106,23 @@ hr.small {
     }
     .navbar-custom.is-fixed {
         position: fixed;
-        background-color: rgba(255, 255, 255, 0.9);
-        border-bottom: 1px solid #f2f2f2;
+
     }
      .navbar-custom.is-fixed .navbar-brand {
-         color: #404040
+
      }
      .navbar-custom.is-fixed .navbar-brand:hover,
      .navbar-custom.is-fixed .navbar-brand:focus {
-         color: #0085a1
+         color: #0085a1;
      }
+	 
      .navbar-custom.is-fixed .nav > li > a {
-         color: #404040
      }
+	 
      .navbar-custom.is-fixed .nav > li > a:hover,
      .navbar-custom.is-fixed .nav > li > a:focus,
      .navbar-custom.is-fixed .nav > li.active > a {
-         color: #0085a1
+         color: #d40052;
      }
 }
 .navbar-default .navbar-nav>.active>a,
@@ -137,7 +137,7 @@ hr.small {
     background: no-repeat center center;
     background-attachment: scroll;
     background-size: cover;
-    margin-bottom: 50px;
+    padding-bottom: 50px;
 }
  .intro-header .site-heading,
  .intro-header .post-heading,
@@ -315,7 +315,11 @@ form .btn {
 }
 .form-group label {
     display: block;
+<<<<<<< HEAD
     z-index: 0; /*dfsdfsdf*/
+=======
+    z-index: 0;
+>>>>>>> edac4c8... css added
     position: relative;
     top: 2em;
     margin: 0;
@@ -418,4 +422,13 @@ img::selection {
 img::-moz-selection {
     color: white;
     background: transparent;
+}
+
+.container-fluid{
+
+	background: -moz-linear-gradient(left,  rgba(27,27,27,0.65) 0%, rgba(0,0,0,0) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(left,  rgba(27,27,27,0.65) 0%,rgba(0,0,0,0) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to right,  rgba(27,27,27,0.65) 0%,rgba(0,0,0,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a61b1b1b', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
+
 }
