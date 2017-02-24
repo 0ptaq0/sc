@@ -73,7 +73,7 @@ function sendFile(file, editor)
 
                 return xhr;
             },
-            url: 'http://localhost/admin/pages/editorUpload?t=8772def47c02',
+            url: 'http://localhost/admin/pages/editorUpload?t=56405d60a835',
             data: formData,
             type: 'POST',
             cache: false,

@@ -23,8 +23,19 @@
                 <div id="notify" class="alert alert-{$bat.notify.type}">{$bat.notify.text}</div>
                 {/if}
                 {$page.content}
+				
             </div>
-        </div>
     </div>
+	</div>
+	
+	
+	<div class="googlemaps">
+			<iframe class="googlemaps"										
+							frameborder="0" 
+							src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14714.679729787284!2d20.15794098945924!3d50.01286544535335!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4716473cf89a4643%3A0x84db615a79f1e826!2zUG9kxYLEmcW8ZSAzOTAsIDMyLTAwMyBQb2TFgsSZxbxlLCBQb2xza2E!5e0!3m2!1spl!2sus!4v1487941176631
+							&zoom=14" 
+							allowfullscreen>
+			</iframe>							
+	</div>
 
     {include: themes/".$settings.theme."/inc/footer.html}

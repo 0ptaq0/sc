@@ -54,6 +54,14 @@ hr.small {
     z-index: 3;
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
+.googlemaps {
+	top: 0;
+    left: 0;
+    width: 100%;
+	height: 200px;
+	position: relative;
+	overflow: hidden;
+}
  .navbar-custom .navbar-brand {
      font-weight: 800
  }
@@ -277,13 +285,14 @@ footer {
      margin-bottom: 0;
  }
 .form-group {
+	background-color: #FFF;
     font-size: 14px;
     position: relative;
     margin-bottom: 0;
     padding-bottom: 1.5em;
     padding-right: 15px;
     padding-left: 15px;
-    border-bottom: 1px solid #eeeeee;
+    border-bottom: 1px solid #4E2C73;
 }
 form .form-group:last-of-type {
     margin-bottom: 25px
@@ -332,15 +341,15 @@ form .row:first-child .form-group {
 }
 input::-webkit-input-placeholder,
 textarea::-webkit-input-placeholder {
-    color: #AAB2BD !important
+    color: #4E2C73 !important
 }
 input::-moz-placeholder,
 textarea::-moz-placeholder {
-    color: #AAB2BD !important
+    color: #4E2C73 !important
 }
 input:-ms-input-placeholder,
 textarea:-ms-input-placeholder {
-    color: #AAB2BD !important
+    color: #4E2C73 !important
 }
 .btn {
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -356,12 +365,12 @@ textarea:-ms-input-placeholder {
     padding: 25px 35px;
 }
 .btn-default {
-    background-color: #fff
+    background-color: #ff85ca
 }
 .btn-default:hover,
 .btn-default:focus {
-    background-color: #0085a1;
-    border: 1px solid #0085a1;
+    background-color: #C147E8;
+    border: 1px solid #542C61;
     color: white;
 }
 .pager {
