@@ -8,7 +8,7 @@ body {
     font-size: 20px;
     color: #ebebeb;
     /*background-color: #1b1b1b;*/
-	background-color: #1b1b1b;
+	background-color: #0f0f0f;
 }
 p {
     line-height: 1.5;
@@ -279,7 +279,8 @@ hr.small {
     line-height: 1.2;
 }
 footer {
-    padding: 50px 0 65px
+    padding: 50px 0 65px;
+	background:#0f0f0f;
 }
  footer .list-inline {
      margin: 0;
@@ -580,6 +581,12 @@ body > footer > div > div > div.footer-left{
 body > footer > div > div > div.footer-left > p{
 	font-size:14px;
 	text-align:center;
+}
+
+
+#map{
+    border-width: 1px;
+	border-top-style: solid;
 }
 
 /* content */
