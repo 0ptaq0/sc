@@ -1,0 +1,29 @@
+{if: !empty($modules)}
+{loop: $modules}
+<article class="row">
+	{loop: $value}
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                	<a href="#"><i class="fa fa-{$value.icon}" style="margin-right:5px;"></i> {$value.name} {$value.version}</a>
+                	<a href="{$value.installUrl}" class="btn btn-warning btn-xs pull-right" style="font-size:50%;margin-left:5px;" data-toggle="tooltip" data-placement="top" title="{$lang.modules.activate}">
+                        <i class="fa fa-plus"></i>
+                    </a>
+                	<a href="{$value.removeUrl}" class="btn btn-danger btn-xs pull-right" style="font-size:50%;" data-toggle="tooltip" data-placement="top" title="{$lang.general.delete}" data-confirm="{$lang.modules.remove_confirm}">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <p>{$value.description}</p>
+                <small>{$lang.modules.author}: {$value.author}</small>
+            </div>
+        </div>
+    </div>
+    {/loop}
+</article>
+{/loop}
+{else}
+<p>{$lang.modules.no_modules}</p>
+{/if}

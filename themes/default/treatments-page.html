@@ -1,0 +1,28 @@
+    {include: themes/".$settings.theme."/inc/header.html}
+
+    <!-- Page Header -->
+    <header class="intro-header" style="background-image: url('{$bat.path}/themes/{$settings.theme}/img/sara_logo.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="site-heading">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                {if: $bat.notify}
+                <div id="notify" class="alert alert-{$bat.notify.type}">{$bat.notify.text}</div>
+                {/if}
+                {$page.content}
+				
+            </div>
+    </div>
+	</div>
+	
+    {include: themes/".$settings.theme."/inc/footer.html}

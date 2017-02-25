@@ -1,0 +1,50 @@
+<article class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{$lang.settings.translation}</h3>
+                <ul class="nav nav-tabs">
+                    {loop: $settings.langs}
+                    <li class="{$value.attr}"><a href="{?=url(ADMIN.'/settings/translation?lang='.$value['name'].'&source='.$_GET['source'])?}">{$value.name}</a></li>
+                    {/loop}
+                </ul>
+            </div>
+            <div class="panel-body">
+                <form name="selectModule" action="{?=url(ADMIN.'/settings/translation')?}" method="GET">
+        			<select name="source" class="form-control" onchange="document.selectModule.submit();">
+        				{loop: $translations}
+        					<option value="{$value}" {?=($value === $_GET['source']) ? 'selected' : '' ?}>{?= (is_numeric($value) ? 'General' : ucfirst($value)) ?}</option>
+        				{/loop}
+        			</select>
+        			<input type="hidden" name="lang" value="{$_GET['lang']}">
+        			<input type="hidden" name="t" value="{$_SESSION['token']}">
+        		</form>
+                <div class="table-responsive">
+                    <form method="post">
+                        <table class="table no-margin">
+                            <tbody>
+                                {loop: $translation as $type => $row}
+                                <tr>
+                                    <td colspan="2">
+                                        <h3>{?= (is_numeric($module) ? 'General' : ucfirst($module)) ?} <small>{?=($type == 'admin') ? 'Admin' : 'Front' ?}</small></h3>
+                                    </td>
+                                </tr>
+                                {loop: $row}
+                                <tr>
+                                    <td>{$value.key}</td>
+                                    <td>
+                                        <pre>{$value.english|e}</pre>
+                                        <input type="text" name="{$module}[{$type}][{$value.key}]" value="{$value.value|e}" class="form-control" placeholder="{$lang.settings.notranslation}" />
+                                    </td>
+                                </tr>
+                                {/loop}
+                                {/loop}
+                            </tbody>
+                        </table>
+                        <input type="submit" name="save" class="btn btn-primary" value="{$lang.general.save}" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>

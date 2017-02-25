@@ -6,7 +6,7 @@
 body {
     font-family: 'Lora', 'Times New Roman', serif;
     font-size: 20px;
-    color: #404040;
+    color: #ebebeb;
     background-color: #1b1b1b;
 }
 p {
@@ -63,13 +63,15 @@ hr.small {
 	overflow: hidden;
 }
  .navbar-custom .navbar-brand {
-     font-weight: 800
+     font-weight: 800;
+	 transition: all 0.5s ease 0.1s;
  }
  .navbar-custom .nav > li > a {
      text-transform: uppercase;
      font-size: 12px;
      font-weight: 800;
      letter-spacing: 1px;
+	 transition: all 0.5s ease 0.1s;
  }
 .navbar-default .navbar-nav>.open>a,
 .navbar-default .navbar-nav>.open>a:hover,
@@ -113,7 +115,7 @@ hr.small {
      }
      .navbar-custom.is-fixed .navbar-brand:hover,
      .navbar-custom.is-fixed .navbar-brand:focus {
-         color: #0085a1;
+         color: #d40052;
      }
 	 
      .navbar-custom.is-fixed .nav > li > a {
@@ -138,6 +140,7 @@ hr.small {
     background-attachment: scroll;
     background-size: cover;
     padding-bottom: 50px;
+    padding-top: 50px;
 }
  .intro-header .site-heading,
  .intro-header .post-heading,
@@ -178,6 +181,7 @@ hr.small {
 }
 .intro-header .post-heading h1 {
     font-size: 35px
+	
 }
 .intro-header .post-heading .subheading,
 .intro-header .post-heading .meta {
@@ -285,14 +289,14 @@ footer {
      margin-bottom: 0;
  }
 .form-group {
-	background-color: #FFF;
+	background-color: #e5e5e5;
     font-size: 14px;
     position: relative;
     margin-bottom: 0;
     padding-bottom: 1.5em;
     padding-right: 15px;
     padding-left: 15px;
-    border-bottom: 1px solid #4E2C73;
+    border-bottom: 1px solid #d40052;
 }
 form .form-group:last-of-type {
     margin-bottom: 25px
@@ -315,11 +319,7 @@ form .btn {
 }
 .form-group label {
     display: block;
-<<<<<<< HEAD
-    z-index: 0; /*dfsdfsdf*/
-=======
     z-index: 0;
->>>>>>> edac4c8... css added
     position: relative;
     top: 2em;
     margin: 0;
@@ -338,22 +338,22 @@ form .btn {
     opacity: 1;
 }
 .form-group-with-focus label {
-    color: #0085a1
+    color: #d40052
 }
 form .row:first-child .form-group {
     border-top: 1px solid #eeeeee
 }
 input::-webkit-input-placeholder,
 textarea::-webkit-input-placeholder {
-    color: #4E2C73 !important
+    color: #333333 !important
 }
 input::-moz-placeholder,
 textarea::-moz-placeholder {
-    color: #4E2C73 !important
+    color: #333333 !important
 }
 input:-ms-input-placeholder,
 textarea:-ms-input-placeholder {
-    color: #4E2C73 !important
+    color: #333333 !important
 }
 .btn {
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -363,18 +363,18 @@ textarea:-ms-input-placeholder {
     letter-spacing: 1px;
     border-radius: 0;
     padding: 15px 25px;
+	transition: all 0.75s ease 0.1s;
 }
 .btn-lg {
     font-size: 16px;
     padding: 25px 35px;
 }
 .btn-default {
-    background-color: #ff85ca
+    background-color: #e56697
 }
 .btn-default:hover,
 .btn-default:focus {
-    background-color: #C147E8;
-    border: 1px solid #542C61;
+    background-color: #d40052;
     color: white;
 }
 .pager {
@@ -408,12 +408,12 @@ textarea:-ms-input-placeholder {
 ::-moz-selection {
     color: white;
     text-shadow: none;
-    background: #0085a1;
+    background: #d40052;
 }
 ::selection {
     color: white;
     text-shadow: none;
-    background: #0085a1;
+    background: #d40052;
 }
 img::selection {
     color: white;
@@ -425,10 +425,19 @@ img::-moz-selection {
 }
 
 .container-fluid{
-
 	background: -moz-linear-gradient(left,  rgba(27,27,27,0.65) 0%, rgba(0,0,0,0) 100%); /* FF3.6-15 */
 	background: -webkit-linear-gradient(left,  rgba(27,27,27,0.65) 0%,rgba(0,0,0,0) 100%); /* Chrome10-25,Safari5.1-6 */
 	background: linear-gradient(to right,  rgba(27,27,27,0.65) 0%,rgba(0,0,0,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a61b1b1b', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
-
 }
+/* DUPA */
+.centerbox {width:100%}
+
+/* kwadraty */
+		ul.box_uslugi li {list-style-type:none;display:inline;clear:left}
+		ul.box_uslugi li.cat-item-none { display: none;}
+		ul.box_uslugi li a{text-decoration:none;font-size:25px;border:1px solid #B15A7C;width:228px;height:128px;float:left;margin:10px 0 10px 20px;padding:10px 10px 0 10px;background:#fff}
+			ul.box_uslugi li a:hover {background: #B15A7C;color:#fff!important;transition: 0.7s;}
+			ul.box_uslugi li a:hover h2 {color:#fff!important;transition: 0.7s;}
+		.clearbox {position:relative;float:right;width:200px;height:320px;}
+
