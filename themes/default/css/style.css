@@ -457,7 +457,7 @@ body > header > div.cantainer{
 	height:100%;
 }
 	
-body > header > div:after{
+body > header > div.container:after{
 	position:absolute;
 	content: "";
     display: block;
@@ -468,6 +468,7 @@ body > header > div:after{
 	background: linear-gradient(to right,  rgba(212,0,82,0) 0%,rgba(212,0,82,0.8) 15%,rgba(212,0,82,1) 19%,rgba(212,0,82,1) 52%,rgba(212,0,82,1) 53%,rgba(212,0,82,1) 81%,rgba(212,0,82,0.8) 85%,rgba(212,0,82,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00d40052', endColorstr='#00d40052',GradientType=1 ); /* IE6-9 */
 	overflow:hidden;
+	left:-15px;
 }
 
 /* formularz kontaktowy*/
