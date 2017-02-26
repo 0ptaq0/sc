@@ -15,6 +15,7 @@
         			'{elseif: ([^}]*)}' => '<?php elseif ($1): ?>',
         			'{\/if}' => '<?php endif; ?>',
         			'{loop: ([^}]*) as ([^}]*)=>([^}]*)}' => '<?php $counter = 0; foreach ($1 as $2=>$3): ?>',
+                    '{loop: ([^}]*) as ([^}]*)}' => '<?php $counter = 0; foreach ($1 as $key => $2): ?>',
         			'{loop: ([^}]*)}' => '<?php $counter = 0; foreach ($1 as $key => $value): ?>',
         			'{\/loop}' => '<?php $counter++; endforeach; ?>',
                     '{\?(\=){0,1}([^}]*)\?}' => '<?php if(strlen("$1")) echo $2; else $2; ?>',
