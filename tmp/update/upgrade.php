@@ -1,7 +1,7 @@
 <?php
 	/**
 	 * Batflat migration/upgrade file
-	 * @copyright Copyright by Sruu.pl (http://sruu.pl) (c) 2016
+	 * @copyright Copyright by Sruu.pl (http://sruu.pl) (c) 2017
 	 * @author Sruu.pl <kontakt@sruu.pl>
 	 */
 	if(!defined("UPGRADABLE"))
@@ -51,16 +51,13 @@
 			 */
 			deleteDir('inc/less');
 
-
 			// Upgrade version
 			$return = '1.0.1';
 
 		case '1.0.1':
-
 			$return = "1.0.2";
 
 		case '1.0.2':
-
 			$return = "1.0.3";
 
 		case '1.0.3':
@@ -95,11 +92,11 @@
 			}
 			$return = '1.1.0';
 		
-		case '1.1.0';
+		case '1.1.0':
 			$this->core->db()->pdo()->exec('CREATE TABLE "blog_tags" (
 							`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 							`name`	TEXT,
-							`slug` TEXT
+							`slug`  TEXT
 						);');
             $this->core->db()->pdo()->exec('CREATE TABLE `blog_tags_relationship` (
 							`blog_id`	INTEGER NOT NULL,
@@ -122,6 +119,9 @@
 			$this->rcopy(BASE_DIR.'/tmp/update/index.php', BASE_DIR.'/index.php');
 
 			$return = '1.2.0';
+
+		case '1.2.0':
+			$return = '1.2.1';	
 	}
 
 	return $return;

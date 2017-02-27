@@ -129,7 +129,14 @@
         if(filter_var($data, FILTER_VALIDATE_URL) !== FALSE)
             return $data;
         
-        $protocol = stripos($_SERVER['SERVER_PROTOCOL'], 'https') === true ? 'https://' : 'http://';
+        if((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off')
+            || isset_or($_SERVER['SERVER_PORT'], null) == 443
+            || isset_or($_SERVER['HTTP_X_FORWARDED_PORT'], null) == 443
+        )
+            $protocol = 'https://';
+        else
+            $protocol = 'http://';
+
         $url = trim($protocol . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']), '/\\');
         $url = str_replace('/'.ADMIN, '', $url);
 

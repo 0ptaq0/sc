@@ -32,7 +32,7 @@
         		$lang = $_GET['lang'];
 			else
 				$lang = $this->core->getSettings('settings', 'lang_site');
-			$this->assign['langs'] = $this->_getLanguages($lang);
+			$this->assign['langs'] = $this->_getLanguages($lang, 'active');
 
         	// list
             $rows = $this->core->db('navs')->toArray();
@@ -63,7 +63,7 @@
 				$lang = $_GET['lang'];
 			else
 				$lang = $this->core->getSettings('settings', 'lang_site');
-			$this->assign['langs'] = $this->_getLanguages($lang);
+			$this->assign['langs'] = $this->_getLanguages($lang, 'selected');
 
 			$this->assign['link'] = ['name' => '', 'lang' => '', 'page' => '', 'url' => '', 'parent' => ''];
 
@@ -94,7 +94,7 @@
                     $lang = $_GET['lang'];
                 else
                     $lang = $row['lang'];
-                $this->assign['langs'] = $this->_getLanguages($lang);
+                $this->assign['langs'] = $this->_getLanguages($lang, 'selected');
 
     	        $this->assign['link'] = filter_var_array($row, FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -274,16 +274,17 @@
 		/**
 		* list of languages
 		* @param string $selected
+        * @param string $active ('active' or 'selected')
 		* @return array
 		*/
-		private function _getLanguages($selected = null)
+		private function _getLanguages($selected = null, $active = null)
 		{
 			$langs = glob('../inc/lang/*', GLOB_ONLYDIR);
 
 			$result = [];
 			foreach($langs as $lang)
 			{
-				if($selected == basename($lang)) $attr = 'active';
+				if($selected == basename($lang)) $attr = $active;
 				else $attr = null;
 				$result[] = ['name' => basename($lang), 'attr' => $attr];
 			}
