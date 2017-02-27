@@ -25,6 +25,7 @@ h5,
 h6 {
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 800;
+	padding-top: 30px;
 }
 a {
     color: #404040
@@ -215,7 +216,12 @@ hr.small {
     color: #0085a1;
 }
 .post-preview > a > .post-cover {
-    max-width: 100%
+
+	max-height: 300px;
+	width: 100%;
+	object-fit: cover;
+	overflow: hidden;
+	position: realtive;
 }
 .post-preview > a > .post-title {
     font-size: 30px;
@@ -431,7 +437,9 @@ background: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 35%, rgba(
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#000000', GradientType=1 );
 }
 /* center */
-.centerbox {width:100%}
+.centerbox {
+	width:100%;
+}
 
 /* squares */
 .square li{
@@ -460,6 +468,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', end
 	color:#fff!important;
 	transition: 0.5s
 	}
+
 		
 
 /* header*/	
@@ -614,7 +623,6 @@ background: -ms-linear-gradient(left, rgba(27,27,27,1) 0%, rgba(33,33,33,1) 1%, 
 background: linear-gradient(to right, rgba(27,27,27,1) 0%, rgba(33,33,33,1) 1%, rgba(33,33,33,1) 99%, rgba(27,27,27,1) 100%);
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1b1b1b', endColorstr='#1b1b1b', GradientType=1 );
 }
-
 .carousel img {
 		max-height: 400px;
         width: 100%;
@@ -622,7 +630,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1b1b1b', end
 		overflow: hidden;
 		position: realtive;
 }
-
 .google-maps {
 	top: 0;
     left: 0;
@@ -631,5 +638,22 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1b1b1b', end
 	position: relative;
 	overflow: hidden;
 }
-
-
+/* Poradnik */
+.post-h2 {
+	position: absolute; 
+	top: 200px; 
+	left: 0; 
+	width: 100%;
+	color: white; 
+   font: bold 24px/45px Helvetica, Sans-Serif; 
+   letter-spacing: -1px;  
+   background: rgb(0, 0, 0); /* fallback color */
+   background: rgba(0, 0, 0, 0.7);
+   padding: 10px; 
+}
+.post-image {
+	position: relative; 
+	width: 100%;
+	max-height:300px;
+	object-fit:cover;
+}
