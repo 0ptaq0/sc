@@ -4,11 +4,12 @@
  * Licensed under MIT
  */
 body {
-    font-family: 'Lora', 'Times New Roman', serif;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 20px;
     color: #ebebeb;
     /*background-color: #1b1b1b;*/
 	background-color: #0f0f0f;
+	overflow-y: scroll;
 }
 p {
     line-height: 1.5;
@@ -706,6 +707,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1b1b1b', end
 #home-zabiegi{
 	padding:0;
 }
+/* Efekt powiekszenia */
 .button {
     -webkit-box-flex: 1;
     -ms-flex: 1 1 auto;
@@ -740,5 +742,3 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1b1b1b', end
     width: 0%;
     left: 0;
 }
-
-		

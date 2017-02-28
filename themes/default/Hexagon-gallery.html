@@ -1,0 +1,650 @@
+
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.1.0/velocity.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.1.0/velocity.ui.js"></script>
+ 
+ <style>
+p {
+  margin-top: 0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+section.intro {
+	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  background: #0f0f0f;
+  background: -moz-radial-gradient(center, ellipse cover, #f6f6f6 1%, #d3d3d3 100%);
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%, #f6f6f6), color-stop(100%, #d3d3d3));
+  /* background: -webkit-radial-gradient(center, ellipse cover, #f6f6f6 1%,#d3d3d3 100%); */
+  background: -o-radial-gradient(center, ellipse cover, #f6f6f6 1%, #d3d3d3 100%);
+  background: -ms-radial-gradient(center, ellipse cover, #f6f6f6 1%, #d3d3d3 100%);
+  /* background: radial-gradient(ellipse at center, #f6f6f6 1%,#d3d3d3 100%); */
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#f6f6f6', endColorstr='#d3d3d3', GradientType=1);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.welcome {
+  font-size: 60px;
+  text-align: center;
+  color: #DDDDDD;
+}
+
+
+/********************************************************************************************************************************
+                                            Hexagon Intro Blocks
+********************************************************************************************************************************/
+
+.intro-block {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.hex-bg-big-text {
+  position: absolute;
+  z-index: -1;
+  height: 100%;
+  width: 100%;
+}
+
+.centerfold-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.hoverblock {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hover-notify {
+  position: absolute;
+  bottom: -80px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 50px;
+}
+
+.code-display {
+  position: relative;
+  color: #DDDDDD;
+  width: 600px;
+  height: 260px;
+}
+
+.code-display::before {
+  content: "Zabiegi";
+  position: absolute;
+  top: -70px;
+  left: 0;
+  font-size: 3.0rem;
+  color: #DDDDDD;
+}
+
+.code-display h1 {
+  color: #DDDDDD;
+}
+
+.code-description {
+  width: 100%;
+  height: 100%;
+  color: #DDDDDD;
+  padding-left: 10px;
+}
+
+.code-description * {
+  display: none;
+}
+
+.code-description > div {
+  padding: 0px 40px;
+  font-size: 26px;
+  border-left: 2px solid #DDDDDD;
+}
+
+.desc-active {
+  display: block;
+  /*height: 100%;*/
+  position: relative;
+}
+
+.desc-active > p {
+  display: block;
+  margin: 0;
+}
+
+.desc-active > p > span {
+  display: inline-block;
+  /* font-weight: bold; */
+  width: 125px;
+}
+
+p.code-title {
+  position: relative;
+  font-size: 6rem;
+}
+
+.desc-active::after {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  content: "";
+  opacity: .2;
+  z-index: -1;
+}
+
+.backend-desc.desc-active::after {
+  background: url('{$bat.path}/themes/{$settings.theme}/img/drop.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: right center;
+}
+
+.frontend-desc.desc-active::after {
+  background: url('{$bat.path}/themes/{$settings.theme}/img/manicure.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: right center;
+}
+
+.html-desc.desc-active::after {
+  background: url('{$bat.path}/themes/{$settings.theme}/img/manicure2.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: right center;
+}
+
+.css-desc.desc-active::after {
+  background: url('{$bat.path}/themes/{$settings.theme}/img/mascara.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: right center;
+}
+
+.javascript-desc.desc-active::after {
+  background: url('{$bat.path}/themes/{$settings.theme}/img/pedicure.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: right center;
+}
+
+.gui-desc.desc-active::after {
+  background: url('{$bat.path}/themes/{$settings.theme}/img/spa.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: right center;
+}
+
+.seo-desc.desc-active::after {
+  background: url('{$bat.path}/themes/{$settings.theme}/img/spa2.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: right center;
+}
+
+.hex-master-wrap {
+  position: relative;
+  /* width: 50%; */
+  min-width: 665px;
+  height: 460px;
+}
+
+.border-1,
+.border-2,
+.border-3 {
+  position: absolute;
+  width: 100%;
+  height: 88px;
+  top: 46px;
+  left: 0;
+  border-left: 3px solid;
+  border-right: 3px solid;
+  border-radius: 8px;
+  z-index: 2;
+  border-color: #a54a7b;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.border-2 {
+  transform: rotate(60deg);
+}
+
+.border-3 {
+  transform: rotate(120deg);
+}
+
+.border-3::before {
+  display: none;
+  position: absolute;
+  content: "";
+  bottom: 10%;
+  left: 42px;
+  width: 50%;
+  height: 83%;
+  background-color: rgba(255, 255, 255, 0);
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-color: white;
+  border-radius: 50%;
+  visibility: visible;
+  z-index: -1;
+  /* transform: rotate(60deg); */
+}
+
+.intro-block .grid-1,
+.intro-block .grid-2,
+.intro-block .grid-3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 75%;
+  margin: 0 auto;
+  margin-bottom: -50px;
+}
+
+.intro-block .grid-3 {
+  margin-bottom: -50px;
+}
+
+.intro-block .grid-2,
+.intro-block .grid-3 {
+  margin-top: -50px;
+}
+
+.hex-wrap {
+  position: relative;
+  width: 150px;
+  height: 190px;
+  margin: 0 1em 0 0;
+  border-top-left-radius: 100%;
+  border-top-right-radius: 100%;
+  border-bottom-left-radius: 100%;
+  border-bottom-right-radius: 100%;
+  border: 0px solid;
+  transform: scale(1.1);
+}
+
+.hex-wrap .label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 100%;
+  height: 58px;
+  color: #DDDDDD;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+}
+
+.hex-wrap .label svg,
+.hex-wrap .label img {
+  height: 50px;
+  width: 50px;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.hexagon {
+  width: 300px;
+  height: 150px;
+  margin: 15px 0 0 -75px;
+  overflow: hidden;
+  visibility: hidden;
+  -webkit-transform: rotate(120deg);
+  -moz-transform: rotate(120deg);
+  -ms-transform: rotate(120deg);
+  -o-transform: rotate(120deg);
+  transform: rotate(90deg);
+  cursor: pointer;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.hex-inner-1 {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: rotate(-60deg);
+  -moz-transform: rotate(-60deg);
+  -ms-transform: rotate(-60deg);
+  -o-transform: rotate(-60deg);
+  transform: rotate(-60deg);
+}
+
+.hex-inner-2 {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  visibility: visible;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: rotate(-60deg);
+  -moz-transform: rotate(-60deg);
+  -ms-transform: rotate(-60deg);
+  -o-transform: rotate(-60deg);
+  transform: rotate(-60deg);
+  overflow: hidden;
+}
+
+.hex-inner-2::before,
+.hex-inner-2::after {
+  position: absolute;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: contain;
+  top: 0;
+  left: 0;
+  height: 110%;
+  width: 110%;
+  content: "";
+  -webkit-transform: rotate(30deg);
+  transform: rotate(30deg);
+}
+
+
+/**********************************************************************************
+                                Hex Hover Area
+**********************************************************************************/
+
+.hex-init {
+  position: absolute;
+  top: 46px;
+  left: 0px;
+  height: 46%;
+  width: 100%;
+  z-index: 9;
+  transform: rotate(-60deg);
+  cursor: pointer;
+}
+
+.hex-init::after {
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  content: "";
+  transform: rotate(-60deg);
+}
+
+.hex-init::before {
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  content: "";
+  transform: rotate(60deg);
+}
+ </style>
+ 
+ <script>
+ 
+$(document).ready(function() {
+  function hex_initial_animation() {
+    $(".hex-wrap,.hover-notify").velocity("transition.expandIn", {
+      stagger: 150
+    });
+    $(".hex-wrap").velocity("callout.pulse");
+    $(".hoverblock").velocity("fadeOut", {
+      delay: 3000,
+      duration: 0
+    });
+  }
+  hex_initial_animation();
+
+  var hoverdetect = setInterval(function() {
+    hovernotify()
+  }, 3000);
+
+  function hovernotify() {
+    $(".hover-notify").velocity("callout.tada");
+  }
+
+  function myStopFunction() {
+    $(".hover-notify").velocity('stop', true).velocity("fadeOut");
+    clearInterval(hoverdetect);
+  }
+
+  $(".hex-init").mouseenter(function() {
+
+    myStopFunction();
+
+    var title_color = $(this).parent().attr("data-color");
+    var title_name = $(this).parent().attr("data-title");
+    var desc_name = $(this).parent().attr("data-content");
+
+    function hex_description() {
+      $('.code-description').velocity('stop', true).velocity("transition.slideRightBigIn");
+      $('.' + desc_name).siblings().removeClass('desc-active');
+      setTimeout(function() {
+        $('.' + desc_name).addClass('desc-active');
+        $('.code-descriptopn > div, .desc-active').children().velocity('stop', true).velocity("transition.slideRightBigIn", {
+          stagger: 300
+        });
+        $('.code-title, .desc-active span').velocity({
+          color: title_color
+        }, {
+          queue: false
+        });
+        $('.code-title').text(title_name)
+      }, 0);
+    }
+    hex_description();
+
+    $(this).parent().addClass('hexactive');
+    $('.hexactive').velocity({
+      scaleX: "1.1",
+      scaleY: "1.1"
+    }, {
+      duration: 200
+    });
+
+  }).mouseleave(function() {
+    $('.hexactive').velocity('stop', true).velocity('reverse').removeClass('hexactive');
+  });
+});
+ </script>
+ 
+ 
+<section class="intro">
+
+  <div class="intro-block">
+    <div class="centerfold-wrap">
+      <div class="hex-master-wrap">
+        <div class="hover-notify">Najedź na ikonkę!</div>
+        <div class="grid-1">
+          <div class="hex-wrap backend" data-title="Mycie Ciałka" data-content="backend-desc" data-color="#A3D5E0">
+            <div class="hex-init"></div>
+            <div class="hex-borders">
+              <div class="border-1"></div>
+              <div class="border-2"></div>
+              <div class="border-3"></div>
+            </div>
+            <div class="label"><img src="/themes/{$settings.theme}/img/drop.png"/></div>
+            <div class="hexagon">
+              <div class="hex-inner-1">
+                <div class="hex-inner-2"></div>
+              </div>
+            </div>
+          </div>
+          <div class="hex-wrap frontend" data-title="Manicure" data-content="frontend-desc" data-color="#A076AB">
+            <div class="hex-init"></div>
+            <div class="hex-borders">
+              <div class="border-1"></div>
+              <div class="border-2"></div>
+              <div class="border-3"></div>
+            </div>
+            <div class="label"><img src="/themes/{$settings.theme}/img/manicure.png" /></div>
+            <div class="hexagon">
+              <div class="hex-inner-1">
+                <div class="hex-inner-2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="hex-wrap html" data-title="Malowanie paznokci" data-content="html-desc" data-color="#A076AB">
+            <div class="hex-init"></div>
+            <div class="hex-borders">
+              <div class="border-1"></div>
+              <div class="border-2"></div>
+              <div class="border-3"></div>
+            </div>
+            <div class="label"><img src="/themes/{$settings.theme}/img/manicure2.png" /></div>
+            <div class="hexagon">
+              <div class="hex-inner-1">
+                <div class="hex-inner-2"></div>
+              </div>
+            </div>
+          </div>
+          <div class="hex-wrap css" data-title="Maskara" data-content="css-desc" data-color="#EDC92F">
+            <div class="hex-init"></div>
+            <div class="hex-borders">
+              <div class="border-1"></div>
+              <div class="border-2"></div>
+              <div class="border-3"></div>
+            </div>
+            <div class="label"><img src="/themes/{$settings.theme}/img/mascara.png" /></div>
+            <div class="hexagon">
+              <div class="hex-inner-1">
+                <div class="hex-inner-2"></div>
+              </div>
+            </div>
+          </div>
+          <div class="hex-wrap jquery" data-title="Pedicure" data-content="javascript-desc" data-color="#EB9783">
+            <div class="hex-init"></div>
+            <div class="hex-borders">
+              <div class="border-1"></div>
+              <div class="border-2"></div>
+              <div class="border-3"></div>
+            </div>
+            <div class="label"><img src="/themes/{$settings.theme}/img/pedicure.png" /></div>
+            <div class="hexagon">
+              <div class="hex-inner-1">
+                <div class="hex-inner-2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="hex-wrap gui" data-title="Bycie talibem" data-content="gui-desc" data-color="#4ABC96">
+            <div class="hex-init"></div>
+            <div class="hex-borders">
+              <div class="border-1"></div>
+              <div class="border-2"></div>
+              <div class="border-3"></div>
+            </div>
+            <div class="label"><img src="/themes/{$settings.theme}/img/spa.png" /></div>
+            <div class="hexagon">
+              <div class="hex-inner-1">
+                <div class="hex-inner-2"></div>
+              </div>
+            </div>
+          </div>
+          <div class="hex-wrap seo" data-title="Duszenie" data-content="seo-desc" data-color="#EDC92F">
+            <div class="hex-init"></div>
+            <div class="hex-borders">
+              <div class="border-1"></div>
+              <div class="border-2"></div>
+              <div class="border-3"></div>
+            </div>
+            <div class="label"><img src="/themes/{$settings.theme}/img/spa2.png" /></div>
+            <div class="hexagon">
+              <div class="hex-inner-1">
+                <div class="hex-inner-2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-display">
+        <div class="code-description">
+          <div class="backend-desc">
+            <p class="code-title"></p>
+            <p><span></span>Olejki Maćka</p>
+            <p><span></span>Działają cuda</p>
+            <div class="code-icon"></div>
+          </div>
+          <div class="frontend-desc">
+            <p class="code-title"></p>
+            <p><span></span>Super</p>
+            <p><span></span>Dłonie w 5 minut</p>
+            <div class="code-icon"></div>
+          </div>
+          <div class="html-desc">
+            <p class="code-title"></p>
+            <p><span></span>Malowanie</p>
+            <p><span></span>Szpachlowanie</p>
+            <div class="code-icon"></div>
+          </div>
+          <div class="css-desc">
+            <p class="code-title"></p>
+            <p><span></span>Czekolada</p>
+            <p><span></span>w tubce</p>
+            <div class="code-icon"></div>
+          </div>
+          <div class="javascript-desc">
+            <p class="code-title"></p>
+            <p><span></span>Nudne</p>
+            <p><span></span>Opisy</p>
+            <div class="code-icon"></div>
+          </div>
+          <div class="gui-desc">
+            <p class="code-title"></p>
+            <p><span></span>Poćwiczyłbym</p>
+            <p><span></span>ale idę spać</p>
+            <div class="code-icon"></div>
+          </div>
+          <div class="seo-desc">
+            <p class="code-title"></p>
+            <p><span></span>Dobranoc</p>
+            <p><span></span>wszystkim</p>
+            <div class="code-icon"></div>
+          </div>
+        </div>
+
+      </div>
+      <div class="hoverblock"></div>
+    </div>
+    <!-- End Centerfold-Wrap -->
+  </div>
+
+
+</section>
