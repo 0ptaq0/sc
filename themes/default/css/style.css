@@ -416,7 +416,7 @@ textarea:-ms-input-placeholder {
 ::selection {
     color: white;
     text-shadow: none;
-    background: #d40052;
+    background: #0f0f0f;
 }
 img::selection {
     color: white;
@@ -742,3 +742,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1b1b1b', end
     width: 0%;
     left: 0;
 }
+#map {
+		width: 100%;
+		max-height: 300px;
+		}
