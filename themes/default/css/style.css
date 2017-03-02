@@ -292,49 +292,49 @@ footer {
      margin-bottom: 0;
  }
 .form-group {
-	background-color: #e5e5e5;
-    font-size: 14px;
-    position: relative;
-    margin-bottom: 0;
-    padding-bottom: 1.5em;
-    padding-right: 15px;
-    padding-left: 15px;
-    border-bottom: 1px solid #d40052;
+	margin: 0 0 2em 0;
+
+
+}
+form .field {
+	margin: 0 0 2em 0;
 }
 form .form-group:last-of-type {
-    margin-bottom: 25px
+    margin-bottom: 2em;
 }
 form .btn {
     margin-left: 15px
 }
 .form-group input,
 .form-group textarea {
-    z-index: 1;
-    position: relative;
-    padding-right: 0;
-    padding-left: 0;
-    border: none;
-    border-radius: 0;
-    font-size: 1.5em;
-    background: none;
-    box-shadow: none !important;
-    resize: none;
+	-moz-appearance: none;
+		-webkit-appearance: none;
+		-ms-appearance: none;
+		appearance: none;
+		background: rgba(255, 255, 255, 0.025);
+		border-radius: 5px;
+		border: none;
+		border: solid 2px rgba(255, 255, 255, 0.125);
+		color: inherit;
+		display: block;
+		outline: 0;
+		padding: 0 1em;
+		text-decoration: none;
+		width: 100%;
 }
 .form-group label {
-    display: block;
-    z-index: 0;
-    position: relative;
-    top: 2em;
-    margin: 0;
-    font-size: 0.85em;
-    line-height: 1.764705882em;
-    opacity: 0;
-    -webkit-transition: top 0.3s ease, opacity 0.3s ease;
-    transition: top 0.3s ease, opacity 0.3s ease;
+    color: #ffffff;
+		display: block;
+		font-family: Raleway, Helvetica, sans-serif;
+		font-size: 0.8em;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		margin: 0 0 0.7em 0;
+		text-transform: uppercase;
 }
 .form-group::not(:first-child) {
     padding-left: 14px;
-    border-left: 1px solid #eeeeee;
+
 }
 .form-group-with-value label {
     top: 0;
@@ -660,6 +660,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1b1b1b', end
 }
 
 .rounded-corners a{
+	-moz-appearance: none;
+    -webkit-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
     border-radius: 25px;
     border: 2px solid #a54a7b;
     padding: 20px; 
@@ -673,6 +677,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1b1b1b', end
 	display:block;
 	color:#a54a7b;
 	transition: all 0.5s ease 0.1s;
+    background-color: transparent;
+    cursor: pointer;
+    white-space: nowrap;
+}
+@media screen and (max-width: 480px) {
+	.rounded-corners a{
+		font-size:20px;
+		text-align: center;
+	}
 }
 .rounded-corners a:hover {
 	background: #a54a7b;

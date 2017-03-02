@@ -1,76 +1,62 @@
     {include: themes/".$settings.theme."/inc/header.html}
 
     <!-- Page Header -->
-    <header class="intro-header" style="background-image: url('{$bat.path}/themes/{$settings.theme}/img/sara_logo.jpg')">
+    <div id="page-wrapper">
 
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <div class="site-heading">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                {if: $bat.notify}
-                <div id="notify" class="alert alert-{$bat.notify.type}">{$bat.notify.text}</div>
-                {/if}
-				
-
-                {$page.content}
-				
-            </div>
-    </div>
-	</div>
-	
-	<!-- Mapka -->
-	<style type="text/css">
-		#map {
-		width: 100%;
-		max-height: 300px;
-		}
-	</style>
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
-			<script type="text/javascript">
-            // When the window has finished loading create our google map below
-            google.maps.event.addDomListener(window, 'load', init);
-        
-            function init() {
-                // Basic options for a simple Google Map
-                // For more options see: https://developers.google.com/maps/documentation/javascript/reference#MapOptions
-                var mapOptions = {
-                    // How zoomed in you want the map to start at (always required)
-                    zoom: 13,
-
-                    // The latitude and longitude to center the map (always required)
-                    center: new google.maps.LatLng(50.012307, 20.163942), 
-
-                    // How you would like to style the map. 
-                    // This is where you would paste any style found on Snazzy Maps.
-                    styles: [{"featureType":"all","elementType":"all","stylers":[{"visibility":"simplified"},{"hue":"#a54a7b"},{"saturation":"0"}]},{"featureType":"administrative","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#c080a2"}]},{"featureType":"administrative.country","elementType":"labels","stylers":[{"color":"#ffffff"}]},{"featureType":"administrative.land_parcel","elementType":"labels.text.fill","stylers":[{"visibility":"simplified"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#3e114e"},{"visibility":"simplified"}]},{"featureType":"landscape","elementType":"labels","stylers":[{"visibility":"off"},{"color":"#a02aca"}]},{"featureType":"landscape.natural","elementType":"all","stylers":[{"visibility":"simplified"},{"color":"#2e093b"}]},{"featureType":"landscape.natural","elementType":"labels.text","stylers":[{"color":"#9e1010"},{"visibility":"off"}]},{"featureType":"landscape.natural","elementType":"labels.text.fill","stylers":[{"color":"#ff0000"}]},{"featureType":"landscape.natural.landcover","elementType":"all","stylers":[{"visibility":"simplified"},{"color":"#58176e"}]},{"featureType":"landscape.natural.landcover","elementType":"labels.text.fill","stylers":[{"visibility":"simplified"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.business","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road","elementType":"geometry","stylers":[{"visibility":"simplified"},{"color":"#a02aca"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"simplified"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#d180ee"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"visibility":"simplified"},{"color":"#a02aca"}]},{"featureType":"road.highway","elementType":"labels","stylers":[{"visibility":"off"},{"color":"#ff0000"}]},{"featureType":"road.highway","elementType":"labels.text","stylers":[{"color":"#a02aca"},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"labels.text.fill","stylers":[{"color":"#cc81e7"},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"labels.text.stroke","stylers":[{"visibility":"simplified"},{"hue":"#bc00ff"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#6d2388"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#c46ce3"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#b7918f"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#b76e95"}]},{"featureType":"water","elementType":"labels","stylers":[{"visibility":"simplified"},{"color":"#ae5c88"}]}]
-                };
-
-                // Get the HTML DOM element that will contain your map 
-                // We are using a div with id="map" seen below in the <body>
-                var mapElement = document.getElementById('map');
-
-                // Create the Google Map using our element and options defined above
-                var map = new google.maps.Map(mapElement, mapOptions);
-
-                // Let's also add a marker while we're at it
-                var marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(50.012307, 20.163942),
-					map: map,
-                    title: 'Mielec!'
-                });
-		}
-        </script>
-	<div id="map" class="google-maps"></div>
+	<!-- Header -->
+		<header id="header" class="alt">
+			<h1><a href="index.html">Solid State</a></h1>
+			<nav>
+				<a href="#menu">Menu</a>
+			</nav>
+		</header>
+		
+		<!-- Menu -->
+		<nav id="menu">
+			<div class="inner">
+				<h2>Menu</h2>
+				<ul class="links">
+					<li><a href="index.html">Home</a></li>
+					<li><a href="generic.html">Generic</a></li>
+					<li><a href="elements.html">Elements</a></li>
+					<li><a href="#">Log In</a></li>
+					<li><a href="#">Sign Up</a></li>
+				</ul>
+				<a href="#" class="close">Close</a>
+			</div>
+		</nav>
+		
+		Wrapper
+		<section id="wrapper" >
+			<header > 
+				<div class="inner" >
+					<h2>Kontakt</h2>
+					<p>Poniżej znajdziesz formularz kontaktowy oraz wskazówki dojazdu</p>
+				</div>
+			</header>
 			
+	
+			<!-- Content -->
+				<div class="wrapper">
+					<div class="inner">
+
+						{if: $bat.notify}
+	<div id="notify" class="alert alert-{$bat.notify.type}">{$bat.notify.text}</div>
+	{/if}
+	{$page.content}
+
+					</div>
+				</div>
+		</section>
+
+	<div class="google-maps">
+			<iframe class="google-maps"										
+							frameborder="0" 
+							src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14714.679729787284!2d20.15794098945924!3d50.01286544535335!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4716473cf89a4643%3A0x84db615a79f1e826!2zUG9kxYLEmcW8ZSAzOTAsIDMyLTAwMyBQb2TFgsSZxbxlLCBQb2xza2E!5e0!3m2!1spl!2sus!4v1487941176631
+							&zoom=14" 
+							allowfullscreen>
+			</iframe>
+	</div>
 
 
     {include: themes/".$settings.theme."/inc/footer.html}

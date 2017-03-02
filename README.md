@@ -2,7 +2,6 @@
 
 localhost/admin -> access to cms
 
-
 TODO:
 
 Strony:
@@ -11,3 +10,7 @@ Strony:
 -Zabiegi (dodać podstrony do odnosnikow + css)
 -Poradnik - done
 -Kontakt (Contact.form, jak dojechać)
+-header + footer
+
+
+Responsywność - hexagon
