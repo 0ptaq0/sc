@@ -4,48 +4,55 @@
     <div id="page-wrapper">
 
 	<!-- Header -->
-		<header id="header" class="alt">
-			<h1><a href="index.html">Solid State</a></h1>
-			<nav>
-				<a href="#menu">Menu</a>
-			</nav>
-		</header>
+		<!-- <header id="header" class="alt"> -->
+			<!-- <h1><a href="index.html">Solid State</a></h1> -->
+			<!-- <nav> -->
+				<!-- <a href="#menu">Menu</a> -->
+			<!-- </nav> -->
+		<!-- </header> -->
 		
 		<!-- Menu -->
-		<nav id="menu">
-			<div class="inner">
-				<h2>Menu</h2>
-				<ul class="links">
-					<li><a href="index.html">Home</a></li>
-					<li><a href="generic.html">Generic</a></li>
-					<li><a href="elements.html">Elements</a></li>
-					<li><a href="#">Log In</a></li>
-					<li><a href="#">Sign Up</a></li>
-				</ul>
-				<a href="#" class="close">Close</a>
-			</div>
-		</nav>
+		<!-- <nav id="menu"> -->
+			<!-- <div class="inner"> -->
+				<!-- <h2>Menu</h2> -->
+				<!-- <ul class="links"> -->
+					<!-- <li><a href="index.html">Home</a></li> -->
+					<!-- <li><a href="generic.html">Generic</a></li> -->
+					<!-- <li><a href="elements.html">Elements</a></li> -->
+					<!-- <li><a href="#">Log In</a></li> -->
+					<!-- <li><a href="#">Sign Up</a></li> -->
+				<!-- </ul> -->
+				<!-- <a href="#" class="close">Close</a> -->
+			<!-- </div> -->
+		<!-- </nav> -->
 
 		
-		Wrapper
+		<!-- Wrapper -->
 		<section id="wrapper" >
 			<header > 
 				<div class="inner" >
 					<h2>Zabiegi</h2>
-					<p>Poniżej znajdziesz zabiegi - podzieliliśmy je na kategorie abyś ogarnął temat</p>
+					
+					<!-- Navi2 -->
+		   {include: themes/".$settings.theme."/navigation.html}
 				</div>
 			</header>
 			
 		
 
 			<!-- Content -->
+			
+			
 	<div class="wrapper">
+	
+			<!-- List view -->
+		   {include: themes/".$settings.theme."/list.html}
 		<div class="inner">
 
 			{if: $bat.notify}
 			<div id="notify" class="alert alert-{$bat.notify.type}">{$bat.notify.text}</div>
 			{/if}
-			{$page.content}
+			
 
 			</div>
 		</div>

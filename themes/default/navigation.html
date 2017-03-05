@@ -1,0 +1,570 @@
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<style>
+@import url(https://fonts.googleapis.com/css?family=Work+Sans:400,300,700|Open+Sans:400italic,300italic);
+body {
+  background-color: #fff
+}
+
+.main-nav2i2 {
+  width: 100%;
+
+  position: relative;
+  
+}
+
+
+/* ====================================
+nav2i2 
+==================================== */
+
+.overlay-nav2i2 {
+  position: fixed;
+  z-index: 99;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: hsla(0, 0%, 0%, 0.8);
+  -webkit-transform: translateY(-100%);
+          transform: translateY(-100%);
+}
+
+.overlay-slide-down {
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+  -webkit-transform: translateY(0);
+          transform: translateY(0)
+}
+
+.overlay-slide-up {
+  -webkit-transition: all .8s ease-in-out;
+  transition: all .8s ease-in-out;
+  -webkit-transform: translateY(-100%);
+          transform: translateY(-100%)
+}
+
+nav2,
+nav2 ul {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+nav2 ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  list-style: none;
+}
+
+nav2 ul li {
+  -ms-flex-preferred-size: 20%;
+      flex-basis: 20%;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 100%;
+  overflow: hidden;
+  -webkit-transform: translateY(-100%);
+          transform: translateY(-100%);
+}
+
+nav2 li a {
+  position: relative;
+  top: 46%;
+  color: #fff;
+  text-transform: uppercase;
+  font-family: 'Work sans', sans-serif;
+  font-weight: 300;
+  letter-spacing: 4px;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+nav2 li a:after {
+  content: attr(data-content);
+  font-size: 0.7rem;
+  -webkit-transition: all .2s linear;
+  transition: all .2s linear;
+  opacity: 0;
+  position: absolute;
+  z-index: 100;
+  color: #fff;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  left: 0;
+  right: 0;
+  bottom: -50px;
+  text-transform: none;
+  font-family: 'Open sans', serif;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0;
+}
+
+nav2 li a:hover:before {
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
+  opacity: 1;
+}
+
+nav2 li a:hover:after {
+  -webkit-transform: translateY(15px);
+          transform: translateY(15px);
+  opacity: 1;
+}
+
+nav2 li:nth-of-type(1){background-color: #A3D5E0}
+nav2 li:nth-of-type(2){background-color: #A076AB}
+nav2 li:nth-of-type(3){background-color: #EDC92F}
+nav2 li:nth-of-type(4){background-color: #4ABC96}
+nav2 li:nth-of-type(5){background-color: #EB9783}
+
+.slide-in-nav2-item {
+  -webkit-animation: slide-in-nav2-item 0.4s linear 1 .2s both;
+          animation: slide-in-nav2-item 0.4s linear 1 .2s both;
+}
+
+.slide-in-nav2-item-delay-1 {
+  -webkit-animation: slide-in-nav2-item 0.4s linear 1 .4s both;
+          animation: slide-in-nav2-item 0.4s linear 1 .4s both;
+}
+
+.slide-in-nav2-item-delay-2 {
+  -webkit-animation: slide-in-nav2-item 0.4s linear 1 .6s both;
+          animation: slide-in-nav2-item 0.4s linear 1 .6s both;
+}
+
+.slide-in-nav2-item-delay-3 {
+  -webkit-animation: slide-in-nav2-item 0.4s linear 1 .8s both;
+          animation: slide-in-nav2-item 0.4s linear 1 .8s both;
+}
+
+.slide-in-nav2-item-delay-4 {
+  -webkit-animation: slide-in-nav2-item 0.4s linear 1 1s both;
+          animation: slide-in-nav2-item 0.4s linear 1 1s both;
+}
+
+.slide-in-nav2-item-reverse {
+  -webkit-animation: slide-in-nav2-item-reverse .3s linear 1 .5s both;
+          animation: slide-in-nav2-item-reverse .3s linear 1 .5s both;
+}
+
+.slide-in-nav2-item-delay-1-reverse {
+  -webkit-animation: slide-in-nav2-item-reverse .3s linear 1 .4s both;
+          animation: slide-in-nav2-item-reverse .3s linear 1 .4s both;
+}
+
+.slide-in-nav2-item-delay-2-reverse {
+  -webkit-animation: slide-in-nav2-item-reverse .3s linear 1 .3s both;
+          animation: slide-in-nav2-item-reverse .3s linear 1 .3s both;
+}
+
+.slide-in-nav2-item-delay-3-reverse {
+  -webkit-animation: slide-in-nav2-item-reverse .3s linear 1 .2s both;
+          animation: slide-in-nav2-item-reverse .3s linear 1 .2s both;
+}
+
+.slide-in-nav2-item-delay-4-reverse {
+  -webkit-animation: slide-in-nav2-item-reverse .3s linear 1 both;
+          animation: slide-in-nav2-item-reverse .3s linear 1 both;
+}
+
+
+/* ====================================
+Burger king
+==================================== */
+
+.open-overlay {
+  position: absolute;
+  width: 100%;
+  display: block;
+  cursor: pointer;
+    display: block;
+}
+
+
+.animate-top-bar {
+  -webkit-animation: animate-top-bar .6s linear 1 both;
+          animation: animate-top-bar .6s linear 1 both
+}
+
+.animate-bottom-bar {
+  -webkit-animation: animate-bottom-bar .6s linear 1 both;
+          animation: animate-bottom-bar .6s linear 1 both
+}
+
+.animate-middle-bar {
+  -webkit-animation: animate-middle-bar .6s linear 1 both;
+          animation: animate-middle-bar .6s linear 1 both
+}
+
+.animate-out-top-bar {
+  -webkit-animation: animate-out-top-bar .6s linear 1 both;
+          animation: animate-out-top-bar .6s linear 1 both
+}
+
+.animate-out-bottom-bar {
+  -webkit-animation: animate-out-bottom-bar .6s linear 1 both;
+          animation: animate-out-bottom-bar .6s linear 1 both
+}
+
+.animate-out-middle-bar {
+  -webkit-animation: animate-out-middle-bar .6s linear 1 both;
+          animation: animate-out-middle-bar .6s linear 1 both
+}
+
+
+/* ====================================
+Animation keyframes
+==================================== */
+
+@-webkit-keyframes slide-in-nav2-item {
+  from {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%)
+  }
+  to {
+    -webkit-transform: translateY(0);
+    transform: translateY(0)
+  }
+}
+
+@keyframes slide-in-nav2-item {
+  from {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%)
+  }
+  to {
+    -webkit-transform: translateY(0);
+    transform: translateY(0)
+  }
+}
+
+@-webkit-keyframes slide-in-nav2-item-reverse {
+  from {
+    -webkit-transform: translateY(0);
+    transform: translateY(0)
+  }
+  to {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%)
+  }
+}
+
+@keyframes slide-in-nav2-item-reverse {
+  from {
+    -webkit-transform: translateY(0);
+    transform: translateY(0)
+  }
+  to {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%)
+  }
+}
+
+@-webkit-keyframes animate-top-bar {
+  0% {
+    background-color: #fff;
+  }
+  50% {
+    -webkit-transform: translateY(9px);
+    transform: translateY(9px)
+  }
+  80% {
+    -webkit-transform: translateY(5px);
+    transform: translateY(5px);
+    background-color: #fff
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    background-color: #29363B;
+  }
+}
+
+@keyframes animate-top-bar {
+  0% {
+    background-color: #fff;
+  }
+  50% {
+    -webkit-transform: translateY(9px);
+    transform: translateY(9px)
+  }
+  80% {
+    -webkit-transform: translateY(5px);
+    transform: translateY(5px);
+    background-color: #fff
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    background-color: #29363B;
+  }
+}
+
+@-webkit-keyframes animate-bottom-bar {
+  0% {
+    background-color: #fff;
+  }
+  50% {
+    -webkit-transform: translateY(-9px);
+    transform: translateY(-9px)
+  }
+  80% {
+    -webkit-transform: translateY(-5px);
+    transform: translateY(-5px);
+    background-color: #fff;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    background-color: #29363B;
+  }
+}
+
+@keyframes animate-bottom-bar {
+  0% {
+    background-color: #fff;
+  }
+  50% {
+    -webkit-transform: translateY(-9px);
+    transform: translateY(-9px)
+  }
+  80% {
+    -webkit-transform: translateY(-5px);
+    transform: translateY(-5px);
+    background-color: #fff;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    background-color: #29363B;
+  }
+}
+
+@-webkit-keyframes animate-middle-bar {
+  0% {
+    background-color: #fff;
+  }
+  80% {
+    background-color: #fff;
+  }
+  100% {
+    background-color: #29363B;
+  }
+}
+
+@keyframes animate-middle-bar {
+  0% {
+    background-color: #fff;
+  }
+  80% {
+    background-color: #fff;
+  }
+  100% {
+    background-color: #29363B;
+  }
+}
+
+@-webkit-keyframes animate-out-top-bar {
+  0% {
+    background-color: #29363B
+  }
+  50% {
+    -webkit-transform: translateY(9px);
+    transform: translateY(9px)
+  }
+  80% {
+    -webkit-transform: translateY(5px);
+    transform: translateY(5px);
+    background-color: #29363B
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    background-color: #FFF;
+  }
+}
+
+@keyframes animate-out-top-bar {
+  0% {
+    background-color: #29363B
+  }
+  50% {
+    -webkit-transform: translateY(9px);
+    transform: translateY(9px)
+  }
+  80% {
+    -webkit-transform: translateY(5px);
+    transform: translateY(5px);
+    background-color: #29363B
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    background-color: #FFF;
+  }
+}
+
+@-webkit-keyframes animate-out-bottom-bar {
+  0% {
+    background-color: #29363B
+  }
+  50% {
+    -webkit-transform: translateY(-9px);
+    transform: translateY(-9px)
+  }
+  80% {
+    -webkit-transform: translateY(-5px);
+    transform: translateY(-5px);
+    background-color: #29363B;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    background-color: #FFF;
+  }
+}
+
+@keyframes animate-out-bottom-bar {
+  0% {
+    background-color: #29363B
+  }
+  50% {
+    -webkit-transform: translateY(-9px);
+    transform: translateY(-9px)
+  }
+  80% {
+    -webkit-transform: translateY(-5px);
+    transform: translateY(-5px);
+    background-color: #29363B;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    background-color: #FFF;
+  }
+}
+
+@-webkit-keyframes animate-out-middle-bar {
+  0% {
+    background-color: #29363B
+  }
+  80% {
+    background-color: #29363B;
+  }
+  100% {
+    background-color: #fff;
+  }
+}
+
+@keyframes animate-out-middle-bar {
+  0% {
+    background-color: #29363B
+  }
+  80% {
+    background-color: #29363B;
+  }
+  100% {
+    background-color: #fff;
+  }
+}
+.main-nav2i2 a{
+  font-family: "Work Sans", sans-serif;
+  color: #fff;
+  font-weight: 300;
+  font-size: 12px;
+  text-transform: uppercase;
+  text-decoration: none;
+  position: inherit;
+  z-index: 10;
+
+  padding-bottom: 3px;
+  border-bottom: 1px solid #fff;
+}
+@media (max-width: 640px) {
+  nav2 ul li a {
+    font-size: 11px;
+  }
+  nav2 li a:after {
+    font-size: 0.6rem;
+  }
+  .open-overlay {
+    right: 1rem;
+  }
+  nav2 li a:before {
+    width: 15px;
+  }
+}
+</style>
+
+
+
+<div class="overlay-nav2i2">
+  <nav2 role="nav2i2">
+    <ul>
+      <li ><a href="#KosmetologiaBookmark" class="open-overlay" data-content="Piękne stopy i dłonie, Pielęgnacja twarzy i ciała, zabiegi dla mężczyzn">Kosmetologia</a></li>
+      <li><a href="#MedycynaBookmark" class="open-overlay" data-content="Botoks, wypełniacze, lifting, mezoterapia, tedeterapia, usuwanie tłuszczaków">Medycyna Estetyczna</a></li>
+      <li><a href="#PodologiaBookmark" class="open-overlay" data-content="Pękające pięty, wypadające oczy, usuwanie odcisków, wyciskanie sztangi">Podologia</a></li>
+      <li><a href="#SpaBookmark" class="open-overlay" data-content="Spanie">SPA</a></li>
+      <li><a href="#OdnowaBookmark" class="open-overlay" data-content="Masaże, rytułały, zjadłbym coś">Odnowa Biologiczna</a></li>
+   </ul>
+  </nav2>
+</div>
+
+<section class="main-nav2i2">
+ <div class="open-overlay">
+  <p>Naciśnij aby wybrać kategorie zabiegów</p>
+ </div>
+ 
+ 
+</section>
+
+<script>
+  $('.open-overlay').click(function() {
+  var overlay_nav2i2 = $('.overlay-nav2i2'),
+    nav2_item_1 = $('nav2 li:nth-of-type(1)'),
+    nav2_item_2 = $('nav2 li:nth-of-type(2)'),
+    nav2_item_3 = $('nav2 li:nth-of-type(3)'),
+    nav2_item_4 = $('nav2 li:nth-of-type(4)'),
+    nav2_item_5 = $('nav2 li:nth-of-type(5)'),
+    top_bar = $('.bar-top'),
+    middle_bar = $('.bar-middle'),
+    bottom_bar = $('.bar-bottom');
+
+  overlay_nav2i2.toggleClass('overlay-active');
+  
+  if (overlay_nav2i2.hasClass('overlay-active')) {
+    top_bar.removeClass('animate-out-top-bar').addClass('animate-top-bar');
+    middle_bar.removeClass('animate-out-middle-bar').addClass('animate-middle-bar');
+    bottom_bar.removeClass('animate-out-bottom-bar').addClass('animate-bottom-bar');
+    overlay_nav2i2.removeClass('overlay-slide-up').addClass('overlay-slide-down')
+    nav2_item_1.removeClass('slide-in-nav2-item-reverse').addClass('slide-in-nav2-item');
+    nav2_item_2.removeClass('slide-in-nav2-item-delay-1-reverse').addClass('slide-in-nav2-item-delay-1');
+    nav2_item_3.removeClass('slide-in-nav2-item-delay-2-reverse').addClass('slide-in-nav2-item-delay-2');
+    nav2_item_4.removeClass('slide-in-nav2-item-delay-3-reverse').addClass('slide-in-nav2-item-delay-3');
+    nav2_item_5.removeClass('slide-in-nav2-item-delay-4-reverse').addClass('slide-in-nav2-item-delay-4');
+  } 
+  else 
+  {
+    top_bar.removeClass('animate-top-bar').addClass('animate-out-top-bar');
+    middle_bar.removeClass('animate-middle-bar').addClass('animate-out-middle-bar');
+    bottom_bar.removeClass('animate-bottom-bar').addClass('animate-out-bottom-bar');
+    overlay_nav2i2.removeClass('overlay-slide-down').addClass('overlay-slide-up')
+    nav2_item_1.removeClass('slide-in-nav2-item').addClass('slide-in-nav2-item-reverse');
+    nav2_item_2.removeClass('slide-in-nav2-item-delay-1').addClass('slide-in-nav2-item-delay-1-reverse');
+    nav2_item_3.removeClass('slide-in-nav2-item-delay-2').addClass('slide-in-nav2-item-delay-2-reverse');
+    nav2_item_4.removeClass('slide-in-nav2-item-delay-3').addClass('slide-in-nav2-item-delay-3-reverse');
+    nav2_item_5.removeClass('slide-in-nav2-item-delay-4').addClass('slide-in-nav2-item-delay-4-reverse');
+  }
+})
+</script>

@@ -74,7 +74,7 @@ section.intro {
 
 .hover-notify {
   position: absolute;
-  bottom: -80px;
+  bottom: -120px;
   left: 0;
   width: 100%;
   text-align: center;
@@ -194,7 +194,7 @@ p.code-title {
 }
 
 .seo-desc.desc-active::after {
-  background: url('{$bat.path}/themes/{$settings.theme}/img/spa2.png');
+  background: url('{$bat.path}/themes/{$settings.theme}/img/pedicure.png');
   background-repeat: no-repeat;
   background-size: contain;
   background-position: right center;
@@ -281,6 +281,9 @@ p.code-title {
   border-bottom-right-radius: 100%;
   border: 0px solid;
   transform: scale(1.1);
+  cursor: pointer;
+    display: block;
+
 }
 
 .hex-wrap .label {
@@ -489,7 +492,8 @@ $(document).ready(function() {
       <div class="hex-master-wrap">
         <div class="hover-notify">Najedź na ikonkę!</div>
         <div class="grid-1">
-          <div class="hex-wrap backend" data-title="Mycie Ciałka" data-content="backend-desc" data-color="#A3D5E0">
+		<a href="localhost/zabiegi#KosmetologiaBookmark">
+          <div class="hex-wrap backend" data-title="Kosmetologia" data-content="backend-desc" data-color="#A3D5E0">
             <div class="hex-init"></div>
             <div class="hex-borders">
               <div class="border-1"></div>
@@ -501,9 +505,11 @@ $(document).ready(function() {
               <div class="hex-inner-1">
                 <div class="hex-inner-2"></div>
               </div>
-            </div>
+            </div>	
           </div>
-          <div class="hex-wrap frontend" data-title="Manicure" data-content="frontend-desc" data-color="#A076AB">
+		  </a>
+		  <a href="localhost/zabiegi#MedycynaBookmark">
+          <div class="hex-wrap frontend" data-title="Medycyna Estetyczna" data-content="frontend-desc" data-color="#A076AB">
             <div class="hex-init"></div>
             <div class="hex-borders">
               <div class="border-1"></div>
@@ -517,23 +523,25 @@ $(document).ready(function() {
               </div>
             </div>
           </div>
+		  </a>
         </div>
         <div class="grid-2">
-          <div class="hex-wrap html" data-title="Malowanie paznokci" data-content="html-desc" data-color="#A076AB">
-            <div class="hex-init"></div>
-            <div class="hex-borders">
-              <div class="border-1"></div>
-              <div class="border-2"></div>
-              <div class="border-3"></div>
-            </div>
-            <div class="label"><img src="/themes/{$settings.theme}/img/manicure2.png" /></div>
-            <div class="hexagon">
-              <div class="hex-inner-1">
-                <div class="hex-inner-2"></div>
-              </div>
-            </div>
-          </div>
-          <div class="hex-wrap css" data-title="Maskara" data-content="css-desc" data-color="#EDC92F">
+          <!-- <div class="hex-wrap html" data-title="Malowanie paznokci" data-content="html-desc" data-color="#A076AB"> -->
+            <!-- <div class="hex-init"></div> -->
+            <!-- <div class="hex-borders"> -->
+              <!-- <div class="border-1"></div> -->
+              <!-- <div class="border-2"></div> -->
+              <!-- <div class="border-3"></div> -->
+            <!-- </div> -->
+            <!-- <div class="label"><img src="/themes/{$settings.theme}/img/manicure2.png" /></div> -->
+            <!-- <div class="hexagon"> -->
+              <!-- <div class="hex-inner-1"> -->
+                <!-- <div class="hex-inner-2"></div> -->
+              <!-- </div> -->
+            <!-- </div> -->
+          <!-- </div> -->
+		  <a href="localhost/zabiegi#PodologiaBookmark">
+          <div class="hex-wrap css" data-title="Podologia" data-content="css-desc" data-color="#EDC92F">
             <div class="hex-init"></div>
             <div class="hex-borders">
               <div class="border-1"></div>
@@ -547,23 +555,25 @@ $(document).ready(function() {
               </div>
             </div>
           </div>
-          <div class="hex-wrap jquery" data-title="Pedicure" data-content="javascript-desc" data-color="#EB9783">
-            <div class="hex-init"></div>
-            <div class="hex-borders">
-              <div class="border-1"></div>
-              <div class="border-2"></div>
-              <div class="border-3"></div>
-            </div>
-            <div class="label"><img src="/themes/{$settings.theme}/img/pedicure.png" /></div>
-            <div class="hexagon">
-              <div class="hex-inner-1">
-                <div class="hex-inner-2"></div>
-              </div>
-            </div>
-          </div>
+		  </a>
+          <!-- <div class="hex-wrap jquery" data-title="Pedicure" data-content="javascript-desc" data-color="#EB9783"> -->
+            <!-- <div class="hex-init"></div> -->
+            <!-- <div class="hex-borders"> -->
+              <!-- <div class="border-1"></div> -->
+              <!-- <div class="border-2"></div> -->
+              <!-- <div class="border-3"></div> -->
+            <!-- </div> -->
+            <!-- <div class="label"><img src="/themes/{$settings.theme}/img/pedicure.png" /></div> -->
+            <!-- <div class="hexagon"> -->
+              <!-- <div class="hex-inner-1"> -->
+                <!-- <div class="hex-inner-2"></div> -->
+              <!-- </div> -->
+            <!-- </div> -->
+          <!-- </div> -->
         </div>
         <div class="grid-3">
-          <div class="hex-wrap gui" data-title="Bycie talibem" data-content="gui-desc" data-color="#4ABC96">
+		<a href="localhost/zabiegi#SpaBookmark">
+          <div class="hex-wrap gui" data-title="SPA" data-content="gui-desc" data-color="#4ABC96">
             <div class="hex-init"></div>
             <div class="hex-borders">
               <div class="border-1"></div>
@@ -577,20 +587,23 @@ $(document).ready(function() {
               </div>
             </div>
           </div>
-          <div class="hex-wrap seo" data-title="Duszenie" data-content="seo-desc" data-color="#EDC92F">
+		  </a>
+		  <a href="localhost/zabiegi#OdnowaBookmark">
+          <div class="hex-wrap seo" data-title="Odnowa Biologiczna" data-content="seo-desc" data-color="#EB9783">
             <div class="hex-init"></div>
             <div class="hex-borders">
               <div class="border-1"></div>
               <div class="border-2"></div>
               <div class="border-3"></div>
             </div>
-            <div class="label"><img src="/themes/{$settings.theme}/img/spa2.png" /></div>
+            <div class="label"><img src="/themes/{$settings.theme}/img/pedicure.png"/></div>
             <div class="hexagon">
               <div class="hex-inner-1">
                 <div class="hex-inner-2"></div>
               </div>
             </div>
           </div>
+		  </a>
         </div>
       </div>
 
