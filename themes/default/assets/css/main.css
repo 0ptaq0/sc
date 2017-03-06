@@ -3708,3 +3708,29 @@
 		}
 
 	}
+	@media screen and (max-width: 1680px)
+{
+	.carousel img {
+	height: 400px;
+	}
+}
+
+@media screen and (max-width: 1280px)
+{
+	.carousel img {
+	height: 300px;
+	}
+}
+
+@media screen and (max-width: 980px)
+{
+	.carousel img {
+	height: 200px;
+	}
+}
+
+@media screen and (max-width: 780px) {
+	.carousel img {
+	height: 150px;
+	}
+}
