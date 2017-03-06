@@ -1703,7 +1703,7 @@
 
 		a:hover {
 			border-bottom-color: transparent;
-			color: #ffffff !important;
+			color: #d40052 !important;
 		}
 
 		a.special:not(.button) {
@@ -2229,7 +2229,7 @@
 	}
 
 		ul li {
-			padding-left: 0.5em;
+			padding-left: 0;
 		}
 
 		ul.alt {
@@ -2533,7 +2533,7 @@
 		input[type="button"]:hover,
 		button:hover,
 		.button:hover {
-			background-color: rgba(255, 255, 255, 0.025);
+			background-color: rgba(0, 0, 0, 0.9);
 		}
 
 		input[type="submit"]:active,
@@ -2678,6 +2678,9 @@
 				}
 
 		@media screen and (max-width: 980px) {
+			body > nav > div.container-fluid{
+				background:rgba(0,0,0,0.8);
+			}
 
 			.features article {
 				margin: 1em 2em 1em 0;
@@ -2971,7 +2974,7 @@
 					border-radius: 5px;
 					border: 0;
 					display: block;
-					 
+
 					font-size: 0.8em;
 					font-weight: 200;
 					letter-spacing: 0.1em;
@@ -3029,8 +3032,8 @@
 		padding: 10em 0 4.75em 0 ;
 		background-color: #2e3141;
 		background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/bg.jpg");
-		background-size: contain;
-		background-position: center, center;
+		background-size: contain !important;
+ 	background-position:center 10px;
 		margin-bottom: -6.5em;
 		min-height: 450px;
 	}
@@ -3107,7 +3110,7 @@
 			-ms-filter: blur(0);
 			filter: blur(0);
 			opacity: 1;
-			 
+
 			font-size: 1em;
 			font-weight: 200;
 			letter-spacing: 0.1em;
@@ -3217,7 +3220,7 @@
 		}
 
 		#wrapper > header p {
-			 
+
 			font-size: 1em;
 			font-weight: 200;
 			letter-spacing: 0.1em;
@@ -3295,6 +3298,7 @@
 		.wrapper:before {
 			left: 0;
 			top: -6.5em;
+			display:none;
 		}
 
 		.wrapper:after {
