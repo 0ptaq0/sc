@@ -88,29 +88,14 @@ img {
 /* Wygląd bloczka */
 
 .show-fourth {
-  display: inline-block;
+display: inline-block;
 width: 100%;
 height: 400px;
 }
-@media screen and (max-width: 1280px) {
-.show-fourth {
-height: 355px;
-}}
-@media screen and (max-width: 980px) {
-.show-fourth {
-height: 250px;
-}}
-@media screen and (max-width: 735px) {
-.show-fourth {
-height: 200px;
-}}
-@media screen and (max-width: 580px) {
-.show-fourth {
-height: 150px;
-}}
+
 
 .show-fourth a.more {
-  display: inline-block;
+ margin: auto;
   text-decoration: none;
   padding: 7px 14px;
   background: #000;
@@ -118,7 +103,7 @@ height: 150px;
   text-transform: uppercase;
   border-radius: 7px;
   box-shadow: 0 0 1px #000;
-	position: relative;
+
 
 }
 
@@ -217,6 +202,12 @@ height: 150px;
     overflow: hidden;
     clear: right;
   }
+    .col-1-3 {
+    width: 50%;
+    padding: 20px;
+    overflow: hidden;
+    clear: right;
+  }
   .wrap {
     width: 100%;
     margin: auto;
@@ -226,6 +217,31 @@ height: 150px;
     clear: both;
   }
 }
+@media screen and (max-width: 1280px) {
+.show-fourth {
+height: 355px;
+}
+	.show-fourth a.more {
+	margin-bottom:10px;
+	}
+}
+@media screen and (max-width: 980px) {
+.show-fourth {
+height: 250px;
+}}
+@media screen and (max-width: 735px) {
+.show-fourth {
+height: 250px;
+}
+.show-fourth a.more {
+
+
+}
+}
+@media screen and (max-width: 580px) {
+.show-fourth {
+height: 250px;
+}}
 </style>
 </head>
 

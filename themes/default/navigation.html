@@ -1,16 +1,14 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
 <style>
-@import url(https://fonts.googleapis.com/css?family=Work+Sans:400,300,700|Open+Sans:400italic,300italic);
+
 body {
   background-color: #fff
 }
 
 .main-nav2i2 {
   width: 100%;
-
   position: relative;
-  
 }
 
 
@@ -81,6 +79,7 @@ nav2 li a {
   text-transform: uppercase;
   font-family: 'Work sans', sans-serif;
   font-weight: 300;
+  text-align: center;
   letter-spacing: 4px;
   text-decoration: none;
   display: block;
@@ -189,6 +188,7 @@ Burger king
   display: block;
   cursor: pointer;
     display: block;
+	left:0;
 }
 
 
@@ -491,11 +491,13 @@ Animation keyframes
   padding-bottom: 3px;
   border-bottom: 1px solid #fff;
 }
-@media (max-width: 640px) {
-  nav2 ul li a {
-    font-size: 11px;
-  }
-  nav2 li a:after {
+
+@media (max-width: 940px) {
+	  nav2 ul li a {
+		font-size: 10pt;
+		letter-spacing: 2px;
+	  }
+	  nav2 li a:after {
     font-size: 0.6rem;
   }
   .open-overlay {
@@ -504,7 +506,13 @@ Animation keyframes
   nav2 li a:before {
     width: 15px;
   }
-}
+  }
+@media (max-width: 640px) {
+	  nav2 ul li a {
+		font-size: 7pt;
+		letter-spacing: 1px;
+	  }
+  }
 </style>
 
 
