@@ -1,91 +1,176 @@
     {include: themes/".$settings.theme."/inc/header.html}
-	
-
 
     <!-- Page Header -->
-    <header class="intro-header" style="background-image: url('{$bat.path}/themes/{$settings.theme}/img/sara_logo.jpg')">	
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <div class="site-heading">
-                    </div>
-                </div>
-            </div>
-        </div>
-		
-    </header>
+    <!-- <header class="intro-header" style="background-image: url('{$bat.path}/themes/{$settings.theme}/img/sara_logo.jpg')"> -->
+
+        <!-- <div class="container"> -->
+            <!-- <div class="row"> -->
+                <!-- <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"> -->
+                    <!-- <div class="site-heading"> -->
+                    <!-- </div> -->
+                <!-- </div> -->
+            <!-- </div> -->
+        <!-- </div> -->
+    <!-- </header> -->
 	
-<style type="text/css">
-            /* Set a size for our map container, the Google Map will take up 100% of this container */
-            #map {
-                width: 100%;
-                max-height: 300px;
-            }
-        </style>
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
+
+
+		<!-- Page Wrapper -->
+			<!-- <div id="page-wrapper"> -->
+
+				<!-- Header -->
+					<!-- <header id="header" class="intro-header"> -->
+						<!-- <h1><a href="index.html">Solid State</a></h1> -->
+						<!-- <nav> -->
+							<!-- <a href="#menu">Menu</a> -->
+						<!-- </nav> -->
+					<!-- </header> -->
+
+				<!-- Menu -->
+					<!-- <nav id="menu"> -->
+						<!-- <div class="inner"> -->
+							<!-- <h2>Menu</h2> -->
+							<!-- <ul class="links"> -->
+								<!-- <li><a href="index.html">Home</a></li> -->
+								<!-- <li><a href="generic.html">Generic</a></li> -->
+								<!-- <li><a href="elements.html">Elements</a></li> -->
+								<!-- <li><a href="#">Log In</a></li> -->
+								<!-- <li><a href="#">Sign Up</a></li> -->
+							<!-- </ul> -->
+							<!-- <a href="#" class="close">Close</a> -->
+						<!-- </div> -->
+					<!-- </nav> -->
+
+				<!-- Banner -->
+					<section id="banner" style="background-image: url('{$bat.path}/themes/{$settings.theme}/img/SC-logo-white.png')">
+
+					</section>
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+
+						<!-- One -->
+							<section id="one" class="wrapper spotlight style1">
+			<!-- Hexagon gallery -->
+		   {include: themes/".$settings.theme."/Hexagon-gallery.html}
+								
+							</section>
+
+						<!-- Two -->
+							<section id="two" class="wrapper alt spotlight style2">
+								<div class="inner">
+									<a href="#" class="image"><img src="/themes/{$settings.theme}/img/drop.png" alt="" /></a>
+									<div class="content">
+										<h2 class="major">Nasi specjaliści</h2>
+										<p>Co prawda nie mamy żadnych, ale będziemy mieli bardzo dobrych profesjonalistów, jesteśmy poważną frimą.</p>
+										<a href="#" class="special">Obczaj moje zdjęcia na insta</a>
+									</div>
+								</div>
+							</section>
+
+						<!-- Three -->
+							<section id="three" class="wrapper spotlight style3">
+								<div class="inner">
+									<a href="#" class="image"><img src="images/pic03.jpg" alt="" /></a>
+									<div class="content">
+										<h2 class="major">Prawda</h2>
+										<p>Jest taka że nie mam pojęcia co tu wkleić</p>
+										<a href="#" class="special">Podej mi inspirejszyn</a>
+									</div>
+								</div>
+							</section>
+
+						<!-- Four -->
+							<section id="four" class="wrapper alt style1">
+
+								<div class="inner">
+								<!--  zawartosc stara  -->
+										{if: $bat.notify}
+										<div id="notify" class="alert alert-{$bat.notify.type}">{$bat.notify.text}</div>
+										{/if}
+										{$page.content}
+									<h2 class="major">Vitae phasellus</h2>
+									<p>Cras mattis ante fermentum, malesuada neque vitae, eleifend erat. Phasellus non pulvinar erat. Fusce tincidunt, nisl eget mattis egestas, purus ipsum consequat orci, sit amet lobortis lorem lacus in tellus. Sed ac elementum arcu. Quisque placerat auctor laoreet.</p>
+									<section class="features">
+										<article>
+											<a href="#" class="image"><img src="images/pic04.jpg" alt="" /></a>
+											<h3 class="major">Sed feugiat lorem</h3>
+											<p>Lorem ipsum dolor sit amet, consectetur adipiscing vehicula id nulla dignissim dapibus ultrices.</p>
+											<a href="#" class="special">Learn more</a>
+										</article>
+										<article>
+											<a href="#" class="image"><img src="images/pic05.jpg" alt="" /></a>
+											<h3 class="major">Nisl placerat</h3>
+											<p>Lorem ipsum dolor sit amet, consectetur adipiscing vehicula id nulla dignissim dapibus ultrices.</p>
+											<a href="#" class="special">Learn more</a>
+										</article>
+										<article>
+											<a href="#" class="image"><img src="images/pic06.jpg" alt="" /></a>
+											<h3 class="major">Ante fermentum</h3>
+											<p>Lorem ipsum dolor sit amet, consectetur adipiscing vehicula id nulla dignissim dapibus ultrices.</p>
+											<a href="#" class="special">Learn more</a>
+										</article>
+										<article>
+											<a href="#" class="image"><img src="images/pic07.jpg" alt="" /></a>
+											<h3 class="major">Fusce consequat</h3>
+											<p>Lorem ipsum dolor sit amet, consectetur adipiscing vehicula id nulla dignissim dapibus ultrices.</p>
+											<a href="#" class="special">Learn more</a>
+										</article>
+									</section>
+									<ul class="actions">
+										<li><a href="#" class="button">Browse All</a></li>
+									</ul>
+								</div>
+							</section>
+
+					</section>
+
+				<!-- Footer -->
+					<section id="footer">
+						
+						<div class="inner">
+							<h1> To na dole do footera sie da, tylko bez twiterra i instagrama</h1>
+							<ul class="contact">
+								<li class="fa-home">
+									Untitled Inc<br />
+									1234 Somewhere Road Suite #2894<br />
+									Nashville, TN 00000-0000
+								</li>
+								<li class="fa-phone">(000) 000-0000</li>
+								<li class="fa-envelope"><a href="#">information@untitled.tld</a></li>
+								<li class="fa-twitter"><a href="#">twitter.com/untitled-tld</a></li>
+								<li class="fa-facebook"><a href="#">facebook.com/untitled-tld</a></li>
+								<li class="fa-instagram"><a href="#">instagram.com/untitled-tld</a></li>
+							</ul>
+							<ul class="copyright">
+							
+								<li>&copy; Untitled Inc. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</section>
+
+			</div>
+
+			<!-- Scripts -->
+			<script src="assets/js/skel.min.js"></script>
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+			<script src="assets/js/main.js"></script>
+			<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+			<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.1.0/velocity.min.js"></script>
+			<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.1.0/velocity.ui.js"></script>
+
 	
-    <!-- Main Content -->
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                {if: $bat.notify}
-                <div id="notify" class="alert alert-{$bat.notify.type}">{$bat.notify.text}</div>
-                {/if}
-                {$page.content}
-				
-            </div>
-    </div>
+	
+	<div class="google-maps">
+			<iframe class="google-maps"										
+							frameborder="0" 
+							src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14714.679729787284!2d20.15794098945924!3d50.01286544535335!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4716473cf89a4643%3A0x84db615a79f1e826!2zUG9kxYLEmcW8ZSAzOTAsIDMyLTAwMyBQb2TFgsSZxbxlLCBQb2xza2E!5e0!3m2!1spl!2sus!4v1487941176631
+							&zoom=14" 
+							allowfullscreen>
+			</iframe>
 	</div>
 	
-	
-	<!-- <div class="googlemaps"> -->
-			<!-- <iframe class="googlemaps"										 -->
-							<!-- frameborder="0"  -->
-							<!-- src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14714.679729787284!2d20.15794098945924!3d50.01286544535335!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4716473cf89a4643%3A0x84db615a79f1e826!2zUG9kxYLEmcW8ZSAzOTAsIDMyLTAwMyBQb2TFgsSZxbxlLCBQb2xza2E!5e0!3m2!1spl!2sus!4v1487941176631 -->
-							<!-- &zoom=14"  -->
-							<!-- allowfullscreen> -->
-			<!-- </iframe> -->
-	<!-- </div> -->
-	
-			<script type="text/javascript">
-            // When the window has finished loading create our google map below
-            google.maps.event.addDomListener(window, 'load', init);
-        
-            function init() {
-                // Basic options for a simple Google Map
-                // For more options see: https://developers.google.com/maps/documentation/javascript/reference#MapOptions
-                var mapOptions = {
-                    // How zoomed in you want the map to start at (always required)
-                    zoom: 13,
-
-                    // The latitude and longitude to center the map (always required)
-                    center: new google.maps.LatLng(50.012307, 20.163942), 
-
-                    // How you would like to style the map. 
-                    // This is where you would paste any style found on Snazzy Maps.
-                    styles: [{"featureType":"all","elementType":"all","stylers":[{"visibility":"simplified"},{"hue":"#a54a7b"},{"saturation":"0"}]},{"featureType":"administrative","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#c080a2"}]},{"featureType":"administrative.country","elementType":"labels","stylers":[{"color":"#ffffff"}]},{"featureType":"administrative.land_parcel","elementType":"labels.text.fill","stylers":[{"visibility":"simplified"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#3e114e"},{"visibility":"simplified"}]},{"featureType":"landscape","elementType":"labels","stylers":[{"visibility":"off"},{"color":"#a02aca"}]},{"featureType":"landscape.natural","elementType":"all","stylers":[{"visibility":"simplified"},{"color":"#2e093b"}]},{"featureType":"landscape.natural","elementType":"labels.text","stylers":[{"color":"#9e1010"},{"visibility":"off"}]},{"featureType":"landscape.natural","elementType":"labels.text.fill","stylers":[{"color":"#ff0000"}]},{"featureType":"landscape.natural.landcover","elementType":"all","stylers":[{"visibility":"simplified"},{"color":"#58176e"}]},{"featureType":"landscape.natural.landcover","elementType":"labels.text.fill","stylers":[{"visibility":"simplified"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.business","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road","elementType":"geometry","stylers":[{"visibility":"simplified"},{"color":"#a02aca"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"simplified"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#d180ee"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"visibility":"simplified"},{"color":"#a02aca"}]},{"featureType":"road.highway","elementType":"labels","stylers":[{"visibility":"off"},{"color":"#ff0000"}]},{"featureType":"road.highway","elementType":"labels.text","stylers":[{"color":"#a02aca"},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"labels.text.fill","stylers":[{"color":"#cc81e7"},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"labels.text.stroke","stylers":[{"visibility":"simplified"},{"hue":"#bc00ff"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#6d2388"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#c46ce3"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#b7918f"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#b76e95"}]},{"featureType":"water","elementType":"labels","stylers":[{"visibility":"simplified"},{"color":"#ae5c88"}]}]
-                };
-
-                // Get the HTML DOM element that will contain your map 
-                // We are using a div with id="map" seen below in the <body>
-                var mapElement = document.getElementById('map');
-
-                // Create the Google Map using our element and options defined above
-                var map = new google.maps.Map(mapElement, mapOptions);
-
-                // Let's also add a marker while we're at it
-                var marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(50.012307, 20.163942),
-					 map: map,
-                    title: 'Mielec!'
-                });
-		}
-
-			
-
-        </script>
-	<div id="map" class="google-maps"></div>
-			
-
-
     {include: themes/".$settings.theme."/inc/footer.html}

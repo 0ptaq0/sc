@@ -1,63 +1,104 @@
-    {include: themes/".$settings.theme."/inc/header.html}
+   {include: themes/".$settings.theme."/inc/header.html}
 
     <!-- Page Header -->
-    <header class="intro-header" style="background-image: url('{$bat.path}/themes/{$settings.theme}/img/sara_logo.jpg')">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <div class="site-heading">            
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+    <div id="page-wrapper">
 
-    <!-- Main Content -->
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            {loop: $blog.posts}
-                <div class="post-preview">
-                    <a href="{$value.url}">
-                        {if: $value.cover_photo}
-                        <img src="{$value.cover_url}" class="post-cover" />
-                        {/if}
-                        <h2 class="post-title">
-                            {$value.title}
-                        </h2>
-                    </a>
-                    <p class="post-intro">{$value.content}</p>
-                    <p class="post-meta">{?= sprintf($lang.blog.posted, $value.author.username, $value.published_at) ?} | <span class="disqus-comment-count" data-disqus-url="{$value.url}">{$lang.blog.no_comments}</span></p>
-                </div>
-                <hr>
-            {/loop}
-                <!-- Pager -->
-                <ul class="pager">
-                    {if: isset($prev)}
-                    <li class="previous">
-                        <a href="{$prev.url}">&larr; {$lang.blog.newer}</a>
-                    </li>
-                    {/if}
-                    {if: isset($next)}
-                    <li class="next">
-                        <a href="{$next.url}">{$lang.blog.older} &rarr;</a>
-                    </li>
-                    {/if}
-                </ul>
-            </div>
-        </div>
-    </div>
-    {if: !empty($settings.blog.disqus)}
-    <script>
-        var disqus_shortname = '{$settings.blog.disqus}';
-        (function () {
-            var s = document.createElement('script'); s.async = true;
-            s.type = 'text/javascript';
-            s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
-            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-        }());
-    </script>
-    <script id="dsq-count-scr" src="//{$settings.blog.disqus}.disqus.com/count.js" async></script>
-    {/if}
+	<!-- Header -->
+		<!-- <header id="header" class="alt"> -->
+			<!-- <h1><a href="index.html">Solid State</a></h1> -->
+			<!-- <nav> -->
+				<!-- <a href="#menu">Menu</a> -->
+			<!-- </nav> -->
+		<!-- </header> -->
+		
+		<!-- Menu -->
+		<!-- <nav id="menu"> -->
+			<!-- <div class="inner"> -->
+				<!-- <h2>Menu</h2> -->
+				<!-- <ul class="links"> -->
+					<!-- <li><a href="index.html">Home</a></li> -->
+					<!-- <li><a href="generic.html">Generic</a></li> -->
+					<!-- <li><a href="elements.html">Elements</a></li> -->
+					<!-- <li><a href="#">Log In</a></li> -->
+					<!-- <li><a href="#">Sign Up</a></li> -->
+				<!-- </ul> -->
+				<!-- <a href="#" class="close">Close</a> -->
+			<!-- </div> -->
+		<!-- </nav> -->
+
+		
+		Wrapper
+		<section id="wrapper" >
+			<header > 
+				<div class="inner" >
+					<h2>Poradnik</h2>
+					<p>Ciekawe artykuły - styl, moda, lifestyle, hiperlordoza zdjęciowa</p>
+				</div>
+			</header>
+
+						<!-- Content -->
+<div class="wrapper">
+	<div class="inner">
+
+		{if: $bat.notify}
+		<div id="notify" class="alert alert-{$bat.notify.type}">{$bat.notify.text}</div>
+		{/if}
+		
+		{loop: $blog.posts}
+		<div class="post-preview">
+			<a href="{$value.url}">
+				{if: $value.cover_photo}
+				<div class="post-image">
+				<img src="{$value.cover_url}" class="post-image"/>
+				<h2 class="post-h2">
+					{$value.title}
+				</h2>
+				</div>
+			{else}
+				<h2 class="post-title">
+					{$value.title}
+				</h2>
+				
+				{/if}
+				
+			</a>
+			<p class="post-intro">{$value.content}</p>
+			<p class="post-meta">{?= sprintf($lang.blog.posted, $value.author.username, $value.published_at) ?} | <span class="disqus-comment-count" data-disqus-url="{$value.url}">{$lang.blog.no_comments}</span></p>
+		</div>
+		<hr>
+	{/loop}
+		<!-- Pager -->
+		<ul class="pager">
+			{if: isset($prev)}
+			<li class="previous">
+				<a href="{$prev.url}">&larr; {$lang.blog.newer}</a>
+			</li>
+			{/if}
+			{if: isset($next)}
+			<li class="next">
+				<a href="{$next.url}">{$lang.blog.older} &rarr;</a>
+			</li>
+			{/if}
+		</ul>
+
+
+		{if: !empty($settings.blog.disqus)}
+		<script>
+			var disqus_shortname = '{$settings.blog.disqus}';
+			(function () {
+			var s = document.createElement('script'); s.async = true;
+			s.type = 'text/javascript';
+			s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+			(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+			}());
+		</script>
+		<script id="dsq-count-scr" src="//{$settings.blog.disqus}.disqus.com/count.js" async></script>
+		{/if}
+
+									
+		</div>
+			</div>
+				</section>
+
 
     {include: themes/".$settings.theme."/inc/footer.html}

@@ -4,11 +4,12 @@
  * Licensed under MIT
  */
 body {
-    font-family: 'Lora', 'Times New Roman', serif;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 20px;
     color: #ebebeb;
     /*background-color: #1b1b1b;*/
 	background-color: #0f0f0f;
+	overflow-y: scroll;
 }
 p {
     line-height: 1.5;
@@ -25,6 +26,7 @@ h5,
 h6 {
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 800;
+	padding-top: 30px;
 }
 a {
     color: #404040
@@ -215,7 +217,12 @@ hr.small {
     color: #0085a1;
 }
 .post-preview > a > .post-cover {
-    max-width: 100%
+
+	max-height: 300px;
+	width: 100%;
+	object-fit: cover;
+	overflow: hidden;
+	position: realtive;
 }
 .post-preview > a > .post-title {
     font-size: 30px;
@@ -285,49 +292,49 @@ footer {
      margin-bottom: 0;
  }
 .form-group {
-	background-color: #e5e5e5;
-    font-size: 14px;
-    position: relative;
-    margin-bottom: 0;
-    padding-bottom: 1.5em;
-    padding-right: 15px;
-    padding-left: 15px;
-    border-bottom: 1px solid #d40052;
+	margin: 0 0 2em 0;
+
+
+}
+form .field {
+	margin: 0 0 2em 0;
 }
 form .form-group:last-of-type {
-    margin-bottom: 25px
+    margin-bottom: 2em;
 }
 form .btn {
     margin-left: 15px
 }
 .form-group input,
 .form-group textarea {
-    z-index: 1;
-    position: relative;
-    padding-right: 0;
-    padding-left: 0;
-    border: none;
-    border-radius: 0;
-    font-size: 1.5em;
-    background: none;
-    box-shadow: none !important;
-    resize: none;
+	-moz-appearance: none;
+		-webkit-appearance: none;
+		-ms-appearance: none;
+		appearance: none;
+		background: rgba(255, 255, 255, 0.025);
+		border-radius: 5px;
+		border: none;
+		border: solid 2px rgba(255, 255, 255, 0.125);
+		color: inherit;
+		display: block;
+		outline: 0;
+		padding: 0 1em;
+		text-decoration: none;
+		width: 100%;
 }
 .form-group label {
-    display: block;
-    z-index: 0;
-    position: relative;
-    top: 2em;
-    margin: 0;
-    font-size: 0.85em;
-    line-height: 1.764705882em;
-    opacity: 0;
-    -webkit-transition: top 0.3s ease, opacity 0.3s ease;
-    transition: top 0.3s ease, opacity 0.3s ease;
+    color: #ffffff;
+		display: block;
+		font-family: Raleway, Helvetica, sans-serif;
+		font-size: 0.8em;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		margin: 0 0 0.7em 0;
+		text-transform: uppercase;
 }
 .form-group::not(:first-child) {
     padding-left: 14px;
-    border-left: 1px solid #eeeeee;
+
 }
 .form-group-with-value label {
     top: 0;
@@ -409,7 +416,7 @@ textarea:-ms-input-placeholder {
 ::selection {
     color: white;
     text-shadow: none;
-    background: #d40052;
+    background: #0f0f0f;
 }
 img::selection {
     color: white;
@@ -431,7 +438,9 @@ background: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 35%, rgba(
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#000000', GradientType=1 );
 }
 /* center */
-.centerbox {width:100%}
+.centerbox {
+	width:100%;
+}
 
 /* squares */
 .square li{
@@ -454,12 +463,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', end
 	padding:10px 10px 0 10px;
 	background:#fff;
 	display:block;
+	transition: all 0.5s ease 0.1s;
 	}
 .square li a:hover {
 	background: #a54a7b;
 	color:#fff!important;
-	transition: 0.5s
 	}
+
 		
 
 /* header*/	
@@ -614,7 +624,6 @@ background: -ms-linear-gradient(left, rgba(27,27,27,1) 0%, rgba(33,33,33,1) 1%, 
 background: linear-gradient(to right, rgba(27,27,27,1) 0%, rgba(33,33,33,1) 1%, rgba(33,33,33,1) 99%, rgba(27,27,27,1) 100%);
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1b1b1b', endColorstr='#1b1b1b', GradientType=1 );
 }
-
 .carousel img {
 		max-height: 400px;
         width: 100%;
@@ -622,7 +631,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1b1b1b', end
 		overflow: hidden;
 		position: realtive;
 }
-
 .google-maps {
 	top: 0;
     left: 0;
@@ -631,5 +639,123 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1b1b1b', end
 	position: relative;
 	overflow: hidden;
 }
+/* Poradnik */
+.post-h2 {
+	position: absolute; 
+	top: 200px; 
+	left: 0; 
+	width: 100%;
+	color: white; 
+	font: bold 24px/45px Helvetica, Sans-Serif; 
+	letter-spacing: -1px;  
+	background: rgb(0, 0, 0); /* fallback color */
+	background: rgba(0, 0, 0, 0.7);
+	padding: 10px; 
+}
+.post-image {
+	position: relative; 
+	width: 100%;
+	max-height:300px;
+	object-fit:cover;
+}
 
-
+.rounded-corners a{
+	-moz-appearance: none;
+    -webkit-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    border-radius: 25px;
+    border: 2px solid #a54a7b;
+    padding: 20px; 
+    width: 100%;
+    height: 100px; 
+	position: relative;
+	text-decoration:none;
+	text-align: center;
+	font-size:30px;
+	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	display:block;
+	color:#a54a7b;
+	transition: all 0.5s ease 0.1s;
+    background-color: transparent;
+    cursor: pointer;
+    white-space: nowrap;
+}
+@media screen and (max-width: 480px) {
+	.rounded-corners a{
+		font-size:20px;
+		text-align: center;
+	}
+}
+.rounded-corners a:hover {
+	background: #a54a7b;
+	color:#fff;
+	text-decoration:none;
+	}
+/* home - squares*/
+.square-home li{
+	list-style-type:none;
+	display:inline;
+	padding-left:0px;
+	margin:0px;
+	width: 60%;
+	position: relative;
+	}
+.square-home li a{
+	text-decoration:none;
+	text-align: center;
+	font-size:20px;
+	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	border:2px solid #a54a7b;
+	line-height: 200px;
+	height:200px;
+	background:#fff;
+	display:block;
+	transition: all 0.5s ease 0.1s;
+	}
+.square-home li a:hover {
+	background: #a54a7b;
+	color:#fff!important;
+	}
+#home-zabiegi{
+	padding:0;
+}
+/* Efekt powiekszenia */
+.button {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    text-align: center;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+    -webkit-transition: .3s;
+    transition: .3s;
+}
+.button:after {
+    position: absolute;
+    -webkit-transition: .3s;
+    transition: .3s;
+    content: '';
+    width: 0;
+    left: 50%;
+    bottom: 0;
+    height: 3px;
+    background: #f7f7f7;
+}
+.button:hover {
+    cursor: pointer;
+	transform: scale(1.2);
+    &:after {
+      width: 100%;
+      left: 0;
+	  width: 0%;
+    }
+.button:hover:after {
+    width: 0%;
+    left: 0;
+}
+#map {
+		width: 100%;
+		max-height: 300px;
+		}

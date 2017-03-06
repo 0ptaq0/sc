@@ -1,28 +1,71 @@
     {include: themes/".$settings.theme."/inc/header.html}
 
-    <!-- Page Header -->
-    <header class="intro-header" style="background-image: url('{$bat.path}/themes/{$settings.theme}/img/sara_logo.jpg')">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <div class="site-heading">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+<!-- Page Header -->
+    <div id="page-wrapper">
 
-    <!-- Main Content -->
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                {if: $bat.notify}
-                <div id="notify" class="alert alert-{$bat.notify.type}">{$bat.notify.text}</div>
-                {/if}
-                {$page.content}
-				
-            </div>
-    </div>
-	</div>
+	<!-- Header -->
+		<!-- <header id="header" class="alt"> -->
+			<!-- <h1><a href="index.html">Solid State</a></h1> -->
+			<!-- <nav> -->
+				<!-- <a href="#menu">Menu</a> -->
+			<!-- </nav> -->
+		<!-- </header> -->
+		
+		<!-- Menu -->
+		<!-- <nav id="menu"> -->
+			<!-- <div class="inner"> -->
+				<!-- <h2>Menu</h2> -->
+				<!-- <ul class="links"> -->
+					<!-- <li><a href="index.html">Home</a></li> -->
+					<!-- <li><a href="generic.html">Generic</a></li> -->
+					<!-- <li><a href="elements.html">Elements</a></li> -->
+					<!-- <li><a href="#">Log In</a></li> -->
+					<!-- <li><a href="#">Sign Up</a></li> -->
+				<!-- </ul> -->
+				<!-- <a href="#" class="close">Close</a> -->
+			<!-- </div> -->
+		<!-- </nav> -->
+
+		
+		<!-- Wrapper -->
+		<section id="wrapper" >
+			<header > 
+				<div class="inner" >
+					<h2>Zabiegi</h2>
+					
+					<!-- Navi2 -->
+		   {include: themes/".$settings.theme."/navigation.html}
+				</div>
+			</header>
+			
+		
+
+			<!-- Content -->
+			
+			
+	<div class="wrapper">
 	
+			<!-- List view -->
+		   {include: themes/".$settings.theme."/list.html}
+		<div class="inner">
+
+			{if: $bat.notify}
+			<div id="notify" class="alert alert-{$bat.notify.type}">{$bat.notify.text}</div>
+			{/if}
+			
+
+			</div>
+		</div>
+
+		</section>
+
+	<div class="google-maps">
+			<iframe class="google-maps"										
+							frameborder="0" 
+							src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14714.679729787284!2d20.15794098945924!3d50.01286544535335!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4716473cf89a4643%3A0x84db615a79f1e826!2zUG9kxYLEmcW8ZSAzOTAsIDMyLTAwMyBQb2TFgsSZxbxlLCBQb2xza2E!5e0!3m2!1spl!2sus!4v1487941176631
+							&zoom=14" 
+							allowfullscreen>
+			</iframe>
+	</div>
+
     {include: themes/".$settings.theme."/inc/footer.html}
