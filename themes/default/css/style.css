@@ -713,6 +713,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1b1b1b', end
 	width: 100%;
 	max-height:300px;
 	object-fit:cover;
+	border-radius: 15px;
+	border: 1px solid #a54a7b;
 }
 
 .rounded-corners a{

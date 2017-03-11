@@ -317,7 +317,7 @@
 	@media screen and (max-width: 1680px) {
 
 		.row > * {
-			padding: 0 0 0 1.75em;
+			padding: 1em 0 0 1.75em;
 		}
 
 		.row {
@@ -1889,6 +1889,7 @@
 
 	section.special, article.special {
 		text-align: center;
+
 	}
 
 /* Form */
