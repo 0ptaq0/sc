@@ -209,7 +209,7 @@ hr.small {
     font-weight: 600;
 }
 .intro-header .post-heading .meta {
-    font-family: 'Lora', 'Times New Roman', serif;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-style: italic;
     font-weight: 300;
     font-size: 20px;
@@ -342,7 +342,7 @@ form .btn {
 .form-group label {
     color: #ffffff;
 		display: block;
-		font-family: Raleway, Helvetica, sans-serif;
+		font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 		font-size: 0.8em;
 		font-weight: 700;
 		letter-spacing: 0.1em;

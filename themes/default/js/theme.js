@@ -13,6 +13,6 @@ jQuery(document).ready(function($) {
         if ($(window).scrollTop() > 0)
             $(".navbar").addClass("is-fixed");
         else 
-    });
             $(".navbar").removeClass("is-fixed");
+});
 });
