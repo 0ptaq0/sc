@@ -1,0 +1,31 @@
+    {include: themes/".$settings.theme."/inc/header.html}
+
+
+			<!-- Page Wrapper -->
+<div id="page-wrapper">
+<!-- Wrapper -->
+<section id="wrapper" >
+<header > 
+<div class="inner" >
+<h2>Zabiegi</h2>
+
+<!-- Navi2 -->
+{include: themes/".$settings.theme."/navigation.html}
+</div>
+</header>
+
+<div class="wrapper">
+<div class="inner">
+{include: themes/".$settings.theme."/navigation.html}
+{if: $bat.notify}
+<div id="notify" class="alert alert-{$bat.notify.type}">{$bat.notify.text}</div>
+{/if}
+
+{$page.content}
+
+</div>
+</div>
+</section>
+</div>
+
+    {include: themes/".$settings.theme."/inc/footer.html}

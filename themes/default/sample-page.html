@@ -1,41 +1,62 @@
-   {include: themes/".$settings.theme."/inc/header.html}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{if: $page.desc}{$page.desc}{else}{$settings.description}{/if}" />
+    <meta name="keywords" content="{$settings.keywords}" />
+    <title>{$page.title} - {$settings.title}</title>
+    <link rel="stylesheet" href="{$bat.path}/inc/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="{$bat.path}/themes/{$settings.theme}/css/style.css" />
+	<link rel="stylesheet" href="{$bat.path}/themes/{$settings.theme}/assets/css/main.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://use.fontawesome.com/56fa629212.js"></script>
+    <script src="{$bat.path}/inc/jscripts/bootstrap.min.js"></script>
+    <script src="{$bat.path}/themes/{$settings.theme}/js/theme.js"></script>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic&subset=latin,latin-ext'>
+    {loop: $bat.header}{$value}{/loop}
+</head>
 
-    <!-- Page Header -->
-    <div id="page-wrapper">
+<body>
+	 <!-- facebook-root -->
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+	  var js, fjs = d.getElementsByTagName(s)[0];
+	  if (d.getElementById(id)) return;
+	  js = d.createElement(s); js.id = id;
+	  js.src = "//connect.facebook.net/pl_PL/sdk.js#xfbml=1&version=v2.8";
+	  fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));</script>
 
-	<!-- Header -->
-		<!-- <header id="header" class="alt"> -->
-			<!-- <h1><a href="index.html">Solid State</a></h1> -->
-			<!-- <nav> -->
-				<!-- <a href="#menu">Menu</a> -->
-			<!-- </nav> -->
-		<!-- </header> -->
-		
-		<!-- Menu -->
-		<!-- <nav id="menu"> -->
-			<!-- <div class="inner"> -->
-				<!-- <h2>Menu</h2> -->
-				<!-- <ul class="links"> -->
-					<!-- <li><a href="index.html">Home</a></li> -->
-					<!-- <li><a href="generic.html">Generic</a></li> -->
-					<!-- <li><a href="elements.html">Elements</a></li> -->
-					<!-- <li><a href="#">Log In</a></li> -->
-					<!-- <li><a href="#">Sign Up</a></li> -->
-				<!-- </ul> -->
-				<!-- <a href="#" class="close">Close</a> -->
-			<!-- </div> -->
-		<!-- </nav> -->
+    <!-- Navigation -->
+    <nav class="navbar navbar-custom navbar-fixed-top overflowHid">
+        <div class="container-fluid">
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar navbar-default"></span>
+                    <span class="icon-bar navbar-default"></span>
+                    <span class="icon-bar navbar-default"></span>
+                </button>
+                <a class="navbar-brand" href="{$bat.path}">{$settings.title}</a>
+            </div>
 
-		
-		Wrapper
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    {$navigation.main}
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+					<section id="banner" style="background: url('{$bat.path}/themes/{$settings.theme}/img/SC-logo-white.png') no-repeat center;">
+
+					</section>
+					
+					
+
 		<section id="wrapper" >
-			<header > 
-				<div class="inner" >
-					<h2>Sample</h2>
-					<p>Sample page</p>
-				</div>
-			</header>
-
 						<!-- Content -->
 <div class="wrapper">
 	<div class="inner">
@@ -49,4 +70,3 @@
 				</section>
 
 
-    {include: themes/".$settings.theme."/inc/footer.html}
