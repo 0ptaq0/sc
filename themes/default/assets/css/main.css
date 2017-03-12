@@ -3225,7 +3225,40 @@
 			line-height: 2;
 			text-transform: uppercase;
 		}
-
+	#banner{
+		background-size: 43% !important;
+		background-position: center 10px !important;
+	}
+	@media screen and (max-width: 1500px) {		
+	#banner{
+		background-size: 53% !important;
+		background-position: center 10px !important;
+	}
+	}
+	@media screen and (max-width: 1000px) {		
+	#banner{
+		background-size: 83% !important;
+		background-position: center 10px !important;
+	}
+	}
+		@media screen and (max-width: 830px) {		
+	#banner{
+		background-size: 97% !important;
+		background-position: center 60px !important;
+	}	
+}
+		@media screen and (max-width: 530px) {		
+	#banner{
+		background-size: 130% !important;
+		background-position: center 60px !important;
+	}	
+}
+		@media screen and (max-width: 430px) {		
+	#banner{
+		background-size: 130% !important;
+		background-position: center 100px !important;
+	}	
+}
 	@media screen and (max-width: 1280px) {
 
 		#wrapper > header {
@@ -3296,7 +3329,6 @@
 		.wrapper:before {
 			left: 0;
 			top: -6.5em;
-			display:none;
 		}
 
 		.wrapper:after {
