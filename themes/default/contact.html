@@ -1,5 +1,7 @@
-    {include: themes/".$settings.theme."/inc/header.html}
-
+   <!DOCTYPE html>
+<html>
+   {include: themes/".$settings.theme."/inc/header.html}
+<body>
     <!-- Page Header -->
     <div id="page-wrapper">
 
@@ -59,4 +61,55 @@
 	</div>
 
 
-    {include: themes/".$settings.theme."/inc/footer.html}
+         <!-- Footer -->
+      <footer>
+          <div class="container overflowHid">
+              <div class="row">
+  				<div class="footer-left">
+  					<p>
+  						Godziny otwarcia:<br>
+  						Pon-Pt 07:00 - 16:00<br><br>
+  						Adres:<br>
+  						Podłęże, 390 32-003 <br><br>
+						NIP: <br>
+						6832091944
+  					</p>
+  				</div>
+
+  				<div class="footer-right">
+					<div class="overflowHid">
+						<div class="fb-page" data-href="https://www.facebook.com/facebook" data-tabs="timeline" data-width="500" data-height="130" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/facebook" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/facebook">Facebook</a></blockquote></div>
+					</div>
+  					<p>Sprawdź nas także i tu:</p>
+  					<ul class="footer-list" style="display:inline-block; padding-left:0; position:absolute; margin-top:10px;">
+                          <li>
+                              <a href="#">
+                                  <span class="fa-stack fa-lg">
+                                      <i class="fa fa-circle fa-stack-2x"></i>
+                                      <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                                  </span>
+                              </a>
+                          </li>
+                          <li>
+                              <a href="#">
+                                  <span class="fa-stack fa-lg">
+                                      <i class="fa fa-circle fa-stack-2x"></i>
+                                      <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+                                  </span>
+                              </a>
+                          </li>
+                      </ul>
+  				</div>
+              </div>
+          </div>
+  		<p class="copyright text-muted">
+                          {$settings.footer}
+                          {$bat.powered}.
+          </p>
+      </footer>
+
+      {loop: $bat.footer}{$value}{/loop}
+
+  </body>
+
+  </html>
