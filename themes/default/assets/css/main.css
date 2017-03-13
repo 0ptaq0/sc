@@ -3307,7 +3307,7 @@
 
 	.wrapper {
 		background-color: #2e3141;
-		margin: 6.5em 0;
+		margin: 4.75em 0;
 		position: relative;
 	}
 
@@ -3316,10 +3316,11 @@
 		}
 
 		.wrapper:before, .wrapper:after {
+			
 			background-repeat: no-repeat;
 			background-size: 100% 100%;
 			display: block;
-			height: 6.5em;
+			height: 4.75em;
 			position: absolute;
 			width: 100%;
 			content: '';
@@ -3328,7 +3329,7 @@
 
 		.wrapper:before {
 			left: 0;
-			top: -6.5em;
+			top: -4.75em;
 		}
 
 		.wrapper:after {
@@ -3336,8 +3337,9 @@
 			-webkit-transform: scaleY(-1);
 			-ms-transform: scaleY(-1);
 			transform: scaleY(-1);
-			bottom: -6.5em;
+			bottom: -4.75em;
 			left: 0;
+
 		}
 
 		.wrapper.alt:before {
@@ -3355,9 +3357,9 @@
 		}
 
 		.wrapper .inner {
-			padding: 3em 0 1em 0 ;
 			margin: 0 auto;
-			width: 55em;
+			padding: 3em 3em 1em 3em ;
+			width: 100%;
 		}
 
 		.wrapper.style2 {
@@ -3402,6 +3404,7 @@
 
 		.wrapper.spotlight {
 			background-color: #a54a7b;
+			/* margin: 0 -0.1em 0 0; */
 		}
 
 			.wrapper.spotlight:before, .wrapper.spotlight:after {
@@ -3425,10 +3428,10 @@
 
 			.wrapper.spotlight .image {
 				border-radius: 100%;
-				margin: 0 3em 2em 0;
-				width: 22em;
 				overflow: hidden;
 				-ms-flex: 1;
+				margin: 0 2em 2em 0;
+				width: 32em;
 			}
 
 				.wrapper.spotlight .image img {
@@ -3450,7 +3453,7 @@
 			}
 
 			.wrapper.spotlight:nth-child(2n - 1) .image {
-				margin: 0 0 2em 3em;
+				margin: 0 0 2em 2em;
 			}
 
 			.wrapper.spotlight.style2 {
