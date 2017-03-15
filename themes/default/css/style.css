@@ -759,7 +759,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1b1b1b', end
 	color:#fff;
 	text-decoration:none;
 	}
-	
+	@media screen and (max-width: 780px) {
+		.post-image {
+    max-height: 150px;
+}
+.post-h2 {
+	position: absolute;
+	top: 25px;
+	left: 0;
+	font: bold 16px/32px Helvetica, Sans-Serif;
+
+}
+	}
 	@media screen and (max-width: 480px) {
 	.carousel img {
 	max-height: 100px;
@@ -767,6 +778,16 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1b1b1b', end
 	.rounded-corners a{
 	font-size:20px;
 	text-align: center;
+}
+.post-h2 {
+	position: absolute;
+	top: 25px;
+	left: 0;
+	font: bold 12px/24px Helvetica, Sans-Serif;
+
+}
+.post-image {
+    max-height: 150px;
 }
 }
 	
