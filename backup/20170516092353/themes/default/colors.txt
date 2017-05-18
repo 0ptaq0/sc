@@ -1,0 +1,7 @@
+color="#a54a7b"
+
+Kosmetologia #A3D5E0
+Medycyna estetyczna #A076AB
+podologia #EDC92F
+spa #4ABC96
+odnowa biologiczna #EB9783

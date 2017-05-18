@@ -1,47 +1,58 @@
 <?php
-
+    /**
+    * This file is part of Batflat ~ the lightweight, fast and easy CMS
+    * 
+    * @author       Paweł Klockiewicz <klockiewicz@sruu.pl>
+    * @author       Wojciech Król <krol@sruu.pl>
+    * @copyright    2017 Paweł Klockiewicz, Wojciech Król <Sruu.pl>
+    * @license      https://batflat.org/license
+    * @link         https://batflat.org
+    */
+    
     namespace Inc\Modules\Pages;
 
-    class Admin
-    {
+	use Inc\Core\AdminModule;
 
-        public $core;
+    class Admin extends AdminModule
+    {
         private $assign = [];
-        
-        public function __construct($object)
-        {
-            $this->core = $object;
-		}
 
         public function navigation()
         {
             return [
-                $this->core->lang['general']['manage']		=> 'manage',
-                $this->core->lang['pages']['add_new']		=> 'add'
+                $this->lang('manage', 'general')	=> 'manage',
+                $this->lang('add_new')				=> 'add'
             ];
         }
         
         /**
         * list of pages
         */
-        public function manage($page = 1)
+        public function getManage($page = 1)
         {
         	// lang
-        	if(isset($_GET['lang']) && !empty($_GET['lang']))
+        	if(!empty($_GET['lang']))
+			{
         		$lang = $_GET['lang'];
+				$_SESSION['pages']['last_lang'] = $lang;
+			}
+			else if(!empty($_SESSION['pages']['last_lang']))
+			{
+				$lang = $_SESSION['pages']['last_lang'];
+			}
 			else
-				$lang = $this->core->getSettings('settings', 'lang_site');
+				$lang = $this->settings('settings', 'lang_site');
 
         	// pagination
-			$totalRecords = $this->core->db('pages')->where('lang', $lang)->toArray();
+			$totalRecords = $this->db('pages')->where('lang', $lang)->toArray();
 			$pagination = new \Inc\Core\Lib\Pagination($page, count($totalRecords), 10, url([ADMIN, 'pages', 'manage', '%d']));
 			$this->assign['pagination'] = $pagination->nav();
-			
 			// list
-        	$rows = $this->core->db('pages')->where('lang', $lang)
+        	$rows = $this->db('pages')->where('lang', $lang)
 					->limit($pagination->offset().', '.$pagination->getRecordsPerPage())
 					->toArray();
 					
+			$this->assign['list'] = [];
         	if(count($rows))
         	{
 	        	foreach($rows as $row)
@@ -56,16 +67,15 @@
         	}
         	
         	$this->assign['langs'] = $this->_getLanguages($lang);
-        	$this->core->tpl->set('pages', $this->assign);
-        	return $this->core->tpl->draw(MODULES.'/pages/view/admin/manage.html');
+        	return $this->draw('manage.html', ['pages' => $this->assign]);
 		}
 		
         /**
         * add new page
         */
-        public function add()
+        public function getAdd()
         {
-            $this->assign['editor'] = $this->core->getSettings('settings', 'editor');
+            $this->assign['editor'] = $this->settings('settings', 'editor');
             $this->_addHeaderFiles();
         	
             // Unsaved data with failure
@@ -76,44 +86,42 @@
             else
         	   $this->assign['form'] = ['title' => '', 'desc' => '', 'content' => '', 'slug' => '', 'markdown' => 0];
         	
-        	$this->assign['title'] = $this->core->lang['pages']['new_page'];
-        	$this->assign['langs'] = $this->_getLanguages($this->core->getSettings('settings', 'lang_site'));
-        	$this->assign['templates'] = $this->_getTemplates(isset_or($e['template'], null));
+        	$this->assign['title'] = $this->lang('new_page');
+        	$this->assign['langs'] = $this->_getLanguages($this->settings('settings.lang_site'), 'selected');
+        	$this->assign['templates'] = $this->_getTemplates(isset_or($e['template'], 'index.html'));
+			$this->assign['manageURL'] = url([ADMIN, 'pages', 'manage']);
 
-        	$this->core->tpl->set('pages', $this->assign);
-        	return $this->core->tpl->draw(MODULES.'/pages/view/admin/form.html');
+        	return $this->draw('form.html', ['pages' => $this->assign]);
 		}
 		
 		
         /**
         * edit page
         */
-        public function edit($id)
+        public function getEdit($id)
         {
-            $this->assign['editor'] = $this->core->getSettings('settings', 'editor');
+            $this->assign['editor'] = $this->settings('settings', 'editor');
             $this->_addHeaderFiles();
 
-            $page = $this->core->db('pages')->where('id', $id)->oneArray();
+            $page = $this->db('pages')->where('id', $id)->oneArray();
 			
         	if(!empty($page))
         	{
                 // Unsaved data with failure
                 if(!empty($e = getRedirectData()))
                 {
-                    $this->assign['form'] = ['title' => isset_or($e['title'], ''), 'desc' => isset_or($e['desc'], ''), 'content' => isset_or($e['content'], ''), 'slug' => isset_or($e['slug'], '')];
+                    $page = array_merge($page, ['title' => isset_or($e['title'], ''), 'desc' => isset_or($e['desc'], ''), 'content' => isset_or($e['content'], ''), 'slug' => isset_or($e['slug'], '')]);
                 }
-                else
-                {
-                    $this->assign['form'] = htmlspecialchars_array($page);
-                    $this->assign['form']['content'] =  $this->core->tpl->noParse($this->assign['form']['content']);
-                }
+                    
+				$this->assign['form'] = htmlspecialchars_array($page);
+                $this->assign['form']['content'] =  $this->tpl->noParse($this->assign['form']['content']);
 
-	        	$this->assign['title'] = $this->core->lang['pages']['edit_page'];
+	        	$this->assign['title'] = $this->lang('edit_page');
 	        	$this->assign['langs'] = $this->_getLanguages($page['lang'], 'selected');
 	        	$this->assign['templates'] = $this->_getTemplates($page['template']);
+				$this->assign['manageURL'] = url([ADMIN, 'pages', 'manage']);
 
-	        	$this->core->tpl->set('pages', $this->assign);
-	        	return $this->core->tpl->draw(MODULES.'/pages/view/admin/form.html');
+	        	return $this->draw('form.html', ['pages' => $this->assign]);
         	}
         	else
         		redirect(url([ADMIN, 'pages', 'manage']));
@@ -122,21 +130,19 @@
         /**
         * save data
         */
-	    public function save($id = null)
+	    public function postSave($id = null)
 		{
             unset($_POST['save'], $_POST['files']);
 
             if(!$id)
-                $location = url([ADMIN, 'pages', 'new']);
+                $location = url([ADMIN, 'pages', 'add']);
             else
                 $location = url([ADMIN, 'pages', 'edit', $id]);
 
-    		if(checkEmptyFields(['title', 'content', 'lang', 'template'], $_POST))
+    		if(checkEmptyFields(['title', 'lang', 'template'], $_POST))
     		{
-    			$this->core->setNotify('failure', $this->core->lang['general']['empty_inputs']);
-	            $this->assign['form'] = htmlspecialchars_array($_POST);
-                $this->assign['form']['content'] = $this->core->tpl->noParse($this->assign['form']['content']);
-                redirect($location);
+    			$this->notify('failure', $this->lang('empty_inputs', 'general'));
+                redirect($location, $_POST);
     		}
 
 			$_POST['title'] = trim($_POST['title']);
@@ -147,30 +153,30 @@
 			else
                 $_POST['slug'] = createSlug($_POST['slug']);
 
-            if($id != null && $this->core->db('pages')->where('slug', $_POST['slug'])->where('lang', $_POST['lang'])->where('id', '!=', $id)->oneArray())
+            if($id != null && $this->db('pages')->where('slug', $_POST['slug'])->where('lang', $_POST['lang'])->where('id', '!=', $id)->oneArray())
             {
-                $this->core->setNotify('failure', $this->core->lang['pages']['page_exists']);
+                $this->notify('failure', $this->lang('page_exists'));
                 redirect(url([ADMIN, 'pages', 'edit', $id]), $_POST);
             }
-            else if($id == null && $this->core->db('pages')->where('slug', $_POST['slug'])->where('lang', $_POST['lang'])->oneArray())
+            else if($id == null && $this->db('pages')->where('slug', $_POST['slug'])->where('lang', $_POST['lang'])->oneArray())
             {
-                $this->core->setNotify('failure', $this->core->lang['pages']['page_exists']);
+                $this->notify('failure', $this->lang('page_exists'));
                 redirect(url([ADMIN, 'pages', 'add']), $_POST);
             }
 
 			if(!$id)
 			{
                 $_POST['date'] = date('Y-m-d H:i:s');
-                $query = $this->core->db('pages')->save($_POST);
-                $location = url([ADMIN, 'pages', 'edit', $this->core->db()->pdo()->lastInsertId()]);
+                $query = $this->db('pages')->save($_POST);
+                $location = url([ADMIN, 'pages', 'edit', $this->db()->pdo()->lastInsertId()]);
 			}
 			else
-                $query = $this->core->db('pages')->where('id', $id)->save($_POST);
+                $query = $this->db('pages')->where('id', $id)->save($_POST);
 
 			if($query)
-				$this->core->setNotify('success', $this->core->lang['pages']['save_success']);
+				$this->notify('success', $this->lang('save_success'));
 			else
-				$this->core->setNotify('failure', $this->core->lang['pages']['save_failure']);
+				$this->notify('failure', $this->lang('save_failure'));
 
             redirect($location);
 		}
@@ -178,12 +184,12 @@
 		/**
         * remove page
         */
-		public function delete($id)
+		public function getDelete($id)
 		{
-			if($this->core->db('pages')->delete($id))
-				$this->core->setNotify('success', $this->core->lang['pages']['delete_success']);
+			if($this->db('pages')->delete($id))
+				$this->notify('success', $this->lang('delete_success'));
 			else
-				$this->core->setNotify('failure', $this->core->lang['pages']['delete_failure']);
+				$this->notify('failure', $this->lang('delete_failure'));
 
 			redirect(url([ADMIN, 'pages', 'manage']));
 		}
@@ -192,7 +198,7 @@
 		/**
         * image upload from WYSIWYG
         */
-		public function editorUpload()
+		public function postEditorUpload()
 		{
 			header('Content-type: application/json');
 			$dir 	= UPLOADS.'/pages';
@@ -212,7 +218,7 @@
 					echo json_encode(['status' => 'success', 'result' => url($imgPath)]);	
 				} 
 				else
-					$error = $this->core->lang['pages']['editor_upload_fail'];
+					$error = $this->lang('editor_upload_fail');
 
 				if($error)
 					echo json_encode(['status' => 'failure', 'result' => $error]);
@@ -223,30 +229,11 @@
 		/**
         * module JavaScript
         */
-		public function javascript()
+		public function getJavascript()
 		{
 			header('Content-type: text/javascript');
-			echo $this->core->tpl->draw(MODULES.'/pages/js/admin/pages.js');	
+			echo $this->draw(MODULES.'/pages/js/admin/pages.js');	
 			exit();
-		}
-
-		/**
-		* lista of languages
-		* @param string $selected
-		* @return array
-		*/
-		private function _getLanguages($selected = null, $active = 'active')
-		{
-			$langs = glob('../inc/lang/*', GLOB_ONLYDIR);
-			
-			$result = [];
-			foreach($langs as $lang)
-			{
-				if($selected == basename($lang)) $attr = $active;
-				else $attr = null;
-				$result[] = ['name' => basename($lang), 'attr' => $attr];
-			}
-			return $result;
 		}
 		
 		/**
@@ -256,7 +243,7 @@
 		*/
 		private function _getTemplates($selected = null)
 		{
-			$theme = $this->core->getSettings('settings', 'theme');
+			$theme = $this->settings('settings', 'theme');
 			$tpls = glob(THEMES.'/'.$theme.'/*.html');
 			
 			$result = [];
@@ -274,14 +261,19 @@
             // WYSIWYG
             $this->core->addCSS(url('inc/jscripts/wysiwyg/summernote.min.css'));
         	$this->core->addJS(url('inc/jscripts/wysiwyg/summernote.min.js'));
-            if($this->core->getSettings('settings', 'lang_admin') != 'en_english')
-                $this->core->addJS(url('inc/jscripts/wysiwyg/lang/'.$this->core->getSettings('settings', 'lang_admin').'.js'));
+            if($this->settings('settings', 'lang_admin') != 'en_english')
+                $this->core->addJS(url('inc/jscripts/wysiwyg/lang/'.$this->settings('settings', 'lang_admin').'.js'));
             
-			// HTML EDITOR
-            $this->core->addCSS(url('inc/jscripts/markitup/skin/style.css'));
-            $this->core->addCSS(url('inc/jscripts/markitup/set/style.css'));
-            $this->core->addJS(url('inc/jscripts/markitup/markitup.min.js'));
-            $this->core->addJS(url('inc/jscripts/markitup/set/'.$this->core->getSettings('settings', 'lang_admin').'.js'));
+			// HTML & MARKDOWN EDITOR
+			$this->core->addCSS(url('/inc/jscripts/editor/markitup.min.css'));
+			$this->core->addCSS(url('/inc/jscripts/editor/markitup.highlight.min.css'));
+			$this->core->addCSS(url('/inc/jscripts/editor/sets/html/set.min.css'));
+			$this->core->addCSS(url('/inc/jscripts/editor/sets/markdown/set.min.css'));
+			$this->core->addJS(url('/inc/jscripts/editor/highlight.min.js'));
+			$this->core->addJS(url('/inc/jscripts/editor/markitup.min.js'));
+			$this->core->addJS(url('/inc/jscripts/editor/markitup.highlight.min.js'));
+			$this->core->addJS(url('/inc/jscripts/editor/sets/html/set.min.js'));
+			$this->core->addJS(url('/inc/jscripts/editor/sets/markdown/set.min.js'));
 			
 			// ARE YOU SURE?
 			$this->core->addJS(url('inc/jscripts/are-you-sure.min.js'));

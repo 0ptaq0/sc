@@ -34,18 +34,23 @@
                             <input type="submit" class="btn btn-primary" name="update" value="{$lang.settings.update_button}" />
                         </form>
                     {else}
-                        <p class="alert alert-warning"><b>/batflat-*.zip</b> does not detected.</p>
+                        <p class="alert alert-danger"><b>/batflat-*.zip</b> does not detected.</p>
                         <input type="submit" class="btn btn-primary" value="{$lang.settings.update_button}" disabled/>
                     {/if}
                 {elseif: cmpver($settings['update_version'], $settings['version']) === 1}
-                    <p class="alert alert-success">{$lang.settings.update_available} ({$settings['update_version']})</p>
+                    <p class="alert alert-warning">{$lang.settings.update_available} ({$settings['update_version']})</p>
                     <form method="post">
                         <input type="submit" class="btn btn-primary" name="update" value="{$lang.settings.update_button}" />
                     </form>
                     <h3>Changelog:</h3>
                     <pre style="max-height:200px;">{$settings['update_changelog']}</pre>
                 {elseif: isset($update_version) && cmpver($update_version, $settings['version']) === 0}
-                    <p class="alert alert-info">{$lang.settings.up_to_date} ({$settings['update_version']})</p>
+                    <p class="alert alert-success">{$lang.settings.up_to_date} ({$settings['update_version']})</p>
+                    <form method="post">
+                        <input type="submit" class="btn btn-primary" name="check" value="{$lang.settings.update_check}" />
+                    </form>
+                {elseif: isset($update_version) && cmpver($update_version, $settings['version']) === -1}
+                    <p class="alert alert-success">{$lang.settings.update_newer_version} ({$settings['update_version']})</p>
                     <form method="post">
                         <input type="submit" class="btn btn-primary" name="check" value="{$lang.settings.update_check}" />
                     </form>

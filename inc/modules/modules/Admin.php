@@ -1,58 +1,49 @@
 <?php
-
+    /**
+    * This file is part of Batflat ~ the lightweight, fast and easy CMS
+    * 
+    * @author       Paweł Klockiewicz <klockiewicz@sruu.pl>
+    * @author       Wojciech Król <krol@sruu.pl>
+    * @copyright    2017 Paweł Klockiewicz, Wojciech Król <Sruu.pl>
+    * @license      https://batflat.org/license
+    * @link         https://batflat.org
+    */
+    
     namespace Inc\Modules\Modules;
 
-    class Admin
+    use Inc\Core\AdminModule;
+
+    class Admin extends AdminModule
     {
-
-        public $core;
-
-        public function __construct($object)
-        {
-            $this->core = $object;
-		}
-
         public function navigation()
         {
             return [
-                $this->core->lang['modules']['active']		=> 'active',
-                $this->core->lang['modules']['unactive']	=> 'unactive',
-                $this->core->lang['modules']['upload_new']	=> 'upload'
+                $this->lang('manage', 'general')    => 'manage',
+                $this->lang('upload_new')	        => 'upload'
             ];
         }
 
         /**
-        * list of active modules
+        * list of active/inactive modules
         */
-        public function active()
+        public function getManage($type = 'active')
         {
-        	$modules = $this->_modulesList('active');
-            $this->core->tpl->set('modules', array_chunk($modules, 2));
-            return $this->core->tpl->draw(MODULES.'/modules/view/admin/active.html');
-		}
-
-        /**
-        * list of unactive modules
-        */
-        public function unactive()
-        {
-            $modules = $this->_modulesList('unactive');
-     		$this->core->tpl->set('modules', array_chunk($modules, 2));
-     		return $this->core->tpl->draw(MODULES.'/modules/view/admin/unactive.html');
+        	$modules = $this->_modulesList($type);
+            return $this->draw('manage.html', ['modules' => array_chunk($modules, 2), 'tab' => $type]);
 		}
 
         /**
         * module upload
         */
-        public function upload()
+        public function getUpload()
         {
-        	return $this->core->tpl->draw(MODULES.'/modules/view/admin/upload.html');
+        	return $this->draw('upload.html');
 		}
 
         /**
          * module extract
          */
-        public function extract()
+        public function postExtract()
         {
             if(isset($_FILES['zip_module']['tmp_name']) && !FILE_LOCK)
             {
@@ -70,7 +61,7 @@
 
                     if(strpos($entry, '/') === FALSE)
                     {
-                        $this->core->setNotify('failure', $this->core->lang['modules']['upload_bad_file']);
+                        $this->notify('failure', $this->lang('upload_bad_file'));
                         redirect( $backURL );
                     }
                 }
@@ -91,23 +82,23 @@
 
                             if(cmpver($info_new['version'], $info_old['version']) <= 0)
                             {
-                                $this->core->setNotify('failure', $this->core->lang['modules']['upload_bad_version']);
+                                $this->notify('failure', $this->lang('upload_bad_version'));
                                 continue;
                             }
                         }
                         $this->unzip($file, MODULES.'/'.$module['name'], $module['name']);
                     }
                     
-                    $this->core->setNotify('success', $this->core->lang['modules']['upload_success']);
+                    $this->notify('success', $this->lang('upload_success'));
                 }
                 else
-                    $this->core->setNotify('failure', $this->core->lang['modules']['upload_bad_file']);
+                    $this->notify('failure', $this->lang('upload_bad_file'));
             }
             
             redirect( $backURL );
         }
 
-		public function install($dir)
+		public function getInstall($dir)
 		{
     		$files = [
     			'info'  => MODULES.'/'.$dir.'/Info.php',
@@ -117,55 +108,97 @@
 
     		if((file_exists($files['info']) && file_exists($files['admin'])) || (file_exists($files['info']) && file_exists($files['site'])))
     		{
-				if($this->core->db('modules')->save(['dir' => $dir, 'sequence' => $this->core->db('modules')->count()]))
+                $core = $this->core;
+                $info = include($files['info']);
+                if(!$this->checkCompatibility(isset_or($info['compatibility'])))
+                {
+                    $this->notify('failure', $this->lang('module_outdated'), $dir);
+                }
+				else if($this->db('modules')->save(['dir' => $dir, 'sequence' => $this->db('modules')->count()]))
 				{
-                    $core = $this->core;
-    				$info = include($files['info']);
-                    if(isset($info['install'])) $info['install']();
+                    if(isset($info['install']))
+                        $info['install']();
 
-	            	$this->core->setNotify('success', $this->core->lang['modules']['activate_success'], $dir);
+	            	$this->notify('success', $this->lang('activate_success'), $dir);
             	}
                 else
-            		$this->core->setNotify('failure', $this->core->lang['modules']['activate_failure'], $dir);
+            		$this->notify('failure', $this->lang('activate_failure'), $dir);
         	}
             else
-        		$this->core->setNotify('failure', $this->core->lang['modules']['activate_failure_files'], $dir);
+        		$this->notify('failure', $this->lang('activate_failure_files'), $dir);
 
-        	redirect(url([ADMIN, 'modules', 'unactive']));
+        	redirect(url([ADMIN, 'modules', 'manage', 'inactive']));
 		}
 
-		public function uninstall($dir)
+		public function getUninstall($dir)
 		{
-			if($this->core->db('modules')->delete('dir', $dir) && !in_array($dir, unserialize(BASIC_MODULES)))
+            if(in_array($dir, unserialize(BASIC_MODULES)))
+            {
+                $this->notify('failure', $this->lang('deactivate_failure'), $dir);
+                redirect(url([ADMIN, 'modules', 'manage', 'active']));
+            }
+
+			if($this->db('modules')->delete('dir', $dir))
 			{
                 $core = $this->core;
                 $info = include(MODULES.'/'.$dir.'/Info.php');
-                if(isset($info['uninstall'])) $info['uninstall']();
 
-				$this->core->setNotify('success', $this->core->lang['modules']['deactivate_success'], $dir);
+                if(isset($info['uninstall']))
+                    $info['uninstall']();
+
+				$this->notify('success', $this->lang('deactivate_success'), $dir);
 			}
             else
-				$this->core->setNotify('failure', $this->core->lang['modules']['deactivate_failure'], $dir);
+				$this->notify('failure', $this->lang('deactivate_failure'), $dir);
 
-			redirect(url([ADMIN, 'modules', 'active']));
+			redirect(url([ADMIN, 'modules', 'manage', 'active']));
 		}
 
-		public function remove($dir)
+		public function getRemove($dir)
 		{
+            if(in_array($dir, unserialize(BASIC_MODULES)))
+            {
+                $this->notify('failure', $this->lang('remove_failure'), $dir);
+			    redirect(url([ADMIN, 'modules', 'manage', 'inactive']));
+            }
+
 		    $path = MODULES.'/'.$dir;
 			if(is_dir($path))
 			{
 				if(deleteDir($path))
-					$this->core->setNotify('success', $this->core->lang['modules']['remove_success'], $dir);
+					$this->notify('success', $this->lang('remove_success'), $dir);
 				else
-					$this->core->setNotify('failure', $this->core->lang['modules']['remove_failure'], $dir);
+					$this->notify('failure', $this->lang('remove_failure'), $dir);
 			}
-			redirect(url([ADMIN, 'modules', 'unactive']));
+			redirect(url([ADMIN, 'modules', 'manage', 'inactive']));
 		}
+
+        public function getDetails($dir)
+        {
+            $files = [
+                'info'      => MODULES.'/'.$dir.'/Info.php',
+                'readme'    => MODULES.'/'.$dir.'/ReadMe.md'
+            ];
+
+            $module = $this->core->getModuleInfo($dir);
+            $module['description'] = $this->tpl->noParse($module['description']);
+            $module['last_modified'] = date("Y-m-d", filemtime($files['info']));
+
+            // ReadMe.md
+            if(file_exists($files['readme']))
+            {
+                $parsedown = new \Inc\Core\Lib\Parsedown();
+                $module['readme'] = $parsedown->text($this->tpl->noParse(file_get_contents($files['readme'])));
+            }
+
+            $this->tpl->set('module', $module);
+            echo $this->tpl->draw(MODULES.'/modules/view/admin/details.html', true);
+            exit();
+        }
 
 		private function _modulesList($type)
 		{
-			$dbModules = array_column($this->core->db('modules')->toArray(), 'dir');
+			$dbModules = array_column($this->db('modules')->toArray(), 'dir');
 			$result = [];
 
 			foreach(glob(MODULES.'/*', GLOB_ONLYDIR) as $dir)
@@ -185,19 +218,26 @@
         		if(((file_exists($files['info']) && file_exists($files['admin'])) || (file_exists($files['info']) && file_exists($files['site']))) && $inArray)
         		{
 	                $details = $this->core->getModuleInfo($dir);
+                    $details['description'] = $this->tpl->noParse($details['description']);
                     $features = $this->core->getModuleNav($dir);
+                    $other = [];
 					$urls = [
 						'url'			=> (is_array($features) ? url([ADMIN, $dir, array_shift($features)]) : '#'),
 						'uninstallUrl'	=> url([ADMIN, 'modules', 'uninstall', $dir]),
 						'removeUrl'		=> url([ADMIN, 'modules', 'remove', $dir]),
-        				'installUrl'	=> url([ADMIN, 'modules', 'install', $dir])
+        				'installUrl'	=> url([ADMIN, 'modules', 'install', $dir]),
+                        'detailsUrl'	=> url([ADMIN, 'modules', 'details', $dir])
         			];
 
+                    $other['installed'] = $type == 'active' ? true : false;
+
         			if(in_array($dir, unserialize(BASIC_MODULES)))
-        				$basic = ['basic' => true];
+        				$other['basic'] = true;
         			else
-        				$basic = ['basic' => false];
-        			$result[] = $details + $urls + $basic;
+        				$other['basic'] = false;
+
+                    $other['compatible'] = $this->checkCompatibility(isset_or($details['compatibility'], '1.0.0'));
+        			$result[] = $details + $urls + $other;
 	        	}
         	}
         	return $result;
@@ -225,5 +265,12 @@
             }
 
             $zip->close();
+        }
+
+        private function checkCompatibility($version)
+        {
+            $systemVersion = $this->settings('settings', 'version');
+            $version = str_replace(['.', '*'], ['\\.', '[0-9]+'], $version);
+            return preg_match('/^'.$version.'[a-z]*$/', $systemVersion);
         }
     }

@@ -1,7 +1,9 @@
 <article class="row">
     <div class="col-md-8">
         <div class="panel panel-default">
-            <div class="panel-heading">{$lang.general.manage}</div>
+            <div class="panel-heading">
+				<h3 class="panel-title">{$lang.general.manage}</h3>
+			</div>
             <div class="panel-body">
                 {if: !empty($galleries)}
 				<div class="table-responsive no-margin">
@@ -17,7 +19,7 @@
 							{loop: $galleries}
 							<tr>
 								<td><a href="{$value.editURL}">{$value.name}</a></td>
-								<td>{$value.tag}</td>
+								<td><code>{$value.tag}</code></td>
 								<td class="text-right">
 									<a href="{$value.editURL}" class="btn btn-xs btn-success">
 										<i class="fa fa-pencil"></i> <span class="hidden-xs">{$lang.general.edit}</span>
@@ -32,7 +34,7 @@
 					</table>
 				</div>
                 {else}
-                <p>{$lang.galleries.no_items}</p>
+                <p class="no-margin">{$lang.general.empty_array}</p>
                 {/if}
             </div>
         </div>
@@ -40,7 +42,9 @@
 
     <div class="col-md-4">
         <div class="panel panel-default">
-            <div class="panel-heading">{$lang.galleries.add_gallery}</div>
+            <div class="panel-heading">
+				<h3 class="panel-title">{$lang.galleries.add_gallery}</h3>
+			</div>
             <div class="panel-body">
         		<form action="{?=url(ADMIN.'/galleries/add')?}" method="POST">
     	            <div class="form-group">

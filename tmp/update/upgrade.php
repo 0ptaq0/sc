@@ -1,9 +1,14 @@
 <?php
 	/**
-	 * Batflat migration/upgrade file
-	 * @copyright Copyright by Sruu.pl (http://sruu.pl) (c) 2017
-	 * @author Sruu.pl <kontakt@sruu.pl>
-	 */
+    * This file is part of Batflat ~ the lightweight, fast and easy CMS
+    * 
+    * @author       Paweł Klockiewicz <klockiewicz@sruu.pl>
+    * @author       Wojciech Król <krol@sruu.pl>
+    * @copyright    2017 Paweł Klockiewicz, Wojciech Król <Sruu.pl>
+    * @license      https://batflat.org/license
+    * @link         https://batflat.org
+    */
+    
 	if(!defined("UPGRADABLE"))
 		exit();
 
@@ -121,7 +126,80 @@
 			$return = '1.2.0';
 
 		case '1.2.0':
-			$return = '1.2.1';	
+			$return = '1.2.1';
+
+		case '1.2.1':
+			register_shutdown_function(function() {
+				sleep(2);
+				redirect(url([ADMIN, 'settings', 'updates']));
+			});
+
+			$lang = $this->core->getSettings('settings', 'lang_site');
+
+			$this->rcopy(BASE_DIR.'/tmp/update/admin', BASE_DIR.'/admin');
+			$this->rcopy(BASE_DIR.'/tmp/update/index.php', BASE_DIR.'/index.php');
+			$this->rcopy(BASE_DIR.'/tmp/update/LICENSE.txt', BASE_DIR.'/LICENSE.txt');
+			$this->rcopy(BASE_DIR.'/tmp/update/themes/admin', BASE_DIR.'/themes/admin');
+			$this->rcopy(BASE_DIR.'/tmp/update/themes/batblog', BASE_DIR.'/themes/batblog');
+
+			// Settings
+			$this->core->db()->pdo()->exec("INSERT INTO `settings` (`module`, `field`, `value`) VALUES ('settings', 'timezone', '".date_default_timezone_get()."')");
+			$this->core->db()->pdo()->exec("INSERT INTO `settings` (`module`, `field`, `value`) VALUES ('settings', 'license', '')");
+			$this->core->db()->pdo()->exec("INSERT INTO `settings` (`module`, `field`, `value`) VALUES ('blog', 'latestPostsCount', '5')");
+
+			// Users
+			$this->core->db()->pdo()->exec("ALTER TABLE users ADD COLUMN description TEXT NULL");
+			$this->core->db()->pdo()->exec("ALTER TABLE users ADD COLUMN avatar TEXT NULL");
+			$this->core->db()->pdo()->exec("CREATE TABLE IF NOT EXISTS `remember_me` (
+                `id` integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+                `token` text NOT NULL,
+                `user_id` integer NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                `expiry` integer NOT NULL
+            )");
+			if(!is_dir(UPLOADS."/users"))
+                mkdir(UPLOADS."/users", 0777);
+
+			$users = $this->core->db('users')->toArray();
+			foreach($users as $user)
+			{
+				$avatar = uniqid('avatar').'.png';
+            	copy(MODULES.'/users/img/default.png', UPLOADS.'/users/'.$avatar);
+				$this->core->db('users')->where('id', $user['id'])->save(['avatar' => $avatar]);
+			}
+
+			// Blog
+			$this->core->db()->pdo()->exec("ALTER TABLE blog ADD COLUMN lang TEXT NULL");
+			$this->core->db()->pdo()->exec("UPDATE blog SET lang = '".$lang."'");
+
+			// Snippets
+			$snippets = $this->core->db('snippets')->toArray();
+			foreach($snippets as $snippet)
+			{
+				$this->core->db('snippets')->where('id', $snippet['id'])->save(['content' => '{lang: '.$lang.'}'.$snippet['content'].'{/lang}']);
+			}
+			$return = '1.3.0';
+		
+		case '1.3.0':
+			$this->core->db()->pdo()->exec("ALTER TABLE navs_items ADD COLUMN class TEXT NULL");
+			$return = '1.3.1';
+
+		case '1.3.1':
+			$this->rcopy(BASE_DIR.'/backup/'.$backup_date.'/inc/core/defines.php', BASE_DIR.'/inc/core/defines.php');
+			$this->rcopy(BASE_DIR.'/tmp/update/themes/admin', BASE_DIR.'/themes/admin');
+			$return = '1.3.1a';
+
+		case '1.3.1a':
+			$return = '1.3.1b';
+
+		case '1.3.1b':
+			$return = '1.3.2';
+
+		case '1.3.2':
+			$this->rcopy(BASE_DIR.'/tmp/update/admin', BASE_DIR.'/admin');
+			$this->rcopy(BASE_DIR.'/tmp/update/themes/admin', BASE_DIR.'/themes/admin');
+			$this->core->db()->pdo()->exec("INSERT INTO modules (`dir`) VALUES ('devbar')");
+			$return = '1.3.3';
+
 	}
 
 	return $return;

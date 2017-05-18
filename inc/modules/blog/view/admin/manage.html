@@ -3,13 +3,18 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">{$lang.general.manage}</h3>
+                <ul class="nav nav-tabs">
+					{loop: $blog.langs}
+					<li class="{$value.attr}"><a href="{?=url(ADMIN.'/blog/manage?lang='.$value.name)?}">{$value.name}</a></li>
+					{/loop}
+				</ul>
             </div>
 
             <div class="panel-body">
                 <form method="post">
                     <div class="clearfix">
                         <h3 class="pull-left" style="margin-top:5px;">{$lang.blog.post_count} {$blog.postCount}</h3>
-                        <button type="submit" title="{$lang.general.delete}" name="delete" class="btn btn-danger pull-right collapse" data-confirm="{$lang.blog.post_del_confirm}"><i class="fa fa-trash"></i></button>
+                        <button type="submit" title="{$lang.general.delete}" name="delete" class="btn btn-danger pull-right" data-confirm="{$lang.blog.post_del_confirm}" disabled><i class="fa fa-trash"></i> {$lang.general.delete} (<span>0</span>)</button>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-striped no-margin">
@@ -25,6 +30,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {if: !empty($blog.posts)}
                                 {loop: $blog.posts}
                                 <tr>
                                     <td><input type="checkbox" name="post-list[]" class="list-item" value="{$value.id}" /></td>
@@ -48,6 +54,9 @@
                                     </td>
                                 </tr>
                                 {/loop}
+                                {else}
+                                <tr><td colspan="7" class="text-center">{$lang.general.empty_array}</td></tr>
+								{/if}
                             </tbody>
                         </table>
                     </div>
@@ -61,9 +70,10 @@
 <script>
 $(".list-item").change(function() {
     if($('.list-item:checked').length > 0)
-        $('button[name="delete"]').fadeIn();
+        $('button[name="delete"]').prop("disabled", false)
     else
-        $('button[name="delete"]').fadeOut();
+        $('button[name="delete"]').prop("disabled", true)
+    $('button[name="delete"] span').text($(".list-item:checked").length);
 }).change();
 $(".check-all").change(function(e) {
     if($(this).is(":checked"))

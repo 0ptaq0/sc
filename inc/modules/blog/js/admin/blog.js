@@ -1,63 +1,102 @@
-function insertEditor(type) {
+function insertEditor(type)
+{
     var editor = $('.editor');
 
-    if (type == 'wysiwyg') {
-        if ($('.markItUp').length) {
+    if(type == 'wysiwyg')
+    {
+        if($('.markItUp').length)
+        {
             editor.markItUpRemove();
+            $('#textarea-tabs').removeClass('markItUp');
         }
 
-        editor.summernote({
+        editor.summernote(
+        {
             lang: '{$lang.name}',
-            height: 270,
-            callbacks: {
-                onInit: function() {
-                    $('.note-codable').keyup(function() {
-                        editor.val($(this).val());
+            height: 335,
+            callbacks:
+            {
+                onInit: function()
+                {
+                    var e = $(this);
+                    $('.note-codable', e.next()).keyup(function()
+                    {
+                        e.val($(this).val());
                     });
                 },
-                onImageUpload: function(files) {
+                onImageUpload: function(files)
+                {
                     sendFile(files[0], this);
                 },
-                onChange: function() {
+                onChange: function()
+                {
                     editor.parents('form').trigger('checkform.areYouSure');
                 }
             }
         });
-    } else {
-        if ($('.note-editor').length) {
-            editor.each(function() {
+    }
+    else
+    {
+        if($('.note-editor').length)
+        {
+            editor.each(function()
+            {
                 var isEmpty = $(this).summernote('isEmpty');
                 $(this).summernote('destroy');
-                if (isEmpty)
+                if(isEmpty)
                     $(this).html('');
             });
         }
 
-        editor.markItUp(markItUpSettings);
+        var checkbox = $('input[name="markdown"]');
+        editor.each(function()
+        {
+            var currentEditor = $(this);
+            currentEditor.markItUp(checkbox.is(':checked') ? markItUp_markdown : markItUp_html).highlight();
+
+            if($('.editor').data('editor') == 'html')
+            {
+                checkbox.change(function()
+                {
+                    currentEditor.markItUpRemove();
+                    if (checkbox.is(':checked'))
+                        currentEditor.markItUp(markItUp_markdown).highlight();
+                    else
+                        currentEditor.markItUp(markItUp_html).highlight();
+                });
+            }
+        });
+        $('#textarea-tabs').addClass('markItUp');
     }
 }
 
-function sendFile(file, editor) {
+function sendFile(file, editor)
+{
     var formData = new FormData();
     formData.append('file', file);
 
     var fileData = URL.createObjectURL(file);
-    $(editor).summernote('insertImage', fileData, function($image) {
+    $(editor).summernote('insertImage', fileData, function($image)
+    {
         $.ajax({
-            xhr: function() {
+            xhr: function()
+            {
                 var xhr = new window.XMLHttpRequest();
 
                 $('input[type="submit"]').prop('disabled', true);
                 var progress = $('.progress:first').clone();
                 progress = (progress.fadeIn()).appendTo($('.progress-wrapper'));
 
-                xhr.upload.addEventListener("progress", function(evt) {
-                    if (evt.lengthComputable) {
+                xhr.upload.addEventListener("progress", function(evt)
+                {
+                    if(evt.lengthComputable)
+                    {
                         var percentComplete = evt.loaded / evt.total;
                         percentComplete = parseInt(percentComplete * 100);
                         progress.children().css('width', percentComplete + '%');
 
-                        if (percentComplete === 100) {
+                        if(percentComplete === 100)
+                        {
                             progress.fadeOut();
                             progress.remove();
                             $('input[type="submit"]').prop('disabled', false);
@@ -74,11 +113,15 @@ function sendFile(file, editor) {
             contentType: false,
             processData: false,
             dataType: 'json',
-            success: function(data) {
-                if (data.status == 'success') {
+            success: function(data)
+            {
+                if(data.status == 'success')
+                {
                     $image.remove();
                     $(editor).summernote('insertImage', data.result);
-                } else if (data.status == 'failure') {
+                }
+                else if(data.status == 'failure')
+                {
                     $image.remove();
                     bootbox.alert(data.result);
                 }
@@ -87,31 +130,71 @@ function sendFile(file, editor) {
     });
 }
 
-function markdown() {
-    if ($('.editor').data('editor') == 'wysiwyg') {
-        var checkbox = $('input[name="markdown"]');
-        checkbox.change(function() {
-            if ($(this).is(':checked'))
+function markdown()
+{
+    var checkbox = $('input[name="markdown"]');
+    if ($('.editor').data('editor') == 'wysiwyg')
+    {
+        checkbox.change(function()
+        {
+            if($(this).is(':checked'))
                 insertEditor('html');
             else
                 insertEditor('wysiwyg');
         });
 
-        checkbox.change();
-    } else
+        if(checkbox.is(':checked'))
+            insertEditor('html');
+        else
+            insertEditor('wysiwyg');
+    } 
+    else
         insertEditor('html');
 }
 
-$(document).ready(function() {
+$(document).ready(function()
+{
     markdown();
-
-    $("#toggle-form label").click(function() {
-        $("#toggle-form .textarea").slideToggle("slow");
-    });
 
     $('form').areYouSure({ 'message': '{$lang.general.unsaved_warning}' });
 
-    $('input[name=tags]').tagsInput({
-        defaultText: '{$lang.blog.add_a_tag}'
+    var $tags = $('select[name="tags[]"]');
+
+    if($tags.hasClass('selectator'))
+        $tags.selectator('destroy');
+
+    $tags.selectator({
+        height: '39px',
+        useSearch: true,
+        useOnMobile: true,
+        showAllOptionsOnFocus: true,
+        load: function (search, callback) {
+            if (search.length < this.minSearchLength) return callback();
+            $.ajax({
+                url: '{?= url([ADMIN, "blog", "jsontags", "' + encodeURIComponent(search) + '"]) ?}',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    callback(data.slice(0, 10));
+                },
+                error: function() {
+                    callback();
+                }
+            });
+        },
+        placeholder: '{$lang.blog.add_a_tag}...',
+        delay: 200,
+        minSearchLength: 2,
+        valueField: 'name',
+        textField: 'name',
+        render: {
+            option: function (_item, escape) {
+                var html = '';
+                html += '<div class="selectator_option_title">';
+                html += ((typeof _item.name !== 'undefined') ? _item.name.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/g, '') : '');
+                html += '</div>';
+                return html;
+            }
+        }
     });
 });

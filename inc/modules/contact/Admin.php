@@ -1,27 +1,30 @@
 <?php
-
+    /**
+    * This file is part of Batflat ~ the lightweight, fast and easy CMS
+    * 
+    * @author       Paweł Klockiewicz <klockiewicz@sruu.pl>
+    * @author       Wojciech Król <krol@sruu.pl>
+    * @copyright    2017 Paweł Klockiewicz, Wojciech Król <Sruu.pl>
+    * @license      https://batflat.org/license
+    * @link         https://batflat.org
+    */
+    
     namespace Inc\Modules\Contact;
 
-    class Admin
+    use Inc\Core\AdminModule;
+
+    class Admin extends AdminModule
     {
-
-        public $core;
-
-        public function __construct($object)
-        {
-            $this->core = $object;
-		}
-
         public function navigation()
         {
             return [
-                $this->core->lang['general']['settings'] => 'settings',
+                $this->lang('settings', 'general') => 'settings',
             ];
         }
 
-        public function settings()
+        public function getSettings()
         {
-            $value = $this->core->getSettings('contact');
+            $value = $this->settings('contact');
 
             if(is_numeric($value['email']))
             {
@@ -43,11 +46,10 @@
                 'name' => $value['phpmailer.name'],
             ];
 
-            $this->core->tpl->set('contact', $assign);
-            return $this->core->tpl->draw(MODULES.'/contact/view/admin/settings.html');
+            return $this->draw('settings.html', ['contact' => $assign]);
         }
 
-        public function save()
+        public function postSave()
         {
             $update = [
                 'email' => ($_POST['user'] > 0 ? $_POST['user'] : $_POST['email']),
@@ -62,21 +64,21 @@
             $errors = 0;
             foreach($update as $field => $value)
             {
-                if(!$this->core->db('settings')->where('module', 'contact')->where('field', $field)->save(['value' => $value]))
+                if(!$this->db('settings')->where('module', 'contact')->where('field', $field)->save(['value' => $value]))
                     $errors++;
             }
 
             if(!$errors)
-                $this->core->setNotify('success', $this->core->lang['contact']['save_success']);
+                $this->notify('success', $this->lang('save_success'));
             else
-                $this->core->setNotify('failure', $this->core->lang['contact']['save_failure']);
+                $this->notify('failure', $this->lang('save_failure'));
 
             redirect(url([ADMIN, 'contact', 'settings']));
         }
 
         private function _getUsers($id = null)
         {
-            $rows = $this->core->db('users')->where('role', 'admin')->toArray();
+            $rows = $this->db('users')->where('role', 'admin')->toArray();
         	if(count($rows))
         	{
 	        	foreach($rows as $row)

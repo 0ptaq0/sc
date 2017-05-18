@@ -1,46 +1,57 @@
 <?php
-
+    /**
+    * This file is part of Batflat ~ the lightweight, fast and easy CMS
+    * 
+    * @author       Paweł Klockiewicz <klockiewicz@sruu.pl>
+    * @author       Wojciech Król <krol@sruu.pl>
+    * @copyright    2017 Paweł Klockiewicz, Wojciech Król <Sruu.pl>
+    * @license      https://batflat.org/license
+    * @link         https://batflat.org
+    */
+    
     namespace Inc\Modules\Navigation;
 
-    class Admin
+    use Inc\Core\AdminModule;
+
+    class Admin extends AdminModule
     {
-
-        public $core;
         private $assign = [];
-
-        public function __construct($object)
-        {
-            $this->core = $object;
-		}
-
         public function navigation()
         {
             return [
-                $this->core->lang['general']['manage']			=> 'manage',
-                $this->core->lang['navigation']['add_link']		=> 'newLink',
-                $this->core->lang['navigation']['add_nav']		=> 'newNav'
+                $this->lang('manage', 'general')    => 'manage',
+                $this->lang('add_link')		        => 'newLink',
+                $this->lang('add_nav')		        => 'newNav'
             ];
         }
 
         /**
         * list of navs and their children
         */
-        public function manage()
+        public function getManage()
         {
         	// lang
-        	if(isset($_GET['lang']) && !empty($_GET['lang']))
+        	if(!empty($_GET['lang']))
+			{
         		$lang = $_GET['lang'];
+				$_SESSION['navigation']['last_lang'] = $lang;
+			}
+			else if(!empty($_SESSION['navigation']['last_lang']))
+			{
+				$lang = $_SESSION['navigation']['last_lang'];
+			}
 			else
-				$lang = $this->core->getSettings('settings', 'lang_site');
+				$lang = $this->settings('settings', 'lang_site');
+
 			$this->assign['langs'] = $this->_getLanguages($lang, 'active');
 
         	// list
-            $rows = $this->core->db('navs')->toArray();
+            $rows = $this->db('navs')->toArray();
         	if(count($rows))
         	{
 	        	foreach($rows as $row)
 	        	{
-	        	    $row['name'] = $this->core->tpl->noParse('{$navigation.'.$row['name'].'}');
+	        	    $row['name'] = $this->tpl->noParse('{$navigation.'.$row['name'].'}');
 	        		$row['editURL'] = url([ADMIN, 'navigation', 'editNav', $row['id']]);
 		        	$row['delURL'] = url([ADMIN, 'navigation', 'deleteNav', $row['id']]);
                     $row['items'] = $this->_getNavItems($row['id'], $lang);
@@ -49,23 +60,22 @@
 	        	}
         	}
 
-        	$this->core->tpl->set('navigation', $this->assign);
-        	return $this->core->tpl->draw(MODULES.'/navigation/view/admin/manage.html');
+        	return $this->draw('manage.html', ['navigation' => $this->assign]);
 		}
 
         /**
         * add new link
         */
-        public function newLink()
+        public function getNewLink()
         {
 			// lang
 			if(isset($_GET['lang']))
 				$lang = $_GET['lang'];
 			else
-				$lang = $this->core->getSettings('settings', 'lang_site');
+				$lang = $this->settings('settings', 'lang_site');
 			$this->assign['langs'] = $this->_getLanguages($lang, 'selected');
 
-			$this->assign['link'] = ['name' => '', 'lang' => '', 'page' => '', 'url' => '', 'parent' => ''];
+			$this->assign['link'] = ['name' => '', 'lang' => '', 'page' => '', 'url' => '', 'parent' => '', 'class' => ''];
 
 			// list of pages
 			$this->assign['pages'] = $this->_getPages($lang);
@@ -75,17 +85,16 @@
 			// list of parents
 			$this->assign['navs'] = $this->_getParents($lang);
 
-			$this->assign['title'] = $this->core->lang['navigation']['add_link'];
-            $this->core->tpl->set('navigation', $this->assign);
-        	return $this->core->tpl->draw(MODULES.'/navigation/view/admin/form.link.html');
+			$this->assign['title'] = $this->lang('add_link');
+        	return $this->draw('form.link.html', ['navigation' => $this->assign]);
         }     
 
         /**
         * edit link
         */
-        public function editLink($id)
+        public function getEditLink($id)
         {
-			$row = $this->core->db('navs_items')->oneArray($id);
+			$row = $this->db('navs_items')->oneArray($id);
 
             if(!empty($row))
     	    {
@@ -106,9 +115,8 @@
                 // list of parents
                 $this->assign['navs'] = $this->_getParents($lang, $row['nav'], $row['parent'], $row['id']);
 				
-				$this->assign['title'] = $this->core->lang['navigation']['edit_link'];
-				$this->core->tpl->set('navigation', $this->assign);
-				return $this->core->tpl->draw(MODULES.'/navigation/view/admin/form.link.html');
+				$this->assign['title'] = $this->lang('edit_link');
+				return $this->draw('form.link.html', ['navigation' => $this->assign]);
             }
             else
                 redirect(url([ADMIN, 'navigation', 'manage']));
@@ -117,7 +125,7 @@
         /**
         * save link data
         */
-        public function saveLink($id = null)
+        public function postSaveLink($id = null)
         {
 			unset($_POST['save']);
             
@@ -132,7 +140,7 @@
 
             if(checkEmptyFields($fields, $_POST))
             {
-            	$this->core->setNotify('failure', $this->core->lang['general']['empty_inputs']);
+            	$this->notify('failure', $this->lang('empty_inputs', 'general'));
             	$this->assign['form'] = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
                 redirect($location);
             }
@@ -153,19 +161,19 @@
             if(!$id)
             {
 				$_POST['"order"'] = $this->_getHighestOrder($_POST['nav'], $_POST['parent'], $_POST['lang']) + 1;
-				$query = $this->core->db('navs_items')->save($_POST);
+				$query = $this->db('navs_items')->save($_POST);
             }
             else
             {
-				$query = $this->core->db('navs_items')->where($id)->save($_POST);
+				$query = $this->db('navs_items')->where($id)->save($_POST);
 				if($query)
-					$query = $this->core->db('navs_items')->where('parent', $id)->update(['nav' => $_POST['nav']]);
+					$query = $this->db('navs_items')->where('parent', $id)->update(['nav' => $_POST['nav']]);
             }
 
             if($query)
-        		$this->core->setNotify('success', $this->core->lang['navigation']['save_link_success']);
+        		$this->notify('success', $this->lang('save_link_success'));
         	else
-        		$this->core->setNotify('failure', $this->core->lang['navigation']['save_link_failure']);
+        		$this->notify('failure', $this->lang('save_link_failure'));
 
             redirect($location);
         }
@@ -173,12 +181,12 @@
         /**
         * delete link
         */
-        public function deleteLink($id)
+        public function getDeleteLink($id)
         {
-			if($this->core->db('navs_items')->where('id', $id)->orWhere('parent', $id)->delete())
-				$this->core->setNotify('success', $this->core->lang['navigation']['delete_link_success']);
+			if($this->db('navs_items')->where('id', $id)->orWhere('parent', $id)->delete())
+				$this->notify('success', $this->lang('delete_link_success'));
 			else
-				$this->core->setNotify('failure', $this->core->lang['navigation']['delete_link_failure']);
+				$this->notify('failure', $this->lang('delete_link_failure'));
 
 			redirect(url([ADMIN, 'navigation', 'manage']));
         }
@@ -186,22 +194,21 @@
         /**
         * add new nav
         */
-        public function newNav()
+        public function getNewNav()
         {
-            $this->assign['title'] = $this->core->lang['navigation']['add_nav'];
+            $this->assign['title'] = $this->lang('add_nav');
 
             $this->assign['name'] = '';
-            $this->core->tpl->set('navigation', $this->assign);
-        	return $this->core->tpl->draw(MODULES.'/navigation/view/admin/form.nav.html');
+        	return $this->draw('form.nav.html', ['navigation' => $this->assign]);
         }
 
         /**
         * edit nav
         */
-        public function editNav($id)
+        public function getEditNav($id)
         {
-            $this->assign['title'] = $this->core->lang['navigation']['edit_nav'];
-            $row = $this->core->db('navs')->where($id)->oneArray();
+            $this->assign['title'] = $this->lang('edit_nav');
+            $row = $this->db('navs')->where($id)->oneArray();
 
             if(!empty($row))
             {
@@ -211,14 +218,13 @@
             else
                 redirect(url([ADMIN, 'navigation', 'manage']));
 
-            $this->core->tpl->set('navigation', $this->assign);
-        	return $this->core->tpl->draw(MODULES.'/navigation/view/admin/form.nav.html');
+        	return $this->draw('form.nav.html', ['navigation', $this->assign]);
         }
 
         /**
         * save nav
         */
-        public function saveNav($id = null)
+        public function postSaveNav($id = null)
         {
             if(empty($_POST['name']))
             {
@@ -227,30 +233,30 @@
                 else
                     redirect(url([ADMIN, 'navigation', 'editNav', $id]));
 
-                $this->core->setNotify('failure', $this->core->lang['general']['empty_inputs']);
+                $this->notify('failure', $this->lang('empty_inputs', 'general'));
             }
 
             $name = createSlug($_POST['name']);
 
             // check if nav already exists
-            if(!$this->core->db('navs')->where('name', $name)->count())
+            if(!$this->db('navs')->where('name', $name)->count())
 			{
                 if(!$id)
                 {
-					$query = $this->core->db('navs')->save(['name' => $name]);
+					$query = $this->db('navs')->save(['name' => $name]);
                 }
                 else
                 {
-					$query = $this->core->db('navs')->where($id)->save(['name' => $name]);
+					$query = $this->db('navs')->where($id)->save(['name' => $name]);
                 }
 
                 if($query)
-                   $this->core->setNotify('success', $this->core->lang['navigation']['save_nav_success']);
+                   $this->notify('success', $this->lang('save_nav_success'));
                 else
-                    $this->core->setNotify('success', $this->core->lang['navigation']['save_nav_failure']);
+                    $this->notify('success', $this->lang('save_nav_failure'));
             }
             else
-                $this->core->setNotify('failure', $this->core->lang['navigation']['nav_already_exists']);
+                $this->notify('failure', $this->lang('nav_already_exists'));
 
             redirect(url([ADMIN, 'navigation', 'manage']));
         }
@@ -258,38 +264,18 @@
         /**
         * remove nav
         */
-        public function deleteNav($id)
+        public function getDeleteNav($id)
         {
-			if($this->core->db('navs')->delete($id))
+			if($this->db('navs')->delete($id))
             {
-		    	$this->core->db('navs_items')->delete('nav', $id);
-                $this->core->setNotify('success', $this->core->lang['navigation']['delete_nav_success']);
+		    	$this->db('navs_items')->delete('nav', $id);
+                $this->notify('success', $this->lang('delete_nav_success'));
 			}
 			else
-				$this->core->setNotify('failure', $this->core->lang['navigation']['delete_nav_failure']);
+				$this->notify('failure', $this->lang('delete_nav_failure'));
 
 			redirect(url([ADMIN, 'navigation', 'manage']));
         }
-
-		/**
-		* list of languages
-		* @param string $selected
-        * @param string $active ('active' or 'selected')
-		* @return array
-		*/
-		private function _getLanguages($selected = null, $active = null)
-		{
-			$langs = glob('../inc/lang/*', GLOB_ONLYDIR);
-
-			$result = [];
-			foreach($langs as $lang)
-			{
-				if($selected == basename($lang)) $attr = $active;
-				else $attr = null;
-				$result[] = ['name' => basename($lang), 'attr' => $attr];
-			}
-			return $result;
-		}
 
 		/**
 		* list of pages
@@ -299,7 +285,7 @@
 		*/
         private function _getPages($lang, $selected = null)
         {
-			$rows = $this->core->db('pages')->where('lang', $lang)->toArray();
+			$rows = $this->db('pages')->where('lang', $lang)->toArray();
         	if(count($rows))
         	{
 	        	foreach($rows as $row)
@@ -320,12 +306,12 @@
 		*/
         private function _getParents($lang, $nav = null, $page = null, $except = null)
         {
-			$rows = $this->core->db('navs')->toArray();
+			$rows = $this->db('navs')->toArray();
         	if(count($rows))
         	{
 	        	foreach($rows as &$row)
 	        	{
-	        	    $row['name'] = $this->core->tpl->noParse('{$navigation.'.$row['name'].'}');
+	        	    $row['name'] = $this->tpl->noParse('{$navigation.'.$row['name'].'}');
 	        	    $row['items'] = $this->_getNavItems($row['id'], $lang);
 
                     if($nav && !$page && ($nav == $row['id']))
@@ -361,7 +347,7 @@
 		*/
         private function _getNavItems($nav, $lang)
         {
-            $items = $this->core->db('navs_items')->where('nav', $nav)->where('lang', $lang)->asc('"order"')->toArray();
+            $items = $this->db('navs_items')->where('nav', $nav)->where('lang', $lang)->asc('"order"')->toArray();
 
             if(count($items))
             {
@@ -374,11 +360,13 @@
 
                     if($item['page'] > 0)
                     {
-                        $page = $this->core->db('pages')->where('id', $item['page'])->oneArray();
+                        $page = $this->db('pages')->where('id', $item['page'])->oneArray();
                         $item['fullURL'] = '/'.$page['slug'];
                     }
                     else
-                        $item['fullURL'] = (parse_url($item['url'], PHP_URL_SCHEME) ? '' : '/' ).$item['url'];
+                    {
+                        $item['fullURL'] = (parse_url($item['url'], PHP_URL_SCHEME) || strpos($item['url'], '#') === 0 ? '' : '/' ).trim($item['url'], '/');
+                    }
                 }
                 return $this->buildTree($items);
             }
@@ -408,14 +396,14 @@
         * @param integer $id
 		* @return void
 		*/
-        public function changeOrder($direction, $id)
+        public function getChangeOrder($direction, $id)
         {
-            $item = $this->core->db('navs_items')->oneArray($id);
+            $item = $this->db('navs_items')->oneArray($id);
 
             if(!empty($item))
             {
                 if($direction == 'up')
-                    $nextItem = $this->core->db('navs_items')
+                    $nextItem = $this->db('navs_items')
                         ->where('"order"', '<', $item['order'])
                         ->where('nav', $item['nav'])
                         ->where('parent', $item['parent'])
@@ -423,7 +411,7 @@
                         ->desc('"order"')
                         ->oneArray();
                 else
-                     $nextItem = $this->core->db('navs_items')
+                     $nextItem = $this->db('navs_items')
                         ->where('"order"', '>', $item['order'])
                         ->where('nav', $item['nav'])
                         ->where('parent', $item['parent'])
@@ -433,11 +421,11 @@
 
                 if(!empty($nextItem))
                 {
-                    $this->core->db('navs_items')->where('id', $item['id'])->save(['"order"' => $nextItem['order']]);
-                    $this->core->db('navs_items')->where('id', $nextItem['id'])->save(['"order"' => $item['order']]);
+                    $this->db('navs_items')->where('id', $item['id'])->save(['"order"' => $nextItem['order']]);
+                    $this->db('navs_items')->where('id', $nextItem['id'])->save(['"order"' => $item['order']]);
                 }
             }
-            redirect(url([ADMIN, 'navigation', 'manage']));
+            redirect(url(ADMIN.'/navigation/manage?lang='.$item['lang']));
         }
 
 		/**
@@ -449,7 +437,7 @@
 		*/
         private function _getHighestOrder($nav, $parent, $lang)
         {			
-			$item = $this->core->db('navs_items')
+			$item = $this->db('navs_items')
 				->where('nav', $nav)
 				->where('parent', $parent)
 				->where('lang', $lang)

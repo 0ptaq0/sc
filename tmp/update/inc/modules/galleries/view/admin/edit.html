@@ -45,7 +45,10 @@
                 </form>
                 {$gallery.pagination}
                 {else}
-                <p>{$lang.galleries.no_items}</p>
+                <div class="text-center text-muted">
+                    <i class="fa fa-file-image-o" style="font-size:256px;"></i>
+                    <h3>{$lang.general.empty_array}</h3>
+                </div>
                 {/if}
             </div>
         </div>

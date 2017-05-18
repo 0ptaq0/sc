@@ -6,10 +6,6 @@
             </div>
             <div class="panel-body">
                 <form name="link" action="{?=url(ADMIN.'/navigation/saveLink/'.@$navigation.link.id)?}" method="POST">
-    				<div class="form-group">
-    	                <label>{$lang.general.name}</label>
-    	                <input type="text" name="name" class="form-control" value="{$navigation.link.name}" required />
-    	            </div>
     	            <div class="form-group">
     	                <label>{$lang.general.lang}</label>
     	                <select name="lang" class="form-control">
@@ -19,8 +15,12 @@
                 		</select>
     	            </div>
     				<div class="form-group">
+    	                <label>{$lang.general.name}</label>
+    	                <input type="text" name="name" class="form-control" value="{$navigation.link.name}" required />
+    	            </div>
+    				<div class="form-group">
     	                <label>{$lang.navigation.page}</label>
-    	                <select name="page" class="form-control">
+    	                <select name="page" class="form-control" data-use-search="true">
                             <option value="0">--- URL ---</option>
                             {loop: $navigation.pages}
                             <option value="{$value.id}" {$value.attr}>{$value.title} ({$value.slug})</option>
@@ -30,6 +30,10 @@
     				<div class="form-group" id="url">
     	                <label>{$lang.navigation.url}</label>
     	                <input type="text" name="url" class="form-control" value="{$navigation.link.url}" placeholder="http://" />
+    	            </div>
+                    <div class="form-group" id="class">
+    	                <label>{$lang.navigation.class}</label>
+    	                <input type="text" name="class" class="form-control" value="{$navigation.link.class}" placeholder="{$lang.general.can_be_empty}" />
     	            </div>
     	            <div class="form-group">
     	                <label>{$lang.navigation.parent}</label>

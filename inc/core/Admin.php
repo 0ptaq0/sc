@@ -1,15 +1,45 @@
 <?php
+    /**
+    * This file is part of Batflat ~ the lightweight, fast and easy CMS
+    * 
+    * @author       Paweł Klockiewicz <klockiewicz@sruu.pl>
+    * @author       Wojciech Król <krol@sruu.pl>
+    * @copyright    2017 Paweł Klockiewicz, Wojciech Król <Sruu.pl>
+    * @license      https://batflat.org/license
+    * @link         https://batflat.org
+    */ 
 
     namespace Inc\Core;
 
+    /**
+     * Core Admin class
+     */
     class Admin extends Main
     {
-
-		public $lang = [];
+        /**
+         * Assigned variables for templates
+         *
+         * @var array
+         */
 		private $assign = [];
+
+        /**
+         * Registered module pages
+         *
+         * @var array
+         */
         private $registerPage = [];
+
+        /**
+         * Instance of Modules Collection
+         *
+         * @var \Inc\Core\Lib\ModulesCollection
+         */
         public $module = null;
 
+        /**
+         * Admin constructor
+         */
         public function __construct()
         {
             parent::__construct();
@@ -18,16 +48,7 @@
             {
                 $this->logout();
             });
-            $this->loadLanguage($this->getSettings('settings', 'lang_admin'));
-        }
-
-        /**
-         * creates instance of installed modules
-         * @return void
-         */
-        public function createModulesObject()
-        {
-            $this->module = new \Inc\Core\Lib\ModulesCollection($this);
+            $this->loadLanguage($this->settings->get('settings.lang_admin'));
         }
 
         /**
@@ -37,10 +58,13 @@
         */
         public function drawTheme($file)
         {
-        	$this->assign['username']   = $this->getUserInfo('username');
+            $username = $this->getUserInfo('fullname');
+
+        	$this->assign['username']   = !empty($username) ? $username : $this->getUserInfo('username');
         	$this->assign['notify']     = $this->getNotify();
             $this->assign['path']       = url();
-            $this->assign['version']    = $this->getSettings('settings', 'version');
+            $this->assign['version']    = $this->settings->get('settings.version');
+            $this->assign['has_update'] = $this->module ? $this->module->settings->_checkUpdate() : false;
 
         	$this->assign['header'] = isset_or($this->appends['header'], ['']);
             $this->assign['footer'] = isset_or($this->appends['footer'], ['']);
@@ -89,7 +113,20 @@
             {
                 if(($this->getUserInfo('access') == 'all') || in_array($name, explode(',', $this->getUserInfo('access'))))
                 {
-                    $details['content'] = $this->getModuleMethod($name, $method, $params);
+                    $anyMethod = 'any'.ucfirst($method);
+                    $method = strtolower($_SERVER['REQUEST_METHOD']).ucfirst($method);
+
+                    if(method_exists($this->module->{$name}, $method))
+                        $details['content'] = call_user_func_array([$this->module->{$name}, $method], array_values($params));
+                    else if(method_exists($this->module->{$name}, $anyMethod))
+                        $details['content'] = call_user_func_array([$this->module->{$name}, $anyMethod], array_values($params));
+                    else
+                    {
+                        http_response_code(404);
+                        $this->setNotify('failure', "[@{$method}] ".$this->lang['general']['unknown_method']);
+                        $details['content'] = null;
+                    }
+
                     $this->tpl->set('module', $details);
                 }
                 else exit;
@@ -202,7 +239,11 @@
         */
 		public function getModuleMethod($name, $method, $params = [])
 		{
-            return call_user_func_array([$this->module->{$name}, $method], array_values($params));
+            if(method_exists($this->module->{$name}, $method))
+                return call_user_func_array([$this->module->{$name}, $method], array_values($params));
+            
+            $this->setNotify('failure', $this->lang['general']['unknown_method']);
+            return false;
 		}
 
         /**
@@ -211,7 +252,7 @@
         * @param string $password
         * @return bool
         */
-        public function login($username, $password)
+        public function login($username, $password, $remember_me = false)
         {
             // Check attempt
             $attempt = $this->db('login_attempts')->where('ip', $_SERVER['REMOTE_ADDR'])->oneArray();
@@ -236,6 +277,7 @@
             }
 
             $row = $this->db('users')->where('username', $username)->oneArray();
+
 			if(count($row) && password_verify(trim($password), $row['password']))
             {
                 // Reset fail attempts for this IP
@@ -245,6 +287,15 @@
 				$_SESSION['token']      = bin2hex(openssl_random_pseudo_bytes(6));
 				$_SESSION['userAgent']  = $_SERVER['HTTP_USER_AGENT'];
 				$_SESSION['IPaddress']  = $_SERVER['REMOTE_ADDR'];
+
+                if($remember_me)
+                {
+                    $token = str_gen(64, "1234567890qwertyuiop[]asdfghjkl;zxcvbnm,./");
+
+                    $this->db('remember_me')->save(['user_id' => $row['id'], 'token' => $token, 'expiry' => time()+60*60*24*30]);
+
+                    setcookie('batflat_remember', $row['id'].':'.$token, time()+60*60*24*365, '/');
+                }
 				return true;
 			}
             else
@@ -275,16 +326,37 @@
 	    private function logout()
 	    {
      		$_SESSION = [];
+
+            // Delete remember_me token from database and cookie
+            if(isset($_COOKIE['batflat_remember']))
+            {
+                $token = explode(':', $_COOKIE['batflat_remember']);
+                $this->db('remember_me')->where('user_id', $token[0])->where('token', $token[1])->delete();
+                setcookie('batflat_remember', null, -1, '/');
+            }
+
      		session_unset();
      		session_destroy();
             redirect(url(ADMIN.'/'));
 	    }
 
+        /**
+         * Register module page
+         *
+         * @param string $name
+         * @param string $path
+         * @return void
+         */
         private function registerPage($name, $path)
         {
             $this->registerPage[] = ['id' => null, 'title' => $name, 'slug' => $path];
         }
 
+        /**
+         * Get registered pages
+         *
+         * @return array
+         */
         public function getRegisteredPages()
         {
             return $this->registerPage;

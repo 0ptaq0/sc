@@ -1,31 +1,31 @@
 <?php
-
-    namespace Inc\Modules\Settings;
+    /**
+    * This file is part of Batflat ~ the lightweight, fast and easy CMS
+    * 
+    * @author       Paweł Klockiewicz <klockiewicz@sruu.pl>
+    * @author       Wojciech Król <krol@sruu.pl>
+    * @copyright    2017 Paweł Klockiewicz, Wojciech Król <Sruu.pl>
+    * @license      https://batflat.org/license
+    * @link         https://batflat.org
+    */
     
-    class Site
+    namespace Inc\Modules\Settings;
+
+    use Inc\Core\SiteModule;
+    
+    class Site extends SiteModule
     {
-
-        public $core;
-
-        public function __construct($object)
+        public function init()
         {
-            $this->core = $object;
             $this->_importSettings();
 		}
 
         private function _importSettings()
         {
-            // general settings
-            $settings = $this->core->getSettings();
-            
-            // modules settings
-            $rows = $this->core->db('settings')->where('module', '<>', 'settings')->toArray();
-            foreach($rows as $row)
-            {
-                $settings[$row['module']][$row['field']] = $row['value'];    
-            }
-            
-            $this->core->tpl->set('settings', $settings);
+            $tmp = $this->core->settings->all();
+            $tmp = array_merge($tmp, $tmp['settings']);
+            unset($tmp['settings']);
+            $this->tpl->set('settings', $tmp);
         }
 
     }

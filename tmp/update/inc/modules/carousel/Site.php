@@ -1,29 +1,35 @@
 <?php
-
+    /**
+    * This file is part of Batflat ~ the lightweight, fast and easy CMS
+    * 
+    * @author       Paweł Klockiewicz <klockiewicz@sruu.pl>
+    * @author       Wojciech Król <krol@sruu.pl>
+    * @copyright    2017 Paweł Klockiewicz, Wojciech Król <Sruu.pl>
+    * @license      https://batflat.org/license
+    * @link         https://batflat.org
+    */
+    
     namespace Inc\Modules\Carousel;
 
-    class Site
+    use Inc\Core\SiteModule;
+
+    class Site extends SiteModule
     {
-
-        public $core;
-
-        public function __construct($object)
+        public function init()
         {
-            $this->core = $object;
-
-            $this->core->tpl->set('carousel', $this->_insertCarousels());
+            $this->tpl->set('carousel', $this->_insertCarousels());
         }
 
         private function _insertCarousels()
         {
             $assign = []; $tempAssign = [];
-            $galleries = $this->core->db('galleries')->toArray();
+            $galleries = $this->db('galleries')->toArray();
 
             if(!empty($galleries))
             {
                 foreach($galleries as $gallery)
                 {
-                    $items = $this->core->db('galleries_items')->where('gallery', $gallery['id'])->toArray();
+                    $items = $this->db('galleries_items')->where('gallery', $gallery['id'])->toArray();
                     $tempAssign = $gallery;
 
                     if(count($items))
@@ -34,9 +40,8 @@
                         }
 
                         $tempAssign['items'] = $items;
-                        $this->core->tpl->set('carousel', $tempAssign);
 
-                        $assign[$gallery['slug']] = $this->core->tpl->draw(MODULES.'/carousel/view/carousel.html');
+                        $assign[$gallery['slug']] = $this->draw('carousel.html', ['carousel' => $tempAssign]);
                     }
 
                 }

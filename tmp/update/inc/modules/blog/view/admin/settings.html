@@ -23,6 +23,10 @@
                         <input type="text" name="blog[disqus]" class="form-control" value="{$settings.disqus}" />
                     </div>
                     <div class="form-group">
+                        <label>{$lang.blog.latest_posts_count}</label>
+                        <input type="number" name="blog[latestPostsCount]" class="form-control" value="{$settings.latestPostsCount}" />
+                    </div>
+                    <div class="form-group">
                         <label>{$lang.blog.date_format}</label>
                         <select name="blog[dateformat]" class="form-control" required>
                             {loop: $settings.dateformats}

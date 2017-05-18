@@ -11,13 +11,16 @@
 
     namespace Inc\Core\Lib;
 
+	/**
+	 * Image processor
+	 */
     class Image {
 
     	/**
     	 * Image resource
     	 *
     	 * @var resource
-    	 * @acces private
+    	 * @access private
     	 */
     	private $image;
 
@@ -25,7 +28,7 @@
     	 * Type of image
     	 *
     	 * @var string
-    	 * @acces private
+    	 * @access private
     	 */
     	private $type = 'png';
 
@@ -33,7 +36,7 @@
     	 * Width of the image in pixel
     	 *
     	 * @var integer
-    	 * @acces private
+    	 * @access private
     	 */
     	private $width;
 
@@ -41,7 +44,7 @@
     	 * Height of the image in pixel
     	 *
     	 * @var integer
-    	 * @acces private
+    	 * @access private
     	 */
     	private $height;
 
@@ -49,7 +52,7 @@
     	 * Return infos about the image
     	 *
     	 * @return array image infos
-    	 * @acces public
+    	 * @access public
     	 */
     	public function getInfos($what = null) {
 
@@ -71,7 +74,7 @@
     	 *
     	 * @param string $hex Color in hexadecimal code
     	 * @return array Color in rgb
-    	 * @acces public
+    	 * @access public
     	 */
     	private function hex2rgb($hex) {
     		$hex = str_replace('#', '', $hex);
@@ -99,9 +102,12 @@
     	 *
     	 * @param string $path Path to an image
     	 * @return boolean true if resource was created
-    	 * @acces public
+    	 * @access public
     	 */
     	public function load($path) {
+			if(empty($path))
+				return false;
+				
     		$file = @fopen($path, 'r');
 
     		if(!$file)
@@ -144,7 +150,7 @@
 		* @param integer $height Height of the image
 		* @param string $background Background color in hexadecimal code
 		* @return boolean true if resource was created
-		* @acces public
+		* @access public
 		*/
 		public function create($width, $height, $background = null) {
 			if($width > 0 && $height > 0) {
@@ -174,7 +180,7 @@
     	 * @param integer $width New width
     	 * @param integer $height New height
     	 * @return boolean true if image was resized
-    	 * @acces public
+    	 * @access public
     	 */
     	public function resize($width, $height = 0) {
     		if($width <= 0 && $height <= 0)
@@ -201,7 +207,7 @@
     	 * @param integer $y Y-coordinate
     	 * @param integer $width Width of cutout
     	 * @param integer $height Height of cutout
-    	 * @acces public
+    	 * @access public
     	 */
     	public function crop($x, $y, $width, $height) {
     		$image = imagecreatetruecolor($width, $height);
@@ -213,11 +219,32 @@
     		$this->height = $height;
     	}
 
+		/**
+		 * Resizes and crops image to specified size
+		 *
+		 * @param int $width New width
+		 * @param int $height New height
+		 * @access public
+		 * @return void
+		 */
+		public function fit($width, $height) {
+			if($this->width > $this->height)
+			{
+				$this->resize(0, $height);
+				$this->crop(($this->width - $width) / 2, 0, $width, $height);
+			}
+			else
+			{
+				$this->resize($width);
+				$this->crop(0, ($this->height - $height) / 2, $width, $height);
+			}
+		}
+
     	/**
     	 * Rotates image
     	 *
     	 * @param integer $angle in degree
-    	 * @acces public
+    	 * @access public
     	 */
     	public function rotate($angle) {
     		$this->image = imagerotate($this->image, $angle, 0);
@@ -231,7 +258,7 @@
 		* @param integer $x2 X2-coordinate
 		* @param integer $y2 Y2-coordinate
 		* @param string $color Color in hexadecimal code
-		* @acces public
+		* @access public
 		*/
 		public function rectangle($x1, $y1, $x2, $y2, $color) {
 			$rgb = $this->hex2rgb($color);
@@ -246,7 +273,7 @@
 		* @param integer $width Width of ellipse
 		* @param integer $height Height of ellipse
 		* @param string $color Color in hexadecimal code
-		* @acces public
+		* @access public
 		*/
 		public function ellipse($x, $y, $width, $height, $color) {
 			$rgb = $this->hex2rgb($color);
@@ -258,7 +285,7 @@
 		*
 		* @param array $points Coordinates of the vertices
 		* @param string $color Color in hexadecimal code
-		* @acces public
+		* @access public
 		*/
 		public function polygon($points, $color) {
 			$rgb = $this->hex2rgb($color);
@@ -271,7 +298,7 @@
 		*
 		* @param array $points Coordinates of the vertices
 		* @param string $color Color in hexadecimal code
-		* @acces public
+		* @access public
 		*/
 		public function line($points, $color) {
 			$rgb = $this->hex2rgb($color);
@@ -289,7 +316,7 @@
     	 * @param integer $angle in degree
     	 * @param string $color Color in hexadecimal code
     	 * @param string $text Text
-    	 * @acces public
+    	 * @access public
     	 */
     	public function write($x, $y, $font, $size, $angle, $color, $text) {
     		$rgb = $this->hex2rgb($color);
@@ -303,7 +330,7 @@
     	 * @param Image $img object
     	 * @param mixed $x X-coordinate
     	 * @param mixed $y Y-coordinate
-    	 * @acces public
+    	 * @access public
     	 */
     	public function merge($img, $x, $y) {
     		$infos = $img->getInfos();
@@ -342,7 +369,7 @@
     	 * Shows image
     	 *
     	 * @param string $type Filetype
-    	 * @acces public
+    	 * @access public
     	 */
     	public function show($type = 'png') {
     		$type = ($type != 'gif' && $type != 'jpeg' && $type != 'png') ? $this->type : $type;
@@ -370,9 +397,9 @@
     	 * @param string $path Path to location
     	 * @param string $type Filetype
     	 * @return boolean true if image was saved
-    	 * @acces public
+    	 * @access public
     	 */
-    	public function save($path) {
+    	public function save($path, $quality = 90) {
     		$dir = dirname($path);
     		$type = pathinfo($path, PATHINFO_EXTENSION);
 
@@ -393,7 +420,7 @@
     				break;
 
     			case 'jpeg': case 'jpg':
-    				imagejpeg($this->image, $path, 90);
+    				imagejpeg($this->image, $path, $quality);
     				break;
 
     			default:

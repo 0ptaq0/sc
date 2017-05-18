@@ -1,0 +1,42 @@
+<article class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{$users.title}</h3>
+            </div>
+            <div class="panel-body">
+    		<form name="user" action="{?=url(ADMIN.'/users/save/'.@$users.form.id)?}" method="POST">
+    			<fieldset>
+    	            <div class="form-group">
+    	                <label>{$lang.general.username}</label>
+    	                <input type="text" name="username" class="form-control" required value="{$users.form.username}" />
+    	            </div>
+    	            <div class="form-group">
+    	                <label>{$lang.users.display_name}</label>
+    	                <input type="text" name="fullname" class="form-control" placeholder="{$lang.general.can_be_empty}" value="{$users.form.fullname}" />
+    	            </div>
+    	            <div class="form-group">
+    	                <label>{$lang.users.email}</label>
+    	                <input type="email" name="email" class="form-control" required value="{$users.form.email}" />
+    	            </div>
+    	            <div class="form-group">
+    	                <label>{$lang.general.password}</label>
+    	                <input type="password" name="password" class="form-control" />
+    	            </div>
+    	            <div class="form-group">
+    	                <label>{$lang.users.access}</label>
+    	                <select name="access[]" multiple="multiple" class="form-control" {if: isset_or($users.form.id, 0) == 1}disabled{/if} required>
+    	                	{loop: $users.modules}
+    	                	<option value="{$value.dir}" {$value.attr}>{$value.name}</option>
+    	                	{/loop}
+    	                </select>
+    	            </div>
+    	            <div class="form-group">
+    	                <input type="submit" name="save" class="btn btn-primary" value="{$lang.general.save}" />
+    	            </div>
+                </fieldset>
+            </form>
+            </div>
+        </div>
+    </div>
+</article>

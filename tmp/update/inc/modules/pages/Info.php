@@ -1,10 +1,20 @@
 <?php
-
+    /**
+    * This file is part of Batflat ~ the lightweight, fast and easy CMS
+    * 
+    * @author       Paweł Klockiewicz <klockiewicz@sruu.pl>
+    * @author       Wojciech Król <krol@sruu.pl>
+    * @copyright    2017 Paweł Klockiewicz, Wojciech Król <Sruu.pl>
+    * @license      https://batflat.org/license
+    * @link         https://batflat.org
+    */
+    
     return [
         'name'          =>  $core->lang['pages']['module_name'],
         'description'   =>  $core->lang['pages']['module_desc'],
         'author'        =>  'Sruu.pl',
         'version'       =>  '1.1',
+        'compatibility'	=> 	'1.3.*',
         'icon'          =>  'file',
 
         'install'       =>  function() use($core)
@@ -20,20 +30,6 @@
                 `content` text NOT NULL,
                 `markdown` INTEGER DEFAULT 0
             )");
-            
-            // Home - EN
-            $core->db()->pdo()->exec("INSERT INTO `pages` (`title`, `slug`, `desc`, `lang`, `template`, `date`, `content`)
-                VALUES ('Home', 'home', 'Praesent in metus id purus accumsan posuere.', 'en_english', 'index.html', datetime('now'),
-                '<p>You wanna know how I got these scars? My father was… a drinker, and a fiend. And one night, he goes off crazier than usual. Mommy gets the kitchen knife to defend herself. He doesn’t like that, not one bit. So, me watching he takes the knife to her, laughing while he does it. He turns to me and he says: “Why so serious?”. He comes at me with the knife “Why so serious?”. He sticks the blade in my mouth. “Let’s put a smile on that face.” and… Why so serious?</p>
-                <p>But we’ve met before. That was a long time ago, I was a kid at St. Swithin’s, It used to be funded by the Wayne Foundation. It’s an orphanage. My mum died when I was small, it was a car accident. I don’t remember it. My dad got shot a couple of years later for a gambling debt. Oh I remember that one just fine. Not a lot of people know what it feels like to be angry in your bones. I mean they understand. The fosters parents. Everybody understands, for a while. Then they want the angry little kid to do something he knows he can’t do, move on. After a while they stop understanding. They send the angry kid to a boy’s home, I figured it out too late. Yeah I learned to hide the anger, and practice smiling in the mirror. It’s like putting on a mask. So you showed up this one day, in a cool car, pretty girl on your arm. We were so excited! Bruce Wayne, a billionaire orphan? We used to make up stories about you man, legends and you know with the other kids, that’s all it was, just stories, but right when I saw you, I knew who you really were. I’d seen that look on your face before. It’s the same one I taught myself. I don’t why you took the fault for Dent’s murder but I’m still a believer in the Batman. Even if you’re not...</p>')
-            ");
-            
-            // Home - PL
-            $core->db()->pdo()->exec("INSERT INTO `pages` (`title`, `slug`, `desc`, `lang`, `template`, `date`, `content`)
-                VALUES ('Home', 'home', 'Praesent in metus id purus accumsan posuere.', 'pl_polski', 'index.html', datetime('now'),
-                '<p>Litwo! Ojczyzno moja! Ty jesteś jak zdrowie. Nazywał się imion wywabi pamięć droga co je tak rzuciły. Tuż i Bernatowicze, Kupść, Gedymin i sprzeczki. W biegu dotknęła blisko siebie czuł choroby zaród. Krzyczano na polu szukała kogoś posadzić na jutro na błoni i stryjaszkiem jedno puste miejsce wejrzenie odgadnął zaraz, czyim miało być siedzeniem. Rumienił się, wieczerzę przy boku sąsiadki a mój Rejencie, prawda, bez trzewika była ekonomowi poczciwemu świętą. Bo nie daje z czego wybrać u Woźnego lepiej zna się tłocz i długie zwijały się na tem, Że ojciec w domu ziemię orzę gdy Sędziego służono niedbale. Słudzy czekają, nim psów gromada. Gracz szarak! skoro pobył mało w nią śrut cienki! Trzymano wprawdzie pękła jedna króluje postać, jak od siebie czuł się uczyli. u nas. Do zobaczenia! tak nie przeczym, że posiadłość tam wódz gospodarstwa obmyśla wypraw w Tabor w miechu. Starzy na dzień postrzegam, jak gdyby ożył? Wróciłby do stolicy dajem i ust nie zmruża jako wódz gospodarstwa obmyśla wypraw w pole psy tuż, i byle nie zarzuci, bym uchybił kom w charta. Tak każe u jednej dwórórki.</p>
-                <p>Kusym o śmierci syna. Brał dom żałobę, ale nic - rzekł z uśmiechem, a na szalach żebyśmy nasz ciężar poznali musim kogoś czekało. Stryj nieraz nowina, niby zakryty od rana w kupie pstręk na tem nic - Tadeuszowi wrzasnął tuż na szańcach Pragi, na koniu jeździł, pieszo do których później dowiedzieć się przyciągnąć do tych pól malowanych zbożem rozmaitem wyzłacanych pszenicą, posrebrzanych żytem. Gdzie bursztynowy świerzop, gryka jak dziecko do złotego run on żył, co o muzyce, o porządku, nikt mężczyzn i stoi wypisany każdy mimowolnie porządku pilnował.</p>')
-            ");
             
             // About - EN
             $core->db()->pdo()->exec("INSERT INTO `pages` (`title`, `slug`, `desc`, `lang`, `template`, `date`, `content`)

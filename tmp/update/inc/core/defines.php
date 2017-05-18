@@ -1,4 +1,13 @@
 <?php
+    /**
+    * This file is part of Batflat ~ the lightweight, fast and easy CMS
+    * 
+    * @author       Paweł Klockiewicz <klockiewicz@sruu.pl>
+    * @author       Wojciech Król <krol@sruu.pl>
+    * @copyright    2017 Paweł Klockiewicz, Wojciech Król <Sruu.pl>
+    * @license      https://batflat.org/license
+    * @link         https://batflat.org
+    */ 
 
 	if (!version_compare(PHP_VERSION, '5.5.0', '>=')) exit("Batflat requires at least <b>PHP 5.5</b>");
 
@@ -19,16 +28,18 @@
 
 	// Basic modules
 	define('BASIC_MODULES', serialize([
-        7 => 'settings',
+        8 => 'settings',
 		0 => 'dashboard',
 		2 => 'pages',
         3 => 'navigation',
-		6 => 'users',
+		7 => 'users',
 		1 => 'blog',
-        4 => 'snippets',
-		5 => 'modules',
-		8 => 'contact',
-		9 => 'langswitcher',
+		4 => 'galleries',
+        5 => 'snippets',
+		6 => 'modules',
+		9 => 'contact',
+		10 => 'langswitcher',
+		11 => 'devbar',
 	]));
 
 	// HTML beautifier

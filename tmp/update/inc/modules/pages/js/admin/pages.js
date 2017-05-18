@@ -9,19 +9,25 @@ function insertEditor(type)
             editor.markItUpRemove();
         }
 
-        editor.summernote({
+        editor.summernote(
+        {
             lang: '{$lang.name}',
-            height: 270,
-            callbacks: {
-                onInit: function() {
-                    $('.note-codable').keyup(function() {
+            height: 335,
+            callbacks:
+            {
+                onInit: function()
+                {
+                    $('.note-codable').keyup(function()
+                    {
                         editor.val($(this).val());
                     });
                 },
-                onImageUpload: function(files) {
+                onImageUpload: function(files)
+                {
                     sendFile(files[0], this);
                 },
-                onChange: function() {
+                onChange: function()
+                {
                     editor.parents('form').trigger('checkform.areYouSure');
                 }
             }
@@ -40,7 +46,24 @@ function insertEditor(type)
             });
         }
 
-        editor.markItUp(markItUpSettings);
+        var checkbox = $('input[name="markdown"]');
+        editor.each(function()
+        {
+            var currentEditor = $(this);
+            currentEditor.markItUp(checkbox.is(':checked') ? markItUp_markdown : markItUp_html).highlight();
+
+            if($('.editor').data('editor') == 'html')
+            {
+                checkbox.change(function()
+                {
+                    currentEditor.markItUpRemove();
+                    if (checkbox.is(':checked'))
+                        currentEditor.markItUp(markItUp_markdown).highlight();
+                    else
+                        currentEditor.markItUp(markItUp_html).highlight();
+                });
+            }
+        });
     }
 }
 
@@ -50,9 +73,11 @@ function sendFile(file, editor)
     formData.append('file', file);
 
     var fileData = URL.createObjectURL(file);
-    $(editor).summernote('insertImage', fileData, function ($image) {
+    $(editor).summernote('insertImage', fileData, function ($image)
+    {
         $.ajax({
-            xhr: function() {
+            xhr: function()
+            {
                 var xhr = new window.XMLHttpRequest();
 
                 $('input[type="submit"]').prop('disabled', true);
@@ -61,13 +86,13 @@ function sendFile(file, editor)
 
                 xhr.upload.addEventListener("progress", function(evt)
                 {
-                    if (evt.lengthComputable)
+                    if(evt.lengthComputable)
                     {
                         var percentComplete = evt.loaded / evt.total;
                         percentComplete = parseInt(percentComplete * 100);
                         progress.children().css('width', percentComplete + '%');
 
-                        if (percentComplete === 100)
+                        if(percentComplete === 100)
                         {
                             progress.fadeOut();
                             progress.remove();
@@ -85,12 +110,15 @@ function sendFile(file, editor)
             contentType: false,
             processData: false,
             dataType: 'json',
-            success: function(data) {
-                if(data.status == 'success') {
+            success: function(data)
+            {
+                if(data.status == 'success')
+                {
                     $image.remove();
                     $(editor).summernote('insertImage', data.result);
                 }
-                else if(data.status == 'failure') {
+                else if(data.status == 'failure')
+                {
                     $image.remove();
                     bootbox.alert(data.result);
                 }
@@ -101,9 +129,9 @@ function sendFile(file, editor)
 
 function markdown()
 {
+    var checkbox = $('input[name="markdown"]');
     if($('.editor').data('editor') == 'wysiwyg')
     {
-        var checkbox = $('input[name="markdown"]');
         checkbox.change(function()
         {
             if($(this).is(':checked'))
@@ -112,14 +140,17 @@ function markdown()
                 insertEditor('wysiwyg');
         });
 
-        checkbox.change();
+        if(checkbox.is(':checked'))
+            insertEditor('html');
+        else
+            insertEditor('wysiwyg');
     }
     else
         insertEditor('html');    
 }
 
-$(document).ready(function() {
+$(document).ready(function()
+{
     markdown();
-
     $('form').areYouSure( {'message':'{$lang.general.unsaved_warning}'} );
 });

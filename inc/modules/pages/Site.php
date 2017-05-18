@@ -1,44 +1,52 @@
 <?php
-
+    /**
+    * This file is part of Batflat ~ the lightweight, fast and easy CMS
+    * 
+    * @author       Paweł Klockiewicz <klockiewicz@sruu.pl>
+    * @author       Wojciech Król <krol@sruu.pl>
+    * @copyright    2017 Paweł Klockiewicz, Wojciech Król <Sruu.pl>
+    * @license      https://batflat.org/license
+    * @link         https://batflat.org
+    */
+    
     namespace Inc\Modules\Pages;
 
-    class Site
+    use Inc\Core\SiteModule;
+
+    class Site extends SiteModule
     {
-
-        public $core;
-
-        public function __construct($object)
+        public function init()
         {
-            $this->core = $object;
+            $slug = parseURL();
+            $lang = $this->_getLanguageBySlug($slug[0]);
+            if($lang !== FALSE)
+                $this->core->loadLanguage($lang);
 
-            $path = $this->core->router->execute(true);
-            if(empty($path))
-                $this->core->router->changeRoute($this->core->getSettings('settings', 'homepage'));
-
-            $this->core->router->set('(:str)', function($slug) {
-                $langs = $this->_getLanguages();
-                if(array_key_exists($slug, $langs))
-                {
-                    $_SESSION['lang'] = $langs[$slug];
-                    $slug = $this->core->getSettings('settings', 'homepage');
-                }
-                else if(!isset($_SESSION['lang']))
-                {
-                    $_SESSION['lang'] = $this->core->getSettings('settings', 'lang_site');
-                }
-
+            if(empty($slug[0]) || ($lang !== FALSE && empty($slug[1])))
+                $this->core->router->changeRoute($this->settings('settings', 'homepage'));
+            
+            \Inc\Core\Lib\Event::add('router.notfound', function() {
+                $this->get404();
+            });
+        }
+        
+        public function routes()
+        {
+            // Load pages from default language
+            $this->route('(:str)', function($slug) {
                 $this->_importPage($slug);
             });
-            $this->core->router->set('(:str)/(:str)', function($lang, $slug) {
-                $langs = $this->_getLanguages();
-                $reload = ($langs[$lang] != $_SESSION['lang']);
-                if(array_key_exists($lang, $langs))
-                    $_SESSION['lang'] = $langs[$lang];
-                else
-                    $_SESSION['lang'] = $this->core->getSettings('settings', 'lang_site');
 
-                if($reload)
-                    redirect(url(trim(preg_replace("/_[a-z]+/", $_SESSION['lang']).'/'.$slug, '/')));
+            // Load pages from specified language prefix
+            $this->route('(:str)/(:str)', function($lang, $slug) {
+                // get current language by slug
+                $lang = $this->_getLanguageBySlug($lang);
+
+                // Set current language to specified or if not exists to default
+                if($lang)
+                    $this->core->loadLanguage($lang);
+                else
+                    $slug = null;
 
                 $this->_importPage($slug);
             });
@@ -53,36 +61,13 @@
         {
             if(!empty($slug))
             {
-                $row = $this->core->db('pages')->where('slug', $slug)->where('lang', $this->_getCurrentLang())->oneArray();
+                $row = $this->db('pages')->where('slug', $slug)->where('lang', $this->_getCurrentLang())->oneArray();
 
                 if(empty($row))
-                {
-                    header('HTTP/1.0 404 Not Found');
-
-                    if(!($row = $this->_get404()))
-                    {
-                        echo '<h1>404 Not Found</h1>';
-                        echo $this->core->lang['pages']['not_found'];
-                        exit;
-                    }
-                }
+                    return $this->get404();
             }
             else
-            {
-                // Get page from slected language
-                // $row = $this->core->db('pages')->where('slug', $this->core->getSettings('settings', 'homepage'))->where('lang', $this->_getCurrentLang())->oneArray();
-
-                // if(!is_array($row))
-                // {
-                    header('HTTP/1.0 404 Not Found');
-                    if(!($row = $this->_get404()))
-                    {
-                        echo '<h1>404 Not Found</h1>';
-                        echo $this->core->lang['pages']['not_found'];
-                        exit;
-                    }
-                // }
-            }
+                return $this->get404();
 
             if(intval($row['markdown']))
             {
@@ -90,9 +75,8 @@
                 $row['content'] = $parsedown->text($row['content']);
             }
 
-            $this->core->template = $row['template'];
-            $this->core->append('<meta name="generator" content="Batflat" />', 'header');
-            $this->core->tpl->set('page', $row);
+            $this->setTemplate($row['template']);
+            $this->tpl->set('page', $row);
         }
 
         /**
@@ -100,42 +84,52 @@
         */
         private function _importAllPages()
         {
-            $rows = $this->core->db('pages')->where('lang', $this->_getCurrentLang())->toArray();
+            $this->tpl->set('pages', function() {
+                $rows = $this->db('pages')->where('lang', $this->_getCurrentLang())->toArray();
 
-            $assign = [];
-            foreach($rows as $row)
-            {
-                $assign[$row['id']] = $row;
-            }
-            $this->core->tpl->set('pages', $assign);
+                $assign = [];
+                foreach($rows as $row)
+                {
+                    $assign[$row['id']] = $row;
+                }
+
+                return $assign;
+            });
         }
 
-        private function _get404()
+        public function get404()
         {
-            $row = $this->core->db('pages')->where('title', '404')->where('lang', $this->_getCurrentLang())->oneArray();
-            if(!empty($row)) return $row;
-            else return false;
+            http_response_code(404);
+            if(!($row = $this->db('pages')->like('slug', '404%')->where('lang', $this->_getCurrentLang())->oneArray()))
+            {
+                echo '<h1>404 Not Found</h1>';
+                echo $this->lang('not_found');
+                exit;
+            }
+
+            $this->setTemplate($row['template']);
+            $this->tpl->set('page', $row);
         }
         
         private function _getCurrentLang()
         {
             if(!isset($_SESSION['lang']))
-                return $this->core->getSettings('settings', 'lang_site');
+                return $this->settings('settings', 'lang_site');
             else
                 return $_SESSION['lang'];
         }
 
-        private function _getLanguages()
+        protected function _getLanguageBySlug($slug)
         {
-            $langs = glob('inc/lang/*', GLOB_ONLYDIR);
-            $return = [];
+            $langs = parent::_getLanguages();
             foreach($langs as $lang)
             {
-                preg_match_all('/([a-z]{2})_([a-z]+)/', str_replace('inc/lang/', null, $lang), $matches);
-                $return[ $matches[1][0] ] = $matches[0][0];
+                preg_match_all('/([a-z]{2})_([a-z]+)/', $lang['name'], $matches);
+                if($slug == $matches[1][0])
+                    return $matches[0][0];
             }
 
-            return $return;
+            return false;
         }
 
     }

@@ -1,4 +1,13 @@
 <?php
+    /**
+    * This file is part of Batflat ~ the lightweight, fast and easy CMS
+    * 
+    * @author       Paweł Klockiewicz <klockiewicz@sruu.pl>
+    * @author       Wojciech Król <krol@sruu.pl>
+    * @copyright    2017 Paweł Klockiewicz, Wojciech Król <Sruu.pl>
+    * @license      https://batflat.org/license
+    * @link         https://batflat.org
+    */ 
 
     /**
     * check if array have an empty values
@@ -10,7 +19,7 @@
     {
         foreach($keys as $field)
         {
-            if(empty($array[$field]) && ($array[$field] != 0))
+            if(empty($array[$field]))
                 return true;
         }
         return false;
@@ -87,18 +96,31 @@
     }
 
     /**
+     * Returns current url
+     * 
+     * @return string
+     */
+    function currentURL()
+    {
+        if(isset_or($GLOBALS['core'], NULL) instanceof \Inc\Core\Admin)
+            return url(ADMIN.'/'.implode('/', parseURL()));
+            
+        return url(implode('/', parseURL()));
+    }
+
+    /**
     * parse URL
     * @param int $key
-    * @return array
+    * @return mixed array, string or false
     */
     function parseURL($key = null)
     {
         $url    = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
         $url    = trim(str_replace($url, '', $_SERVER['REQUEST_URI']), '/');
-        $url    = strtok($url, '?');
-        $array  = explode('/', $url);
+        $url    = explode('?', $url);
+        $array  = explode('/', $url[0]);
 
-        if($key) return $array[$key-1];
+        if($key) return isset_or($array[$key-1], false);
         else return $array;
     }
 
@@ -128,6 +150,9 @@
     {
         if(filter_var($data, FILTER_VALIDATE_URL) !== FALSE)
             return $data;
+
+        if(!is_array($data) && strpos($data, '#') === 0)
+            return $data;
         
         if((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off')
             || isset_or($_SERVER['SERVER_PORT'], null) == 443
@@ -145,13 +170,28 @@
         elseif($data)
         {
             $data = str_replace(BASE_DIR.'/', null, $data);
-            $url = $url.'/'.$data;
+            $url = $url.'/'.trim($data, '/');
         }
 
         if(strpos($url, '/'.ADMIN.'/') !== false)
             $url = addToken($url);
 
         return $url;
+    }
+
+    /**
+     * Current domain name
+     *
+     * @return string
+     */
+    function domain($with_protocol = true)
+    {
+        $url = parse_url(url());
+
+        if($with_protocol)
+            return $url['scheme'].'://'.$url['host'];
+            
+        return $url['host'];
     }
 
     /**
@@ -189,12 +229,17 @@
             elseif($bLen > $aLen)
                 $aVal = str_pad($aVal, $bLen, "0");
 
-            if($aVal > $bVal) return 1;
+            if($aVal == $bVal)
+                continue;
+            
+            if($aVal > $bVal)
+                return 1;
+
+            if($aVal < $bVal)
+                return -1;
         }
 
-        if($aVal == $bVal) return 0;
-
-        return -1;
+        return 0;
     }
 
     /**
@@ -214,4 +259,86 @@
         }
 
         return $text;
+    }
+
+    /**
+     * Get response headers list
+     * 
+     * @param string $key
+     * @return mixed Array of headers or specified header by $key
+     */
+    function get_headers_list($key = null)
+    {
+        $headers_list = headers_list();
+        $headers = [];
+        foreach($headers_list as $header)
+        {
+            $e = explode(":", $header);
+            $headers[ strtolower(array_shift($e)) ] = trim(implode(":", $e));
+        }
+
+        if($key)
+            return isset_or($headers[ strtolower($key) ], false);
+
+        return $headers;
+    }
+
+    /**
+     * Generating random hash from specified characters
+     *
+     * @param  int $length     Hash length
+     * @param  string $characters Characters for hash
+     *
+     * @return string             Generated random string
+     */
+    function str_gen($length, $characters = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM")
+    {
+        $return = null;
+
+        if(is_string($characters))
+            $characters = str_split($characters);
+        
+        for($i = 0; $i < $length; $i++)
+        {
+            $return .= $characters[ rand(0, count($characters)-1) ];
+        }
+
+        return $return;
+    }
+
+    /**
+     * Compressed base64_encode
+     * 
+     * @param strin $string
+     * @return string
+     */
+    function gz64_encode($string)
+    {
+        return str_replace(['+', '/'], ['_', '-'], trim(base64_encode(gzcompress($string, 9)), "="));
+    }
+
+    /**
+     * Decompress base64_decode
+     * 
+     * @param string $string
+     * @return string
+     */
+    function gz64_decode($string)
+    {
+        return gzuncompress(base64_decode(str_replace(['_','-'],['+','/'],$string)));
+    }
+
+    /**
+     * Call variable which can be callback or other type.
+     * If it is anonymous function it will be executed, otherwise $variable will be returned.
+     *
+     * @param mixed $variable
+     * @return mixed
+     */
+    function cv($variable)
+    {
+        if(!is_string($variable) && is_callable($variable))
+            return $variable();
+        
+        return $variable;
     }

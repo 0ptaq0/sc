@@ -1,45 +1,54 @@
 <?php
-
+    /**
+    * This file is part of Batflat ~ the lightweight, fast and easy CMS
+    * 
+    * @author       Paweł Klockiewicz <klockiewicz@sruu.pl>
+    * @author       Wojciech Król <krol@sruu.pl>
+    * @copyright    2017 Paweł Klockiewicz, Wojciech Król <Sruu.pl>
+    * @license      https://batflat.org/license
+    * @link         https://batflat.org
+    */
+    
     namespace Inc\Modules\Contact;
 
-    class Site
+    use Inc\Core\SiteModule;
+
+    class Site extends SiteModule
     {
-        public $core;
         private $_headers, $_params;
         private $_error = null;
 
         private $mail = [];
 
-        public function __construct($object)
+        public function init()
         {
-            $this->core = $object;
-            $this->_insertForm();
+            $this->tpl->set('contact', function() {
+                if(isset($_POST['send-email']))
+                {
+                    if($this->_initDriver())
+                    {
+                        if($this->_sendEmail())
+                            $this->notify('success', $this->lang('send_success'));
+                        else
+                            $this->notify('failure', $this->_error);
+                    }
+                    else
+                        $this->notify('failure', $this->_error);
+
+                    redirect(currentURL());
+                }
+                return ['form' => $this->_insertForm()];
+            });
 		}
 
         private function _insertForm()
         {
-            $assign = [];
-
-            if(isset($_POST['send-email']))
-            {
-                if($this->_initDriver())
-                {
-                    if($this->_sendEmail())
-                        $this->core->setNotify('success', $this->core->lang['contact']['send_success']);
-                    else
-                        $this->core->setNotify('failure', $this->_error);
-                }
-                else
-                    $this->core->setNotify('failure', $this->_error);
-            }
-
-            $assign['form'] = $this->core->tpl->draw(MODULES.'/contact/view/form.html');
-            $this->core->tpl->set('contact', $assign);
+            return $this->draw('form.html');
         }
 
         private function _initDriver()
         {
-            $settings = $this->core->getSettings('contact');
+            $settings = $this->settings('contact');
 
             $this->email['driver'] = $settings['driver'];
 
@@ -54,13 +63,13 @@
 
             if($settings['driver'] == 'mail')
             {
-                $this->email['sender'] = $this->core->getSettings('settings','title')." <no-reply@{$_SERVER['HTTP_HOST']}>";
+                $this->email['sender'] = $this->settings('settings','title')." <no-reply@{$_SERVER['HTTP_HOST']}>";
             }
             else if($settings['driver'] == 'phpmailer' && class_exists('PHPMailer'))
             {
                 $this->email['sender'] = [
-                    $this->core->getSettings('contact', 'phpmailer.username'),
-                    $this->core->getSettings('contact', 'phpmailer.name'),
+                    $this->settings('contact', 'phpmailer.username'),
+                    $this->settings('contact', 'phpmailer.name'),
                 ];
             }
 
@@ -70,12 +79,11 @@
             }
             else
             {
-                $user = $this->core->db('users')->where($settings['email'])->oneArray();
+                $user = $this->db('users')->where($settings['email'])->oneArray();
                 $this->email['to'] = $user['email'];
             }
 
-            $this->core->tpl->set('mail', $data);
-            $this->email['message'] = $this->core->tpl->draw(MODULES.'/contact/view/mail.html');
+            $this->email['message'] = $this->draw('mail.html', ['mail' => $data]);
 
             return true;
         }
@@ -83,16 +91,16 @@
         private function _checkErrors($array)
         {
             if(!filter_var($array['from'], FILTER_VALIDATE_EMAIL))
-                $this->_error = $this->core->lang['contact']['wrong_email'];
+                $this->_error = $this->lang('wrong_email');
 
             if(checkEmptyFields(['name', 'subject', 'from', 'message'], $array))
-                $this->_error = $this->core->lang['contact']['empty_inputs'];
+                $this->_error = $this->lang('empty_inputs');
 
             // antibot field
             if(!empty($array['title'])) exit();
 
             if(isset($_COOKIE['MailWasSend']))
-                $this->_error = $this->core->lang['contact']['antiflood'];
+                $this->_error = $this->lang('antiflood');
 
             if($this->_error)
                 return true;
@@ -109,7 +117,7 @@
                 $headers .= "MIME-Version: 1.0\n";
                 $headers .= "Content-type: text/html; charset=utf-8\n";
 
-                if(mail($this->email['to'], '=?UTF-8?B?'.base64_encode($this->email['subject']).'?=', $this->email['message'], $headers))
+                if(@mail($this->email['to'], '=?UTF-8?B?'.base64_encode($this->email['subject']).'?=', $this->email['message'], $headers))
                 {
                     // cookies antiflood
                     $cookieParams = session_get_cookie_params();
@@ -118,13 +126,13 @@
                 }
                 else
                 {
-                    $this->core->setNotify('failure', $this->core->lang['contact']['send_failure']);
+                    $this->_error = $this->lang('send_failure');
                     return FALSE;
                 }
             }
             else if($this->email['driver'] == 'phpmailer')
             {
-                $settings = $this->core->getSettings('contact');
+                $settings = $this->settings('contact');
 
                 try {
                     $mail = new \PHPMailer(true);

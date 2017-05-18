@@ -1,5 +1,4 @@
 <?php
-
     /**
      * @link https://github.com/gajus/dindent for the canonical source repository
      * @license https://github.com/gajus/dindent/blob/master/LICENSE BSD 3-Clause
@@ -7,6 +6,9 @@
 
     namespace Inc\Core\Lib;
 
+    /**
+     * Indenter class
+     */
     class Indenter
     {
         private

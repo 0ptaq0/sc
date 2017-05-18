@@ -1,21 +1,28 @@
 <?php
-
+    /**
+    * This file is part of Batflat ~ the lightweight, fast and easy CMS
+    * 
+    * @author       Paweł Klockiewicz <klockiewicz@sruu.pl>
+    * @author       Wojciech Król <krol@sruu.pl>
+    * @copyright    2017 Paweł Klockiewicz, Wojciech Król <Sruu.pl>
+    * @license      https://batflat.org/license
+    * @link         https://batflat.org
+    */
+    
     namespace Inc\Modules\Snippets;
 
-    class Site
+    use Inc\Core\SiteModule;
+
+    class Site extends SiteModule
     {
-
-        public $core;
-
-        public function __construct($object)
+        public function init()
         {
-            $this->core = $object;
             $this->_importSnippets();
 		}
 
         private function _importSnippets()
         {
-            $rows = $this->core->db('snippets')->toArray();
+            $rows = $this->db('snippets')->toArray();
 
             $snippets = [];
             foreach($rows as $row)
@@ -23,6 +30,6 @@
                 $snippets[$row['slug']] = $row['content'];
             }
 
-            return $this->core->tpl->set('snippet', $snippets);
+            return $this->tpl->set('snippet', $snippets);
         }
     }

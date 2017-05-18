@@ -1,32 +1,74 @@
 <?php
+    /**
+    * This file is part of Batflat ~ the lightweight, fast and easy CMS
+    * 
+    * @author       Paweł Klockiewicz <klockiewicz@sruu.pl>
+    * @author       Wojciech Król <krol@sruu.pl>
+    * @copyright    2017 Paweł Klockiewicz, Wojciech Król <Sruu.pl>
+    * @license      https://batflat.org/license
+    * @link         https://batflat.org
+    */ 
 
     namespace Inc\Core\Lib;
 
+    /**
+     * Templates class
+     */
     class Templates
     {
-
+        /**
+         * Variables for template usage
+         *
+         * @var array
+         */
         private $data = [];
+
+        /**
+         * Temporary directory for Templates cache
+         *
+         * @var string
+         */
         private $tmp = 'tmp/';
-        private $executes = [];
+
+        /**
+         * Template tags list
+         *
+         * @var array
+         */
         private $tags = [
+                    '{\*(.*?)\*}' => 'self::comment',
                     '{noparse}(.*?){\/noparse}' => 'self::noParse',
         			'{if: ([^}]*)}' => '<?php if ($1): ?>',
         			'{else}' => '<?php else: ?>',
         			'{elseif: ([^}]*)}' => '<?php elseif ($1): ?>',
         			'{\/if}' => '<?php endif; ?>',
-        			'{loop: ([^}]*) as ([^}]*)=>([^}]*)}' => '<?php $counter = 0; foreach ($1 as $2=>$3): ?>',
-                    '{loop: ([^}]*) as ([^}]*)}' => '<?php $counter = 0; foreach ($1 as $key => $2): ?>',
-        			'{loop: ([^}]*)}' => '<?php $counter = 0; foreach ($1 as $key => $value): ?>',
+        			'{loop: ([^}]*) as ([^}]*)=>([^}]*)}' => '<?php $counter = 0; foreach (%%$1 as $2=>$3): ?>',
+                    '{loop: ([^}]*) as ([^}]*)}' => '<?php $counter = 0; foreach (%%$1 as $key => $2): ?>',
+        			'{loop: ([^}]*)}' => '<?php $counter = 0; foreach (%%$1 as $key => $value): ?>',
         			'{\/loop}' => '<?php $counter++; endforeach; ?>',
                     '{\?(\=){0,1}([^}]*)\?}' => '<?php if(strlen("$1")) echo $2; else $2; ?>',
-        			'{(\$[a-zA-Z\-\._\[\]\'"0-9]+)}' => '<?php echo $1; ?>',
-                    '{(\$[a-zA-Z\-\._\[\]\'"0-9]+)\|e}' => '<?php echo htmlspecialchars($1, ENT_QUOTES | ENT_HTML5, "UTF-8"); ?>',
-                    '{(\$[a-zA-Z\-\._\[\]\'"0-9]+)\|cut:([0-9]+)}' => '<?php echo mb_strimwidth(strip_tags($1), 0, $2+3, "...", "utf-8"); ?>',
-                    '{include: (.+?\.[a-z]{2,4})}' => '<?php include_once("$1"); ?>',
-                    '{\*(.*?)\*}' => '',
+        			'{(\$[a-zA-Z\-\._\[\]\'"0-9]+)}' => '<?php echo %%$1; ?>',
+                    '{(\$[a-zA-Z\-\._\[\]\'"0-9]+)\|e}' => '<?php echo htmlspecialchars(%%$1, ENT_QUOTES | ENT_HTML5, "UTF-8"); ?>',
+                    '{(\$[a-zA-Z\-\._\[\]\'"0-9]+)\|cut:([0-9]+)}' => '<?php echo str_limit(strip_tags(%%$1), $2); ?>',
+                    '{widget: ([\.\-a-zA-Z0-9]+)}' => '<?php echo \Inc\Core\Lib\Widget::call(\'$1\'); ?>',
+                    '{include: (.+?\.[a-z]{2,4})}' => '<?php include_once(str_replace(url()."/", null, "$1")); ?>',
+                    '{template: (.+?\.[a-z]{2,4})}' => '<?php include_once(str_replace(url()."/", null, $bat["theme"]."/$1")); ?>',
+                    '{lang: ([a-z]{2}_[a-z]+)}' => '<?php if($bat["lang"] == "$1"): ?>',
+                    '{/lang}' => '<?php endif; ?>',
         		];
 
+        /**
+         * Instance of Batflat core class
+         *
+         * @var \Inc\Core\Main
+         */
         public $core;
+
+        /**
+         * Templates constructor
+         *
+         * @param Inc\Core\Main $object
+         */
         public function __construct($object)
         {
             $this->core = $object;
@@ -38,11 +80,13 @@
         * set variable
         * @param string $name
         * @param mixed $value
-        * @return void
+        * @return Templates $this
         */
         public function set($name, $value)
         {
             $this->data[$name] = $value;
+
+            return $this;
         }
 
         /**
@@ -71,17 +115,32 @@
                 else
                     $content = preg_replace('#'.$regexp.'#', $replace, $content);
             }
+
             // replace variables
             if(preg_match_all('/(\$(?:[a-zA-Z0-9_-]+)(?:\.(?:(?:[a-zA-Z0-9_-][^\s]+)))*)/', $content, $matches))
             {   
                 for($i = 0; $i < count($matches[1]); $i++)
                 {
                     // $a.b to $a["b"]
-                    $rep = preg_replace('/\.([a-zA-Z\-_0-9]*(?![a-zA-Z\-_0-9]*(\'|\")))/', "['$1']", $matches[1][$i]);
+                    $rep = $this->replaceVariable($matches[1][$i]);
                     $content = str_replace($matches[0][$i], $rep, $content);
                 }
             }
 
+            // remove spaces betweend %% and $
+            $content = preg_replace('/\%\%\s+/', '%%', $content);
+
+            // call cv() for signed variables
+            if(preg_match_all('/\%\%(.)([a-zA-Z0-9_-]+)/', $content, $matches))
+            {
+                for($i = 0; $i < count($matches[2]); $i++)
+                {
+                    if($matches[1][$i] == '$')
+                        $content = str_replace($matches[0][$i], 'cv($'.$matches[2][$i].')', $content);
+                    else
+                        $content = str_replace($matches[0][$i], $matches[1][$i].$matches[2][$i], $content);
+                }
+            }
 
             return $content;
         }
@@ -130,7 +189,7 @@
         {
             if(preg_match('#inc(\/modules\/[^"]*\/)view\/([^"]*.'.pathinfo($file, PATHINFO_EXTENSION).')#', $file, $m))
             {
-                $themeFile = 'themes/'.$this->core->getSettings('settings', 'theme').$m[1].$m[2];
+                $themeFile = THEMES.'/'.$this->core->settings->get('settings.theme').$m[1].$m[2];
                 if(is_file($themeFile)) $file = $themeFile;
             }
 
@@ -179,6 +238,16 @@
         }
 
         /**
+        * remove selected content from source code
+        * @param string $content
+        * @return null
+        */
+        public function comment($content)
+        {
+            return null;
+        }
+
+        /**
         * search tags in content
         * @param string $content
         * @return bool
@@ -193,4 +262,18 @@
             return false;
         }
 
+        /**
+         * Replace dot based variable to PHP version
+         * $a.b => $a['b']
+         *
+         * @param string $var
+         * @return string
+         */
+        private function replaceVariable($var)
+        {
+            if(strpos($var, '.') === FALSE)
+                return $var;
+
+            return preg_replace('/\.([a-zA-Z\-_0-9]*(?![a-zA-Z\-_0-9]*(\'|\")))/', "['$1']", $var);
+        }
 	}

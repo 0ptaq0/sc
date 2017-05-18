@@ -1,0 +1,420 @@
+@charset "UTF-8";
+@import url('http://cdn.jsdelivr.net/animatecss/3.5.0/animate.min.css');
+
+html {
+    height: 100%;
+}
+    body {
+        padding-bottom: 30px;
+        position: relative;
+        min-height: 100%;
+    }
+
+a, .btn {
+    transition: background 0.2s, color 0.2s;
+}
+    a:hover,
+    a:focus {
+        text-decoration: none;
+    }
+
+/* 1. MAIN WRAPPER
+--------------------------------------------------------- */
+#wrapper {
+    padding-left: 0;
+    transition: all 0.5s ease;
+    position: relative;
+}
+#wrapper.toggled {
+    padding-left: 250px;
+}
+
+/* 2. SIDEBAR
+--------------------------------------------------------- */
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    left: 250px;
+    width: 0;
+    height: 100%;
+    margin-left: -250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #222;
+    transition: all 0.5s ease;
+}
+#wrapper.toggled #sidebar-wrapper {
+    width: 250px;
+}
+
+.sidebar-brand {
+    position: absolute;
+    top: 0;
+    width: 250px;
+    text-align: center;
+    padding: 20px 0;
+}
+    .sidebar-brand img {
+        width: auto;
+        height: 30px;
+        display: inline-block;
+        padding-top: 2px;
+    }
+    .sidebar-brand h2 {
+        display: inline-block;
+        margin: 0;
+        vertical-align: middle;
+        font-weight: 600;
+        font-size: 24px;
+    }
+        .sidebar-brand h2 span {
+            color: #fff;
+        }
+
+.sidebar-nav {
+    position: absolute;
+    top: 75px;
+    width: 250px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+    .sidebar-nav > li {
+        text-indent: 10px;
+        line-height: 42px;
+    }
+        .sidebar-nav > li.sortable-placeholder {
+           background: rgba(255,255,255,0.03);
+           border-top: 1px solid rgba(255,255,255,0.075);
+           border-bottom: 1px solid rgba(255,255,255,0.075);
+           padding: 21px 0; 
+        }
+        .sidebar-nav > li a {
+            display: block;
+            text-decoration: none;
+            color: #757575;
+            font-weight: 600;
+        }
+            .sidebar-nav > li > a:hover,
+            .sidebar-nav > li.active > a {
+                text-decoration: none;
+                color: #fff;
+                background: #F8BE12;
+            }
+            .sidebar-nav > li > a:active,
+            .sidebar-nav > li > a:focus {
+                text-decoration: none;
+            }
+            .sidebar-nav > li > a i.fa {
+                padding-right: 10px;
+                font-size: 14px;
+            }
+        .sidebar-nav > li > ul {
+            background: rgba(255,255,255,0.03);
+            list-style: none;
+            margin: 0;
+            padding: 0 0 0 24px;
+            border-left: 1px solid #222;
+            position: relative;
+        }
+            .sidebar-nav > li > ul:before {
+                content: "";
+                height: 100%;
+                width: 1px;
+                position: absolute;
+                background: rgba(255,255,255,0.075);
+                left: 24px;
+                top: 0;
+            }
+            .sidebar-nav > li > ul li {
+                line-height: 35px;
+            }
+                .sidebar-nav > li > ul li a {
+                    font-weight: 400;
+                    font-size: 90%;
+                    padding: 0 8px;
+                    position: relative;
+                }
+                    .sidebar-nav > li > ul li a:hover {
+                        color: #fff;
+                    }
+                    .sidebar-nav > li > ul li a:before {
+                        content: "";
+                        width: 8px;
+                        height: 1px;
+                        background: rgba(255,255,255,0.075);
+                        position: absolute;
+                        left: 1px;
+                        top: 17px;
+                    }
+                .sidebar-nav > li > ul li.active a {
+                    color: #fff;
+                }
+
+/* 3. NAVBAR
+--------------------------------------------------------- */
+#navbar-wrapper {
+    width: 100%;
+    position: absolute;
+    z-index: 2;
+}
+#wrapper.toggled #navbar-wrapper {
+    position: absolute;
+    margin-right: -250px;
+}
+    #navbar-wrapper .navbar {
+        padding: 10px 15px;
+        border-width: 0 0 0 0;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        font-size: 24px;
+        margin-bottom: 0;
+    }
+        #navbar-wrapper .navbar .navbar-header {
+            float: left;
+        }
+            #navbar-wrapper .navbar .navbar-header .navbar-brand {
+                font-size: 24px;
+            }
+
+        #navbar-wrapper .navbar ul.navbar-nav {
+            float: right;
+        }
+            #navbar-wrapper .navbar ul.navbar-nav li {
+                float: left;
+            }
+                #navbar-wrapper .navbar ul.navbar-nav li:not(.hello) a {
+                    color: #F8BE12;
+                }
+                    #navbar-wrapper .navbar ul.navbar-nav li:not(.hello) a:hover {
+                        color: #656565;
+                    }
+                #navbar-wrapper .navbar ul.navbar-nav li.hello a {
+                    pointer-events: none;
+                }
+                    #navbar-wrapper .navbar ul.navbar-nav li.hello a span {
+                        font-size: 70%;
+                        position: relative;
+                        bottom: 2px;
+                    }
+
+/* 4. CONTENT
+--------------------------------------------------------- */
+#content-wrapper {
+    width: 100%;
+    position: absolute;
+    padding: 15px;
+    top: 100px;
+}
+#wrapper.toggled #content-wrapper {
+    position: absolute;
+    margin-right: -250px;
+}
+.content-title {
+    margin: 11px 0 30px 0;
+}
+h3.panel-title {
+    font-weight: 400;
+}
+    h3.panel-title .btn {
+        color: #fff;
+    }
+.panel-heading {
+    position: relative;
+}
+.panel-heading .nav-tabs {
+    position: absolute;
+    bottom: 0;
+    right: 13px;
+    border-bottom: 0;
+}
+    .panel-heading .nav-tabs > li a {
+        padding: 5px 10px;
+        margin-left: 2px;
+    }
+    .panel-heading .nav-tabs > li.active a {
+        border-bottom: 1px solid #fff;
+        background-color: #fff;
+        color: #616262;
+    }
+
+#notify {
+    display: none;
+    width: 100%;
+    position: absolute;
+    padding: 12px 30px;
+    color: #fff;
+    box-sizing: border-box;
+    margin: 0;
+    top: 75px;
+}
+    #notify.alert-danger:before {
+        content: '\f071';
+        font-family: 'FontAwesome';
+        padding-right: 1em;
+    }
+    #notify.alert-success:before {
+        content: '\f00c';
+        font-family: 'FontAwesome';
+        padding-right: 1em;
+    }
+    #notify .close {
+        position: static;
+    }
+
+
+/* 5. FOOTER
+--------------------------------------------------------- */
+footer {
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+    height: 20px;
+    width: calc(100% - 15px);
+    text-align: right;
+    font-size: 12px;
+}
+
+/* 6. LOGIN
+--------------------------------------------------------- */
+#login {
+    width: 90%;
+    max-width: 420px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform:          translate(-50%, -50%);
+    -webkit-transform:  translate(-50%, -50%);
+}
+    #login .panel {
+        border: 0;
+        box-shadow: none;
+    }
+
+    #login .panel-heading {
+        background-color: #222;
+        color: #F8BE12;
+        text-align: center;
+        border: 0;
+        margin-top: -1px;
+    }
+        #login .panel-heading img {
+            height: 25px;
+            width: auto;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        #login .panel-heading h2 {
+            font-weight: 600;
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0;
+            font-size: 21px;
+        }
+            #login .panel-heading h2 span {
+                color: #FFF;
+            }
+        #login .panel-body button {
+            background-color: #F8BE12;
+        }
+            #login .panel-body button:hover {
+                background-color: #f6bb42
+            }
+
+    #login #notify {
+        display: block;
+        position: static;
+        width: 100%;
+        display: block;
+        margin-top: 20px;
+        text-align: center;
+    }
+    #login .fa-lock {
+        padding: 0 1px 0 1px;
+    }
+
+
+/* 7. OTHER STUFF
+--------------------------------------------------------- */
+[class*="bg-"] {
+    padding: 15px;
+}
+.well .label {
+    font-size: 80%;
+    padding: .4em .9em .4em;
+}
+.tooltip-inner {
+    white-space: pre;
+}
+.table>tbody>tr>td {
+    vertical-align: middle;
+}
+.table a:not(.btn),
+table a:not(.btn) {
+    text-decoration: none;
+}
+.no-margin {
+    margin: 0;
+}
+.pagination {
+    margin: 21px 0 0 0;
+}
+.text-warning {
+    color: #F8BE12;
+}
+
+/* 8. MEDIA QUERIES
+--------------------------------------------------------- */
+.panel-heading .tinynav {
+    position: absolute;
+    top: 7px;
+    right: 15px;
+    display: block 
+}
+.panel-heading .nav-tabs {
+    display: none
+}
+
+@media(min-width: 768px) {
+    #wrapper {
+        padding-left: 250px;
+    }
+
+    #wrapper.toggled {
+        padding-left: 0;
+    }
+
+    #sidebar-wrapper {
+        width: 250px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 0;
+    }
+
+    #navbar-wrapper {
+        position: relative;
+    }
+
+    #content-wrapper {
+        position: relative;
+        top: 0;
+    }
+
+    #wrapper.toggled #navbar-wrapper,
+    #wrapper.toggled #content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+
+    #notify {
+        position: relative;
+        top: 0;
+    }
+
+    .panel-heading .tinynav {
+        display: none;
+    }
+    .panel-heading .nav-tabs {
+        display: block;
+    }
+}

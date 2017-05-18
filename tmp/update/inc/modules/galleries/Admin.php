@@ -1,38 +1,43 @@
 <?php
-
+    /**
+    * This file is part of Batflat ~ the lightweight, fast and easy CMS
+    * 
+    * @author       Paweł Klockiewicz <klockiewicz@sruu.pl>
+    * @author       Wojciech Król <krol@sruu.pl>
+    * @copyright    2017 Paweł Klockiewicz, Wojciech Król <Sruu.pl>
+    * @license      https://batflat.org/license
+    * @link         https://batflat.org
+    */
+    
     namespace Inc\Modules\Galleries;
 
-    class Admin
+    use Inc\Core\AdminModule;
+
+    class Admin extends AdminModule
     {
         private $_thumbs = ['md' => 600, 'sm' => 300, 'xs' => 150];
-        public $core;
-
-        public function __construct($object)
-        {
-            $this->core = $object;
-		}
 
         public function navigation()
         {
             return [
-                $this->core->lang['general']['manage'] => 'manage',
+                $this->lang('manage', 'general') => 'manage',
             ];
         }
 
         /**
         * galleries manage
         */
-        public function manage()
+        public function getManage()
         {
             $assign = [];
 
 	        // list
-            $rows = $this->core->db('galleries')->toArray();
+            $rows = $this->db('galleries')->toArray();
         	if(count($rows))
         	{
 	        	foreach($rows as $row)
 	        	{
-	        	    $row['tag']    = $this->core->tpl->noParse('{$gallery.'.$row['slug'].'}');
+	        	    $row['tag']    = $this->tpl->noParse('{$gallery.'.$row['slug'].'}');
 	        		$row['editURL'] = url([ADMIN, 'galleries',  'edit', $row['id']]);
 		        	$row['delURL']  = url([ADMIN, 'galleries', 'delete', $row['id']]);
 
@@ -40,43 +45,42 @@
 	        	}
         	}
 
-        	$this->core->tpl->set('galleries', $assign);
-        	return $this->core->tpl->draw(MODULES.'/galleries/view/admin/manage.html');
+        	return $this->draw('manage.html', ['galleries' => $assign]);
         }
 
 		/**
 		* add new gallery
 		*/
-        public function add()
+        public function anyAdd()
         {
             $location = [ADMIN, 'galleries', 'manage'];
             
             if(!empty($_POST['name']))
             {
                 $name = trim($_POST['name']);
-                if(!$this->core->db('galleries')->where('slug', createSlug($name))->count())
+                if(!$this->db('galleries')->where('slug', createSlug($name))->count())
                 {
-                    $query = $this->core->db('galleries')->save(['name' => $name, 'slug' => createSlug($name)]);
+                    $query = $this->db('galleries')->save(['name' => $name, 'slug' => createSlug($name)]);
 
                     if($query)
                     {
-                        $id     = $this->core->db()->lastInsertId();
+                        $id     = $this->db()->lastInsertId();
                         $dir    = UPLOADS.'/galleries/'.$id;
 
                         if(mkdir($dir, 0755, true))
                         {
-                            $this->core->setNotify('success', $this->core->lang['galleries']['add_gallery_success']);
-                            $location = [ADMIN, 'galleries', 'edit', $this->core->db()->lastInsertId()];
+                            $this->notify('success', $this->lang('add_gallery_success'));
+                            $location = [ADMIN, 'galleries', 'edit', $this->db()->lastInsertId()];
                         }
                     }
                     else
-                        $this->core->setNotify('failure', $this->core->lang['galleries']['add_gallery_failure']);
+                        $this->notify('failure', $this->lang('add_gallery_failure'));
                 }
                 else
-                    $this->core->setNotify('failure', $this->core->lang['galleries']['gallery_already_exists']);
+                    $this->notify('failure', $this->lang('gallery_already_exists'));
             }
             else
-                $this->core->setNotify('failure', $this->core->lang['general']['empty_inputs']);
+                $this->notify('failure', $this->lang('empty_inputs', 'general'));
                 
             redirect(url($location));
         }
@@ -84,16 +88,16 @@
 		/**
 		* remove gallery
 		*/
-        public function delete($id)
+        public function getDelete($id)
         {
-			$query = $this->core->db('galleries')->delete($id);
+			$query = $this->db('galleries')->delete($id);
 
             deleteDir(UPLOADS.'/galleries/'.$id);
 
 			if($query)
-                $this->core->setNotify('success', $this->core->lang['galleries']['delete_gallery_success']);
+                $this->notify('success', $this->lang('delete_gallery_success'));
 			else
-				$this->core->setNotify('failure', $this->core->lang['galleries']['delete_gallery_failure']);
+				$this->notify('failure', $this->lang('delete_gallery_failure'));
 
             redirect(url([ADMIN, 'galleries', 'manage']));
         }
@@ -101,24 +105,24 @@
 		/**
 		* edit gallery
 		*/
-        public function edit($id, $page = 1)
+        public function getEdit($id, $page = 1)
         {
             $assign = [];
-            $assign['settings'] = $this->core->db('galleries')->oneArray($id);
+            $assign['settings'] = $this->db('galleries')->oneArray($id);
 
             // pagination
-			$totalRecords = $this->core->db('galleries_items')->where('gallery', $id)->toArray();
+			$totalRecords = $this->db('galleries_items')->where('gallery', $id)->toArray();
 			$pagination = new \Inc\Core\Lib\Pagination($page, count($totalRecords), 10, url([ADMIN, 'galleries', 'edit', $id, '%d']));
 			$assign['pagination'] = $pagination->nav();
             $assign['page'] = $page;
 
             // items
             if($assign['settings']['sort'] == 'ASC')
-                $rows = $this->core->db('galleries_items')->where('gallery', $id)
+                $rows = $this->db('galleries_items')->where('gallery', $id)
                         ->limit($pagination->offset().', '.$pagination->getRecordsPerPage())
                         ->asc('id')->toArray();
             else
-                $rows = $this->core->db('galleries_items')->where('gallery', $id)
+                $rows = $this->db('galleries_items')->where('gallery', $id)
                         ->limit($pagination->offset().', '.$pagination->getRecordsPerPage())
                         ->desc('id')->toArray();
 
@@ -126,8 +130,8 @@
             {
                 foreach($rows as $row)
                 {
-                    $row['title'] = $this->core->tpl->noParse(htmlspecialchars($row['title']));
-                    $row['desc'] = $this->core->tpl->noParse(htmlspecialchars($row['desc']));
+                    $row['title'] = $this->tpl->noParse(htmlspecialchars($row['title']));
+                    $row['desc'] = $this->tpl->noParse(htmlspecialchars($row['desc']));
                     $row['src'] = unserialize($row['src']);
 
                     if(!isset($row['src']['sm']))
@@ -138,29 +142,28 @@
             }
 
             $assign['id'] = $id;
-            $this->core->tpl->set('gallery', $assign);
 
             $this->core->addCSS(url('inc/jscripts/lightbox/lightbox.min.css'));
             $this->core->addJS(url('inc/jscripts/lightbox/lightbox.min.js'));
             $this->core->addJS(url('inc/jscripts/are-you-sure.min.js'));
             
-            return $this->core->tpl->draw(MODULES.'/galleries/view/admin/edit.html');
+            return $this->draw('edit.html', ['gallery' => $assign]);
         }
 
 		/**
 		* save gallery data
 		*/
-        public function saveSettings($id)
+        public function postSaveSettings($id)
         {
             if(checkEmptyFields(['name', 'sort'], $_POST))
     		{
-                $this->core->setNotify('failure', $this->core->lang['general']['empty_inputs']);
+                $this->notify('failure', $this->lang('empty_inputs', 'general'));
                 redirect(url([ADMIN, 'galleries', 'edit', $id]));
             }
 
             $_POST['slug'] = createSlug($_POST['name']);
-            if($this->core->db('galleries')->where($id)->save($_POST))
-                $this->core->setNotify('success', $this->core->lang['galleries']['save_settings_success']);
+            if($this->db('galleries')->where($id)->save($_POST))
+                $this->notify('success', $this->lang('save_settings_success'));
 
             redirect(url([ADMIN, 'galleries', 'edit', $id]));
         }
@@ -168,15 +171,15 @@
 		/**
 		* save images data
 		*/
-        public function saveImages($id, $page)
+        public function postSaveImages($id, $page)
         {
             foreach($_POST['img'] as $key => $val)
             {
-                $query = $this->core->db('galleries_items')->where($key)->save(['title' => $val['title'], 'desc' => $val['desc']]);
+                $query = $this->db('galleries_items')->where($key)->save(['title' => $val['title'], 'desc' => $val['desc']]);
             }
 
             if($query)
-                $this->core->setNotify('success', $this->core->lang['galleries']['save_settings_success']);
+                $this->notify('success', $this->lang('save_settings_success'));
 
             redirect(url([ADMIN, 'galleries', 'edit', $id, $page]));
         }
@@ -184,13 +187,13 @@
         /**
         * image uploading
         */
-        public function upload($id)
+        public function postUpload($id)
         {
             $dir    = UPLOADS.'/galleries/'.$id;
             $cntr   = 0;
 
             if(!is_uploaded_file($_FILES['files']['tmp_name'][0]))
-                $this->core->setNotify('failure', $this->core->lang['galleries']['no_files']);
+                $this->notify('failure', $this->lang('no_files'));
             else
             {
                 foreach($_FILES['files']['tmp_name'] as $image)
@@ -218,14 +221,14 @@
                             }
                         }
 
-                        $query = $this->core->db('galleries_items')->save(['src' => serialize($src), 'gallery' => $id]);
+                        $query = $this->db('galleries_items')->save(['src' => serialize($src), 'gallery' => $id]);
                     }
                     else
-                        $this->core->setNotify('failure', $this->core->lang['galleries']['wrong_extension'], 'jpg, png, gif');
+                        $this->notify('failure', $this->lang('wrong_extension'), 'jpg, png, gif');
                 }
 
     			if($query)
-                    $this->core->setNotify('success', $this->core->lang['galleries']['add_images_success']);;
+                    $this->notify('success', $this->lang('add_images_success'));;
             }
 
             redirect(url([ADMIN, 'galleries', 'edit', $id]));
@@ -234,12 +237,12 @@
         /**
         * remove image
         */
-        public function deleteImage($id)
+        public function getDeleteImage($id)
         {
-            $image = $this->core->db('galleries_items')->where($id)->oneArray();
+            $image = $this->db('galleries_items')->where($id)->oneArray();
             if(!empty($image))
             {
-                if($this->core->db('galleries_items')->delete($id))
+                if($this->db('galleries_items')->delete($id))
                 {
                     $images = unserialize($image['src']);
                     foreach($images as $src)
@@ -247,15 +250,15 @@
                         if(file_exists(BASE_DIR.'/'.$src))
                         {
                             if(!unlink(BASE_DIR.'/'.$src))
-                                $this->core->setNotify('failure', $this->core->lang['galleries']['delete_image_failure']);
+                                $this->notify('failure', $this->lang('delete_image_failure'));
                             else
-                                $this->core->setNotify('success', $this->core->lang['galleries']['delete_image_success']);
+                                $this->notify('success', $this->lang('delete_image_success'));
                         }
                     }
                 }
             }
             else
-                $this->core->setNotify('failure', $this->core->lang['galleries']['image_doesnt_exists']);
+                $this->notify('failure', $this->lang('image_doesnt_exists'));
 
             redirect(url([ADMIN, 'galleries', 'edit', $image['gallery']]));
         }

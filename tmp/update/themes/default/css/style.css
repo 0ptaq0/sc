@@ -1,10 +1,4 @@
-/*!
- * Clean Blog v1.0.0 (http://startbootstrap.com)
- * Copyright 2014 Start Bootstrap
- * Licensed under MIT
- */
-
-@import url('https://fonts.googleapis.com/css?family=Lora:400,700|Open+Sans:300,400,700,800&subset=latin-ext');
+@import url('//fonts.googleapis.com/css?family=Lora:400,700|Open+Sans:300,400,700,800&subset=latin-ext');
 body {
     font-family: 'Lora', 'Times New Roman', serif;
     font-size: 20px;
@@ -32,7 +26,7 @@ a {
 }
 a:hover,
 a:focus {
-    color: #0085a1
+    color: #f8be12
 }
 a img:hover,
 a img:focus {
@@ -108,6 +102,12 @@ hr.small {
         -moz-appearance: none;
         -webkit-appearance: none;
     }
+    .navbar-custom .nav > li > form > select:focus {
+        box-shadow: none;
+    }
+    .navbar-custom .nav > li > form > select > option {
+        color: initial;    
+    }
     .navbar-custom .nav > li > a:hover,
     .navbar-custom .nav > li > a:focus {
         color: rgba(255, 255, 255, 0.8);
@@ -129,7 +129,7 @@ hr.small {
     }
     .navbar-custom.is-fixed .navbar-brand:hover,
     .navbar-custom.is-fixed .navbar-brand:focus {
-        color: #0085a1
+        color: #f8be12
     }
     .navbar-custom.is-fixed .nav > li > a {
         color: #404040
@@ -137,7 +137,7 @@ hr.small {
     .navbar-custom.is-fixed .nav > li > a:hover,
     .navbar-custom.is-fixed .nav > li > a:focus,
     .navbar-custom.is-fixed .nav > li.active > a {
-        color: #0085a1
+        color: #f8be12
     }
     .navbar-custom.is-fixed .nav > li > form > select {
         background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' height='10px' width='15px'%3E%3Ctext x='0' y='10' fill='#404040'%3E%E2%96%BE%3C/text%3E%3C/svg%3E");
@@ -154,8 +154,9 @@ hr.small {
 }
 .intro-header {
     background-color: #808080;
-    background: no-repeat center center;
-    background-attachment: scroll;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
     background-size: cover;
     margin-bottom: 50px;
 }
@@ -233,7 +234,7 @@ hr.small {
 .post-preview > a:hover,
 .post-preview > a:focus {
     text-decoration: none;
-    color: #0085a1;
+    color: #f8be12;
 }
 .post-preview > a > .post-cover {
     max-width: 100%
@@ -260,7 +261,7 @@ hr.small {
 }
 .post-preview > .post-meta > a:hover,
 .post-preview > .post-meta > a:focus {
-    color: #0085a1;
+    color: #f8be12;
     text-decoration: underline;
 }
 @media only screen and (min-width: 768px) {
@@ -304,6 +305,14 @@ footer .copyright {
     text-align: center;
     margin-bottom: 0;
 }
+.form-control {
+    border-radius: 0;
+    box-shadow: none;
+}
+.form-control:focus {
+    border-color: #f8be12;
+    box-shadow: 0 0 8px rgba(249, 190, 18, .6);
+}
 .form-group {
     font-size: 14px;
     position: relative;
@@ -326,7 +335,6 @@ form .btn {
     padding-right: 0;
     padding-left: 0;
     border: none;
-    border-radius: 0;
     font-size: 1.5em;
     background: none;
     box-shadow: none !important;
@@ -353,7 +361,7 @@ form .btn {
     opacity: 1;
 }
 .form-group-with-focus label {
-    color: #0085a1
+    color: #f8be12
 }
 form .row:first-child .form-group {
     border-top: 1px solid #eeeeee
@@ -388,9 +396,14 @@ textarea:-ms-input-placeholder {
 }
 .btn-default:hover,
 .btn-default:focus {
-    background-color: #0085a1;
-    border: 1px solid #0085a1;
+    background-color: #f8be12;
+    border: 1px solid #f8be12;
     color: white;
+}
+.input-group .btn {
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 400;
 }
 .pager {
     margin: 20px 0 0
@@ -409,8 +422,8 @@ textarea:-ms-input-placeholder {
 .pager li > a:hover,
 .pager li > a:focus {
     color: white;
-    background-color: #0085a1;
-    border: 1px solid #0085a1;
+    background-color: #f8be12;
+    border: 1px solid #f8be12;
 }
 .pager .disabled > a,
 .pager .disabled > a:hover,
@@ -420,15 +433,39 @@ textarea:-ms-input-placeholder {
     background-color: #404040;
     cursor: not-allowed;
 }
+.pagination > li > a,
+.pagination > li > span {
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: inherit;
+}
+.pagination > li > a:hover,
+.pagination > li > span:hover {
+    color: inherit;
+}
+.pagination > li:first-child > a,
+.pagination > li:last-child > a,
+.pagination > li:first-child > span,
+.pagination > li:last-child > span {
+    border-radius: 0;
+}
+.pagination > .active > a,
+.pagination > .active > a:focus,
+.pagination > .active > a:hover,
+.pagination > .active > span,
+.pagination > .active > span:focus,
+.pagination > .active > span:hover {
+    border-color: #f8be12;
+    background: #f8be12;
+}
 ::-moz-selection {
     color: white;
     text-shadow: none;
-    background: #0085a1;
+    background: #f8be12;
 }
 ::selection {
     color: white;
     text-shadow: none;
-    background: #0085a1;
+    background: #f8be12;
 }
 img::selection {
     color: white;

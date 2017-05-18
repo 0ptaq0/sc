@@ -1,19 +1,23 @@
 <?php
-
+    /**
+    * This file is part of Batflat ~ the lightweight, fast and easy CMS
+    * 
+    * @author       Paweł Klockiewicz <klockiewicz@sruu.pl>
+    * @author       Wojciech Król <krol@sruu.pl>
+    * @copyright    2017 Paweł Klockiewicz, Wojciech Król <Sruu.pl>
+    * @license      https://batflat.org/license
+    * @link         https://batflat.org
+    */
+    
     namespace Inc\Modules\LangSwitcher;
 
-    class Site
+    use Inc\Core\SiteModule;
+
+    class Site extends SiteModule
     {
-
-        public $core;
-
-        public function __construct($object)
+        public function init()
         {
-            $this->core = $object;
-
-            $this->core->tpl->set('langSwitcher', $this->_insertSwitcher());
-            
-            if($this->core->getSettings('settings', 'autodetectlang') == 1 && empty(trim($_SERVER['REQUEST_URI'], '/')) && !isset($_SESSION['lang']))
+            if($this->settings('settings', 'autodetectlang') == '1' && empty(parseURL(1)) && !isset($_SESSION['langswitcher']['detected']))
             {
                 $detedcted = false;
                 $languages = $this->_detectBrowserLanguage();
@@ -22,21 +26,21 @@
                     $value = substr($value, 0, 2);
                     if($detect = glob('inc/lang/'.$value.'_*'))
                     {
-                        $_GET['lang'] = basename($detect[0]);
+                        $this->core->loadLanguage(basename($detect[0]));
                         break;
                     }
                 }
             }
 
+            $_SESSION['langswitcher']['detected'] = true;
             if(isset($_GET['lang']))
             {
                 $lang = explode('_', $_GET['lang'])[0];
                 $this->_setLanguage($_GET['lang']);
 
                 $dir = trim(dirname($_SERVER['SCRIPT_NAME']),'/');
-                $trimmed = trim(str_replace([$dir, '?'.$_SERVER['QUERY_STRING']], null, $_SERVER['REQUEST_URI']), '/');
 
-                $e = explode('/', $trimmed);
+                $e = parseURL();
                 foreach($this->_getLanguages() as $lng) 
                 {
                     if($lng['symbol'] == $e[0])
@@ -47,20 +51,21 @@
                 }
                 $slug = implode('/', $e);
 
-                if($this->core->db('pages')->where('slug', $slug)->where('lang', $_GET['lang'])->oneArray())
+                if($this->db('pages')->where('slug', $slug)->where('lang', $_GET['lang'])->oneArray())
                     redirect(url($lang.'/'.$slug));
                 else
                     redirect(url($slug));
             }
+
+            $this->tpl->set('langSwitcher', $this->_insertSwitcher());
         }
 
         private function _insertSwitcher()
         {
-            $this->core->tpl->set('languages', $this->_getLanguages());
-            return $this->core->tpl->draw(MODULES.'/langswitcher/view/switcher.html');
+            return $this->draw('switcher.html', ['languages' => $this->_getLanguages()]);
         }
 
-        private function _getLanguages($selected = null)
+        protected function _getLanguages($selected = null, $attr = 'selected')
         {
             $langs = glob('inc/lang/*', GLOB_ONLYDIR);
 
@@ -68,15 +73,12 @@
             foreach($langs as $lang)
             {
                 $lang = basename($lang);
-
-                if(($selected ? $selected : $this->core->lang['name']) == $lang) $attr = 'selected';
-                else $attr = null;
                 
                 $result[] = [
                     'dir'   => $lang,
                     'name'  => mb_strtoupper(preg_replace('/_[a-z]+/', null, $lang)),
                     'symbol'=> preg_replace('/_[a-z]+/', null, $lang),
-                    'attr'  => $attr
+                    'attr'  => (($selected ? $selected : $this->core->lang['name']) == $lang) ? $attr : null
                 ];
             }
             return $result;
@@ -95,7 +97,7 @@
         private function _detectBrowserLanguage()
         {
             $prefLocales = array_reduce(
-            explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']), 
+            explode(',', isset_or($_SERVER['HTTP_ACCEPT_LANGUAGE'], null)), 
             function ($res, $el) { 
                 list($l, $q) = array_merge(explode(';q=', $el), [1]); 
                 $res[$l] = (float) $q; 

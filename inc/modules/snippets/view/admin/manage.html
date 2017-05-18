@@ -19,7 +19,7 @@
 							{loop: $snippets}
 							<tr>
 								<td><a href="{$value.editURL}">{$value.name}</a></td>
-								<td>{$value.tag}</td>
+								<td><code>{$value.tag}</code></td>
 								<td class="text-right">
 									<a href="{$value.editURL}" class="btn btn-xs btn-success">
 										<i class="fa fa-pencil"></i> <span class="hidden-xs">{$lang.general.edit}</span>
@@ -34,7 +34,7 @@
 					</table>
 				</div>
                 {else}
-                <p>{$lang.snippets.no_snippets}</p>
+                <p class="no-margin">{$lang.general.empty_array}</p>
                 {/if}
             </div>
         </div>

@@ -58,3 +58,25 @@
         width: 100%;
     }
 }
+
+.news {
+    max-height: 425px;
+    overflow: auto;
+}
+    .news-item:not(:last-of-type) {
+        padding-bottom: 15px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #e9e9e9;
+    }
+        .news-item .news-header {
+            margin-bottom: 8px;
+        }
+            .news-item .news-header .title {
+                font-weight: 700;
+            }
+            .news-item .news-header time {
+                font-size: 12px;
+            }
+        .news-item .news-content {
+            font-size: 14px;
+        }

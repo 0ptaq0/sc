@@ -1,21 +1,53 @@
 <?php
+    /**
+    * This file is part of Batflat ~ the lightweight, fast and easy CMS
+    * 
+    * @author       Paweł Klockiewicz <klockiewicz@sruu.pl>
+    * @author       Wojciech Król <krol@sruu.pl>
+    * @copyright    2017 Paweł Klockiewicz, Wojciech Król <Sruu.pl>
+    * @license      https://batflat.org/license
+    * @link         https://batflat.org
+    */ 
 
     namespace Inc\Core;
 
+    /**
+     * Core Site class
+     */
     class Site extends Main
     {
-
-		public $lang = [];
+        /**
+         * Current site template file
+         * Does not use template if set to false
+         *
+         * @var mixed
+         */
         public $template = 'index.html';
 
+        /**
+         * Site constructor
+         */
         public function __construct()
         {
             parent::__construct();
             $this->loadLanguage();
             $this->loadModules();
 
-            $this->router->execute();
-            $this->drawTheme($this->template);
+            $return = $this->router->execute();
+
+            if(is_string($this->template))
+            {
+                $this->drawTheme($this->template);
+            }
+            else if($this->template === false)
+            {
+                if(strpos(get_headers_list('Content-Type'), 'text/html') !== FALSE)
+                    header("Content-type: text/plain");
+
+                echo $return;
+            }
+
+            $this->module->finishLoop();
         }
 
         /**
@@ -27,15 +59,16 @@
         {
             $assign = [];
         	$assign['notify']   = $this->getNotify();
-            $assign['powered']  = 'Powered by <a href="http://batflat.org/">Batflat</a>';
+            $assign['powered']  = 'Powered by <a href="https://batflat.org/">Batflat</a>';
             $assign['path']     = url();
-            $assign['theme']    = url('themes/'.$this->getSettings('settings', 'theme'));
+            $assign['theme']    = url(THEMES.'/'.$this->settings->get('settings.theme'));
+            $assign['lang']     = $this->lang['name'];
 
         	$assign['header']   = isset_or($this->appends['header'], ['']);
             $assign['footer']   = isset_or($this->appends['footer'], ['']);
 
 			$this->tpl->set('bat', $assign);
-            echo $this->tpl->draw(THEMES.'/'.$this->getSettings('settings', 'theme').'/'.$file, true);
+            echo $this->tpl->draw(THEMES.'/'.$this->settings->get('settings.theme').'/'.$file, true);
         }
 
         /**
@@ -43,12 +76,21 @@
         * @param string $lang
         * @return void
         */
-        private function loadLanguage()
+        public function loadLanguage($lang = null)
         {
+            $this->lang = [];
+
+            if($lang != null && is_dir('inc/lang/'.$lang))
+                $_SESSION['lang'] = $lang;
+
         	if(!isset($_SESSION['lang']) || !is_dir('inc/lang/'.$_SESSION['lang']))
-				$this->lang['name'] = $this->getSettings('settings', 'lang_site');
+            {
+				$this->lang['name'] = $this->settings->get('settings.lang_site');
+                $_SESSION['lang'] = $this->lang['name'];
+            }
 			else
 				$this->lang['name'] = $_SESSION['lang'];
+            
 
             foreach(glob(MODULES.'/*/lang/'.$this->lang['name'].'.ini') as $file)
             {
@@ -67,26 +109,7 @@
 		}
 
         /**
-        * load modules
-        * @return void
-        */
-        private function loadModules()
-        {
-            $rows = $this->db('modules')->toObject();
-            foreach($rows as $row)
-            {
-                $file = MODULES.'/'.$row->dir.'/Site.php';
-                if(is_file($file))
-                {
-    				$clsName = 'Site';
-            		$namespace = 'inc\modules\\'.$row->dir.'\\'.$clsName;
-                    ${$clsName} = new $namespace($this);
-                }
-            }
-        }
-
-        /**
-        * chcec if user is login
+        * check if user is login
         * @return bool
         */
         public function loginCheck()

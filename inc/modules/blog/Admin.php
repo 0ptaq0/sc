@@ -1,31 +1,35 @@
 <?php
-
+    /**
+    * This file is part of Batflat ~ the lightweight, fast and easy CMS
+    * 
+    * @author       Paweł Klockiewicz <klockiewicz@sruu.pl>
+    * @author       Wojciech Król <krol@sruu.pl>
+    * @copyright    2017 Paweł Klockiewicz, Wojciech Król <Sruu.pl>
+    * @license      https://batflat.org/license
+    * @link         https://batflat.org
+    */
+    
     namespace Inc\Modules\Blog;
 
-    class Admin
-    {
+    use Inc\Core\AdminModule;
 
-        public $core;
+    class Admin extends AdminModule
+    {
         private $assign = [];
-        
-        public function __construct($object)
-        {
-            $this->core = $object;
-		}
 
         public function navigation()
         {
             return [
-                $this->core->lang['general']['manage']		=> 'manage',
-                $this->core->lang['blog']['add_new']        => 'add',
-                $this->core->lang['blog']['settings']		=> 'settings'
+                $this->lang('manage', 'general')    => 'manage',
+                $this->lang('add_new')              => 'add',
+                $this->lang('settings')		        => 'settings'
             ];
         }
         
         /**
         * list of posts
         */
-        public function manage($page = 1)
+        public function anyManage($page = 1)
         {
             if(isset($_POST['delete']))
             {
@@ -33,35 +37,50 @@
                 {
                     foreach($_POST['post-list'] as $item)
                     {
-                        $row = $this->core->db('blog')->where('id', $item)->oneArray();
-                        if($this->core->db('blog')->delete($item))
+                        $row = $this->db('blog')->where('id', $item)->oneArray();
+                        if($this->db('blog')->delete($item) === 1)
                         {
-                            if(file_exists(UPLOADS."/blog/".$row['cover_photo']))
+                            if(!empty($row['cover_photo']) && file_exists(UPLOADS."/blog/".$row['cover_photo']))
                                 unlink(UPLOADS."/blog/".$row['cover_photo']);
 
-                            $this->core->setNotify('success', $this->core->lang['blog']['delete_success']);
+                            $this->notify('success', $this->lang('delete_success'));
                         }
                         else
-                            $this->core->setNotify('failure', $this->core->lang['blog']['delete_failure']);
+                            $this->notify('failure', $this->lang('delete_failure'));
                     }
 
                     redirect(url([ADMIN, 'blog', 'manage']));
                 }
             }
+
+            // lang
+        	if(!empty($_GET['lang']))
+			{
+        		$lang = $_GET['lang'];
+				$_SESSION['blog']['last_lang'] = $lang;
+			}
+			else if(!empty($_SESSION['blog']['last_lang']))
+			{
+				$lang = $_SESSION['blog']['last_lang'];
+			}
+			else
+				$lang = $this->settings('settings.lang_site');
             
         	// pagination
-			$totalRecords = count($this->core->db('blog')->toArray());
+			$totalRecords = count($this->db('blog')->where('lang', $lang)->toArray());
 			$pagination = new \Inc\Core\Lib\Pagination($page, $totalRecords, 10, url([ADMIN, 'blog', 'manage', '%d']));
             $this->assign['pagination'] = $pagination->nav();
             
             // list 
             $this->assign['newURL'] = url([ADMIN, 'blog', 'add']);
             $this->assign['postCount'] = 0;
-            $rows = $this->core->db('blog')
+            $rows = $this->db('blog')
+                    ->where('lang', $lang)
                     ->limit($pagination->offset().', '.$pagination->getRecordsPerPage())
                     ->desc('published_at')->desc('created_at')
                     ->toArray();
-                    
+                
+            $this->assign['posts'] = [];
             if($totalRecords)
             {
                 $this->assign['postCount'] = $totalRecords;
@@ -72,19 +91,22 @@
                     $row['viewURL'] = url(['blog', 'post', $row['slug']]);
 
 
-                    $row['user'] = $this->core->getUserInfo('username', $row['user_id']);
-                    $row['comments'] = $row['comments'] ? $this->core->lang['blog']['comments_on'] : $this->core->lang['blog']['comments_off'];
+                    $fullname = $this->core->getUserInfo('fullname', $row['user_id']);
+                    $username = $this->core->getUserInfo('username', $row['user_id']);
+                    $row['user'] = !empty($fullname) ? $fullname.' ('.$username.')' : $username;
+                    
+                    $row['comments'] = $row['comments'] ? $this->lang('comments_on') : $this->lang('comments_off');
 
                     switch($row['status'])
                     {
                         case 0:
-                            $row['type'] = $this->core->lang['blog']['post_sketch'];
+                            $row['type'] = $this->lang('post_sketch');
                             break;
                         case 1:
-                            $row['type'] = $this->core->lang['blog']['post_hidden'];
+                            $row['type'] = $this->lang('post_hidden');
                             break;
                         case 2:
-                            $row['type'] = $this->core->lang['blog']['post_published'];
+                            $row['type'] = $this->lang('post_published');
                             break;
                         default:
                             case 0:
@@ -98,87 +120,84 @@
                 }
             }
 
-            $this->core->tpl->set('blog', $this->assign);
-            return $this->core->tpl->draw(MODULES.'/blog/view/admin/manage.html');
+            $this->assign['langs'] = $this->_getLanguages($lang);
+
+            return $this->draw('manage.html', ['blog' => $this->assign]);
 		}
 		
         /**
         * add new post
         */
-        public function add()
+        public function getAdd()
         {
-            $this->assign['manageURL'] = url(['blog', 'manage']);
-            $this->assign['editor'] = $this->core->getSettings('settings', 'editor');
-            $this->_addHeaderFiles();
-            
-            $this->assign['form'] = [
-                'title' => '',
-                'content' => '', 
-                'slug' => '', 
-                'intro' => '', 
-                'date' => date('Y-m-d H:i'), 
-                'comments' => 1, 
-                'cover_photo' => NULL, 
-                'status' => 0, 
-                'markdown' => 0, 
-                'tags' => ''
-            ];
-
-            $this->assign['users'] = $this->core->db('users')->toArray();
-            $this->assign['author'] = $this->core->getUserInfo('id');
-            
-            $this->assign['title'] = $this->core->lang['blog']['new_post'];
-
-            $this->core->tpl->set('blog', $this->assign);
-            return $this->core->tpl->draw(MODULES.'/blog/view/admin/form.html');
+            return $this->getEdit(null);
         }
         
         
         /**
         * edit post
         */
-        public function edit($id)
+        public function getEdit($id = null)
         {
             $this->assign['manageURL'] = url([ADMIN, 'blog', 'manage']);
             $this->assign['coverDeleteURL'] = url([ADMIN, 'blog', 'deleteCover', $id]);
-            $this->assign['editor'] = $this->core->getSettings('settings', 'editor');
+            $this->assign['editor'] = $this->settings('settings.editor');
             $this->_addHeaderFiles();
 
-            $blog = $this->core->db('blog')->where('id', $id)->oneArray();
+            if($id === null)
+            {
+                $blog = [
+                    'id' => null,
+                    'title' => '',
+                    'content' => '', 
+                    'slug' => '', 
+                    'intro' => '',
+                    'lang' => $this->settings('settings.lang_site'),
+                    'user_id' => $this->core->getUserInfo('id'),
+                    'comments' => 1, 
+                    'cover_photo' => NULL, 
+                    'status' => 0, 
+                    'markdown' => 0, 
+                    'tags' => '',
+                    'published_at' => time(),
+                ];
+            }
+            else
+                $blog = $this->db('blog')->where('id', $id)->oneArray();
 			
         	if(!empty($blog))
         	{
+                $this->assign['langs'] = $this->_getLanguages($blog['lang'], 'selected');
                 $this->assign['form'] = htmlspecialchars_array($blog);
-                $this->assign['form']['content'] =  $this->core->tpl->noParse($this->assign['form']['content']);
-                $this->assign['form']['date'] = date("Y-m-d H:i", $blog['published_at']);
+                $this->assign['form']['content'] =  $this->tpl->noParse($this->assign['form']['content']);
+                $this->assign['form']['date'] = date("Y-m-d\TH:i", $blog['published_at']);
 
-                $tags_array = $this->core->db('blog_tags')->leftJoin('blog_tags_relationship', 'blog_tags.id = blog_tags_relationship.tag_id')->where('blog_tags_relationship.blog_id', $blog['id'])->select(['blog_tags.name'])->toArray();
-                $tags = [];
-                foreach($tags_array as $tag)
-                    $tags[] = $tag['name'];
+                $tags_array = $this->db('blog_tags')->leftJoin('blog_tags_relationship', 'blog_tags.id = blog_tags_relationship.tag_id')->where('blog_tags_relationship.blog_id', $blog['id'])->select(['blog_tags.name'])->toArray();
                 
-                $this->assign['form']['tags'] = implode(', ', $tags);
-                $this->assign['users'] = $this->core->db('users')->toArray();
+                $this->assign['form']['tags'] = $tags_array;
+                $this->assign['users'] = $this->db('users')->toArray();
                 $this->assign['author'] = $this->core->getUserInfo('id', $blog['user_id']);
 
-	        	$this->assign['title'] = $this->core->lang['blog']['edit_post'];
+	        	$this->assign['title'] = ($blog['id'] === null) ? $this->lang('new_post') : $this->lang('edit_post');
 
-	        	$this->core->tpl->set('blog', $this->assign);
-	        	return $this->core->tpl->draw(MODULES.'/blog/view/admin/form.html');
+	        	return $this->draw('form.html', ['blog' => $this->assign]);
         	}
         	else
         		redirect(url([ADMIN, 'blog', 'manage']));
 		}
 		
         /**
-        * save post
-        */
-	    public function save($id = null)
+         * Save post
+         * 
+         * @param int $id
+         * @return void
+         */
+	    public function postSave($id = null)
 		{
             unset($_POST['save'], $_POST['files']);
 
             if(!empty($_POST['tags']))
-                $tags = explode(',', $_POST['tags']);
+                $tags = array_unique($_POST['tags']);
             else
                 $tags = [];
                 
@@ -192,9 +211,9 @@
 
     		if(checkEmptyFields(['title', 'content'], $_POST))
     		{
-    			$this->core->setNotify('failure', $this->core->lang['general']['empty_inputs']);
+    			$this->notify('failure', $this->lang('empty_inputs', 'general'));
 	            $this->assign['form'] = htmlspecialchars_array($_POST);
-                $this->assign['form']['content'] = $this->core->tpl->noParse($this->assign['form']['content']);
+                $this->assign['form']['content'] = $this->tpl->noParse($this->assign['form']['content']);
                 redirect($location);
     		}
 
@@ -206,15 +225,14 @@
 
             // check slug and append with iterator
             $oldSlug = $_POST['slug'];
-            $i = 1;
+            $i = 2;
 
             if($id === null)
                 $id = 0;
 
-            while($this->core->db('blog')->where('slug', $_POST['slug'])->where('id', '!=', $id)->oneArray())
+            while($this->db('blog')->where('slug', $_POST['slug'])->where('id', '!=', $id)->oneArray())
             {
-                $_POST['slug'] = $oldSlug.'-'.$i;
-                $i++;
+                $_POST['slug'] = $oldSlug.'-'.($i++);
             }
 
             // format conversion date
@@ -243,36 +261,39 @@
             {
                 $_POST['created_at'] = strtotime(date('Y-m-d H:i:s'));
 
-                $query = $this->core->db('blog')->save($_POST);
-                $location = url([ADMIN, 'blog', 'edit', $this->core->db()->pdo()->lastInsertId()]);
+                $query = $this->db('blog')->save($_POST);
+                $location = url([ADMIN, 'blog', 'edit', $this->db()->pdo()->lastInsertId()]);
             }
             else    // edit
             {
-                $query = $this->core->db('blog')->where('id', $id)->save($_POST);
+                $query = $this->db('blog')->where('id', $id)->save($_POST);
             }
 
             // detach tags from post
             if($id)
             {
-                $this->core->db('blog_tags_relationship')->delete('blog_id', $id);
+                $this->db('blog_tags_relationship')->delete('blog_id', $id);
                 $blogId = $id;
             }
             else
-                $blogId = $id ? $id : $this->core->db()->pdo()->lastInsertId();
+                $blogId = $id ? $id : $this->db()->pdo()->lastInsertId();
 
             
             // Attach or create new tag
             foreach($tags as $tag)
             {
+                if(preg_match("/[`~!@#$%^&*()_|+\-=?;:\'\",.<>\{\}\[\]\\\/]+/", $tag))
+                    continue;
+
                 $slug = createSlug($tag);
-                if($e = $this->core->db('blog_tags')->like('slug', $slug)->oneArray())
+                if($e = $this->db('blog_tags')->like('slug', $slug)->oneArray())
                 {
-                    $this->core->db('blog_tags_relationship')->save(['blog_id' => $blogId, 'tag_id' => $e['id']]);
+                    $this->db('blog_tags_relationship')->save(['blog_id' => $blogId, 'tag_id' => $e['id']]);
                 }
                 else
                 {
-                    $tagId = $this->core->db('blog_tags')->save(['name' => $tag, 'slug' => $slug]);
-                    $this->core->db('blog_tags_relationship')->save(['blog_id' => $blogId, 'tag_id' => $tagId]);
+                    $tagId = $this->db('blog_tags')->save(['name' => $tag, 'slug' => $slug]);
+                    $this->db('blog_tags_relationship')->save(['blog_id' => $blogId, 'tag_id' => $tagId]);
                 }
             }
 
@@ -281,28 +302,33 @@
                 if(!file_exists(UPLOADS."/blog"))
                     mkdir(UPLOADS."/blog", 0777, true);
 
-                $img->save(UPLOADS."/blog/".$_POST['cover_photo']);
-				$this->core->setNotify('success', $this->core->lang['blog']['save_success']);
+                if($p = $img->getInfos('width'))
+                    $img->save(UPLOADS."/blog/".$_POST['cover_photo']);
+
+				$this->notify('success', $this->lang('save_success'));
             }
 			else
-				$this->core->setNotify('failure', $this->core->lang['blog']['save_failure']);
+				$this->notify('failure', $this->lang('save_failure'));
 
             redirect($location);
 		}
 		
 		/**
-        * remove post
-        */
-		public function delete($id)
+         * Remove post
+         * 
+         * @param int $id
+         * @return void
+         */
+		public function getDelete($id)
 		{
-			if($post = $this->core->db('blog')->where('id', $id)->oneArray() && $this->core->db('blog')->delete($id))
+			if($post = $this->db('blog')->where('id', $id)->oneArray() && $this->db('blog')->delete($id))
             {
                 if($post['cover_photo'])
                     unlink(UPLOADS."/blog/".$post['cover_photo']);
-				$this->core->setNotify('success', $this->core->lang['blog']['delete_success']);
+				$this->notify('success', $this->lang('delete_success'));
             }
 			else
-				$this->core->setNotify('failure', $this->core->lang['blog']['delete_failure']);
+				$this->notify('failure', $this->lang('delete_failure'));
 
 			redirect(url([ADMIN, 'blog', 'manage']));
 		}
@@ -310,22 +336,22 @@
 		/**
         * remove post cover
         */
-        public function deleteCover($id)
+        public function getDeleteCover($id)
         {
-            if($post = $this->core->db('blog')->where('id', $id)->oneArray())
+            if($post = $this->db('blog')->where('id', $id)->oneArray())
             {
                 unlink(UPLOADS."/blog/".$post['cover_photo']);
-                $this->core->db('blog')->where('id', $id)->save(['cover_photo' => null]);
-                $this->core->setNotify('success', $this->core->lang['blog']['cover_deleted']);
+                $this->db('blog')->where('id', $id)->save(['cover_photo' => null]);
+                $this->notify('success', $this->lang('cover_deleted'));
 
                 redirect(url([ADMIN, 'blog', 'edit', $id]));
             }
 
         }
 
-        public function settings()
+        public function getSettings()
         {
-            $assign = htmlspecialchars_array($this->core->getSettings('blog'));
+            $assign = htmlspecialchars_array($this->settings('blog'));
             $assign['dateformats'] = [
                 [
                     'value' => 'd-m-Y',
@@ -337,11 +363,11 @@
                 ],
                 [
                     'value' => 'd Mx Y',
-                    'name'  => '01 '.$this->core->lang['blog']['janx'].' 2016'
+                    'name'  => '01 '.$this->lang('janx').' 2016'
                 ],
                 [
                     'value' => 'M d, Y',
-                    'name'  => $this->core->lang['blog']['jan'].' 01, 2016'
+                    'name'  => $this->lang('jan').' 01, 2016'
                 ],
                 [
                     'value' => 'd-m-Y H:i',
@@ -353,27 +379,26 @@
                 ],
                 [
                     'value' => 'd Mx Y, H:i',
-                    'name'  => '01 '.$this->core->lang['blog']['janx'].' 2016, 12:00'
+                    'name'  => '01 '.$this->lang('janx').' 2016, 12:00'
                 ],
             ];
-            $this->core->tpl->set('settings', $assign);
-            return $this->core->tpl->draw(MODULES.'/blog/view/admin/settings.html');
+            return $this->draw('settings.html', ['settings' => $assign]);
         }
 
-        public function saveSettings()
+        public function postSaveSettings()
         {
             foreach($_POST['blog'] as $key => $val)
             {
-                $this->core->db('settings')->where('module', 'blog')->where('field', $key)->save(['value' => $val]);
+                $this->settings('blog', $key, $val);
             }
-            $this->core->setNotify('success', $this->core->lang['blog']['settings_saved']);
+            $this->notify('success', $this->lang('settings_saved'));
             redirect(url([ADMIN, 'blog', 'settings']));
         }
 
 		/**
         * image upload from WYSIWYG
         */
-		public function editorUpload()
+		public function postEditorUpload()
 		{
 			header('Content-type: application/json');
 			$dir 	= UPLOADS.'/blog';
@@ -393,7 +418,7 @@
 					echo json_encode(['status' => 'success', 'result' => url($imgPath)]);	
 				} 
 				else
-					$error = $this->core->lang['blog']['editor_upload_fail'];
+					$error = $this->lang('editor_upload_fail');
 
 				if($error)
 					echo json_encode(['status' => 'failure', 'result' => $error]);
@@ -404,12 +429,27 @@
 		/**
         * module JavaScript
         */
-		public function javascript()
+		public function getJavascript()
 		{
 			header('Content-type: text/javascript');
-			echo $this->core->tpl->draw(MODULES.'/blog/js/admin/blog.js');
+			echo $this->draw(MODULES.'/blog/js/admin/blog.js');
 			exit();
 		}
+
+        public function getJsonTags($query = null)
+        {
+            header('Content-type: application/json');
+
+            if(!$query)
+                exit(json_encode([]));
+
+            $tags = $this->db('blog_tags')->like('name', $query.'%')->toArray();
+
+            if(array_search($query, array_column($tags, 'name')) === false)
+                $tags[] = ['id' => 0, 'slug' => createSlug($query), 'name' => $query];
+
+            exit(json_encode($tags));
+        }
 
         private function _addHeaderFiles()
         {
@@ -417,24 +457,27 @@
             $this->core->addCSS(url('inc/jscripts/wysiwyg/summernote.min.css'));
         	$this->core->addJS(url('inc/jscripts/wysiwyg/summernote.min.js'));
 
-            // TAGS
-            $this->core->addCSS(url(MODULES.'/blog/css/admin/jquery.tagsinput.min.css'));
-            $this->core->addJS(url(MODULES.'/blog/js/admin/jquery.tagsinput.min.js'));
-
-            if($this->core->getSettings('settings', 'lang_admin') != 'en_english')
-                $this->core->addJS(url('inc/jscripts/wysiwyg/lang/'.$this->core->getSettings('settings', 'lang_admin').'.js'));
+            if($this->settings('settings.lang_admin') != 'en_english')
+                $this->core->addJS(url('inc/jscripts/wysiwyg/lang/'.$this->settings('settings.lang_admin').'.js'));
             
-			// HTML EDITOR
-            $this->core->addCSS(url('inc/jscripts/markitup/skin/style.css'));
-            $this->core->addCSS(url('inc/jscripts/markitup/set/style.css'));
-            $this->core->addJS(url('inc/jscripts/markitup/markitup.min.js'));
-            $this->core->addJS(url('inc/jscripts/markitup/set/'.$this->core->getSettings('settings', 'lang_admin').'.js'));
+			// HTML & MARKDOWN EDITOR
+			$this->core->addCSS(url('/inc/jscripts/editor/markitup.min.css'));
+			$this->core->addCSS(url('/inc/jscripts/editor/markitup.highlight.min.css'));
+			$this->core->addCSS(url('/inc/jscripts/editor/sets/html/set.min.css'));
+			$this->core->addCSS(url('/inc/jscripts/editor/sets/markdown/set.min.css'));
+			$this->core->addJS(url('/inc/jscripts/editor/highlight.min.js'));
+			$this->core->addJS(url('/inc/jscripts/editor/markitup.min.js'));
+			$this->core->addJS(url('/inc/jscripts/editor/markitup.highlight.min.js'));
+			$this->core->addJS(url('/inc/jscripts/editor/sets/html/set.min.js'));
+			$this->core->addJS(url('/inc/jscripts/editor/sets/markdown/set.min.js'));
 			
 			// ARE YOU SURE?
 			$this->core->addJS(url('inc/jscripts/are-you-sure.min.js'));
 
 			// MODULE SCRIPTS
 			$this->core->addJS(url([ADMIN, 'blog', 'javascript']));
-        }
 
+			// MODULE CSS
+			$this->core->addCSS(url(MODULES.'/blog/css/admin/blog.css'));
+        }
     }

@@ -2,18 +2,18 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="{if: $page.desc}{$page.desc}{else}{$settings.description}{/if}" />
-    <meta name="keywords" content="{$settings.keywords}" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{if: $page.desc}{$page.desc}{else}{$settings.description}{/if}">
+    <meta name="keywords" content="{$settings.keywords}">
     <title>{$page.title} - {$settings.title}</title>
-    <link rel="stylesheet" href="{$bat.path}/inc/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="{$bat.path}/themes/{$settings.theme}/css/style.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/56fa629212.css" />
+    <link rel="stylesheet" href="{$bat.path}/inc/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{$bat.theme}/css/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/56fa629212.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="{$bat.path}/inc/jscripts/bootstrap.min.js"></script>
-    <script src="{$bat.path}/themes/{$settings.theme}/js/theme.js"></script>
+    <script src="{$bat.theme}/js/theme.js"></script>
     {loop: $bat.header}{$value}{/loop}
 </head>
 
